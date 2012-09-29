@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block body %}
+<div align="center">
+<form action="/delete" method="POST">
+<fieldset>
+
+<input type="hidden" name="entry_id" value="{{ entry.id }}">
+
+<div id="confirm">
+<div id="msg">Really, destroy?</div>
+<div id="details">
+ID: {{ entry.id }}
+Title: {{ entry.title }}
+Date: {{ entry.date }}
+</div>
+<div id="control">
+<input type="submit" value="DELETE">
+<input type="button" onclick="history.back();" value="Cancel">
+</div>
+</div>
+  
+</fieldset>
+</form>
+</div>
+{% endblock %}
+

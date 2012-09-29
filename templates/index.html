@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block body %}
+
+{% if not entries %}
+<div align="center" id="result_msg" style="margin-top:2em;">
+Unbelievable. No entries yet. 
+<div style="margin:2em;">
+<input type="button" onclick="window.location='/new'" value="new">
+</div>
+</div>
+{% else %}
+{% if msg %}
+<div align="center" id="result_msg">{{ msg|safe }}</div>
+{% endif %}
+{% endif %}
+
+<div id="entries" align="center">
+
+  {% for entry in entries %}
+<div class="entry_head">
+
+  {% if entries|count() == 1 %}
+<span id="date"><a href="/dated/{{ entry.date }}">{{ entry.date_str }}</a></span>
+<span id="title"><a href="/">{{ entry.title }}</a></span>
+  {% else %}
+<span id="date"><a href="/dated/{{ entry.date }}">{{ entry.date_str }}</a></span>
+<span id="title"><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></span>
+  {% endif %}
+
+<input type="button" id="delete_btn"
+ onclick="window.location='/confirm/{{ entry.id }}'" 
+ value="delete">
+
+<input type="button" id="edit_btn"
+ onclick="window.location='/edit/{{ entry.id }}'" 
+ value="edit">
+
+<input type="button" id="new_btn"
+ onclick="window.location='/new'" 
+ value="new">
+
+</div>
+
+<div class="entry_body">
+{{ entry.text|safe }}
+</div>
+
+<div class="entry_foot">
+<span id="tags">
+{% for tag in entry.tags %}
+<span id="tag"><a href="/tagged/{{ tag }}"># {{tag}}</a></span>
+{% endfor %}
+</span>
+</div>
+
+  {% endfor %}
+
+</div>
+
+{% endblock %}
