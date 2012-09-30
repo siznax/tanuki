@@ -1,31 +1,39 @@
 {% extends "layout.html" %}
 {% block body %}
 
-{% if not entries %}
-<div align="center" id="result_msg" style="margin-top:2em;">
-Unbelievable. No entries yet. 
-<div style="margin:2em;">
-<input type="button" onclick="window.location='/new'" value="new">
-</div>
-</div>
-{% else %}
 {% if msg %}
-<div align="center" id="result_msg">{{ msg|safe }}</div>
+<div align="center" id="result_msg">
+{{ msg|safe }}
+{% if not entries %}
+<input type="button" value="new" id="new_btn"
+ onclick="window.location='/new'">
 {% endif %}
+</div>
+{% endif %}
+
+{% if tag_set %}
+<div id="tag_set" align="center">
+{% for tag in tag_set %}
+<span><em><!-- LAME vertical space --></em><i>{{ tag['count'] }}</i><a 
+ href="/tagged/{{ tag['name'] }}">{{ tag['name'] }}</a></span>
+{% endfor %}
+</div>
 {% endif %}
 
 <div id="entries" align="center">
 
-  {% for entry in entries %}
+{% for entry in entries %}
+
 <div class="entry_head">
 
-  {% if entries|count() == 1 %}
 <span id="date"><a href="/dated/{{ entry.date }}">{{ entry.date_str }}</a></span>
-<span id="title"><a href="/">{{ entry.title }}</a></span>
-  {% else %}
-<span id="date"><a href="/dated/{{ entry.date }}">{{ entry.date_str }}</a></span>
+
+{% if entries|count() == 1 %}
+{{ home|safe }}
+<span id="title">{{ entry.title }}</span>
+{% else %}
 <span id="title"><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></span>
-  {% endif %}
+{% endif %}
 
 <input type="button" id="delete_btn"
  onclick="window.location='/confirm/{{ entry.id }}'" 
@@ -41,19 +49,19 @@ Unbelievable. No entries yet.
 
 </div>
 
-<div class="entry_body">
-{{ entry.text|safe }}
-</div>
+<div class="entry_body">{{ entry.text|safe }}</div>
 
 <div class="entry_foot">
 <span id="tags">
+
 {% for tag in entry.tags %}
 <span id="tag"><a href="/tagged/{{ tag }}"># {{tag}}</a></span>
 {% endfor %}
+
 </span>
 </div>
 
-  {% endfor %}
+{% endfor %}
 
 </div>
 

@@ -16,10 +16,15 @@ class Tanuki:
         self.date = datetime.date.today().isoformat()
         self.mode = None
 
-    def connect( self ):
-        self.con = sqlite3.connect( self.config['DATABASE'] )
-        self.con.execute('pragma foreign_keys = on') # !important
-        self.db = self.con.cursor()
+    def tag_set( self ):
+        sql = 'select count(*),name from tags group by name order by count(*) desc'
+        tmp = [ {'count':r[0],'name':r[1]} for r in self.db.execute( sql ) ]
+        print tmp
+        return tmp
+
+    def home( self ):
+        return "<span id=\"home\"><a href=\"/\">%s</a></span>"\
+            % ( '&#x2668;' )
 
     def new( self ):
         return render_template( 'edit.html', 
@@ -82,6 +87,13 @@ class Tanuki:
             msg = "Try again, title or text not unique."
             return render_template( 'error.html', msg=msg )
 
+    def get_tags_sorted( self ):
+        tags = []
+        sql = 'select count(*),name from tags group by name order by count(*) desc'
+        for row in self.db.execute( sql, [entry_id] ):
+            tags.append( row[0] )
+        return tags
+
     def get_tags( self, entry_id ):
         tags = []
         sql = 'select name from tags where id=?'
@@ -135,13 +147,26 @@ class Tanuki:
     def entries_dated( self, date ):
         entries = self.entries( date )
         date_str = datetime.datetime.strptime( date, '%Y-%m-%d' ).strftime( '%a %d %b %Y' )
-        msg = "&#9732; found %d entries dated %s" % ( len(entries), date_str )
+        msg = "%s %d dated %s" % ( self.home(), len(entries), date_str )
         return render_template('index.html', 
                                entries=entries,
                                msg=msg)
 
-    def delete( self, req ):
+    def entries_tagged( self, tag ):
+        entries = self.entries( None, tag )
+        msg = "%s %d tagged %s" % ( self.home(), len(entries), tag )
+        return render_template('index.html', 
+                               entries=entries,
+                               msg=msg)
+        
+    def delete( self, entry_id ):
+        self.clear_tags( entry_id )
         sql = 'DELETE from entries WHERE id=?'
-        self.db.execute( sql, [req.form['entry_id']] )
+        self.db.execute( sql, [entry_id] )
         self.con.commit()
+
+    def connect( self ):
+        self.con = sqlite3.connect( self.config['DATABASE'] )
+        self.con.execute('pragma foreign_keys = on') # !important
+        self.db = self.con.cursor()
 

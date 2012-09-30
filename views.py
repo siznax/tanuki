@@ -17,9 +17,13 @@ tanuki = Tanuki( app.config )
 @app.route('/')
 def index():
     entries = tanuki.entries()
-    msg = "%d entries" % ( len(entries) )
+    if not entries:
+        msg = "<h1>Unbelievable. No entries yet.</h1>"
+    else:
+        msg = "%d entries" % ( len(entries) )
     return render_template( 'index.html', 
                             entries=entries,
+                            tag_set=tanuki.tag_set(),
                             msg=msg )
 
 @app.route('/entry/<_id>')
@@ -28,7 +32,8 @@ def entry(_id):
     if not entry:
         return redirect( url_for( 'index' ) )
     return render_template('index.html', 
-                           entries=[ entry ])
+                           entries=[ entry ], 
+                           home=tanuki.home() )
 
 @app.route('/dated/<date>')
 def dated(date):
@@ -36,11 +41,7 @@ def dated(date):
 
 @app.route('/tagged/<tag>')
 def tagged(tag):
-    entries = tanuki.entries( None, tag )
-    msg = "&#9732; found %d entries tagged %s" % ( len(entries), tag )
-    return render_template('index.html', 
-                           entries=entries,
-                           msg=msg)
+    return tanuki.entries_tagged( tag )
 
 @app.route('/new')
 def new():
@@ -60,7 +61,7 @@ def edit(_id):
 
 @app.route('/delete', methods=['POST'])
 def delete():
-    tanuki.delete( request )
+    tanuki.delete( request['entry_id'] )
     return redirect(url_for('index'))
 
 @app.route('/confirm/<_id>')

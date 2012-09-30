@@ -5,23 +5,26 @@ body {
   padding:0;
   font-family:Georgia; 
   background:whitesmoke; 
-  background-image:url("/static/noise.png");
+/*
+  background:#3c5a76 url('/static/tumblr.png') no-repeat center;
+*/
+  background:whitesmoke url('/static/noise.png');
 }
 
-div#home_link {
-  position:absolute;
-  top:1em;
-  left:1em;
-  font-size:larger;
+#result_msg #new_btn {
+  margin-left:2em;
+}
+#result_msg #home {
+  margin-right:10px;
   font-weight:bold;
 }
-div#home_link A {
+#result_msg #home A {
   text-decoration:none;
   color:silver;
 }
-div#home_link A:hover {
+#result_msg #home A:hover {
   color:black;
-  text-shadow:rgb(255, 255, 255) 0px 1px 0px;
+  text-shadow:rgb(245, 245, 245) 0px 1px 0px;
 }
 
 div#app_title { 
@@ -43,7 +46,6 @@ div#app_title input {
   margin-left:2em;
 }
 
-fieldset { border:none; }
 div#edit_form { 
   margin-top:2em;
   padding:1em;
@@ -53,32 +55,67 @@ form#edit input#title {
   font-size:x-large; 
   width:80%;
 }
-textarea#entry_text { 
+fieldset { border:none; }
+#edit_form textarea#entry_text { 
   padding:8px;
   width:80%;
   height:300px;
   font-size:12pt;
 }
-input[type="text"]#date_box {
+#edit_form #date_box {
   font-size:12pt;
   text-align:center;
 }
-input[type="text"]#tags_box {
+#edit_form #tags_box {
   font-size:12pt;
 }
 
 div#result_msg {
   font-family:"Open Sans",Arial; 
   text-shadow: rgb(255, 255, 255) 0px 1px 0px;
-  margin-top:1em;
+  margin-top:32px;
+  margin-bottom:-24px;
 }
+
+div#tag_set {
+  margin-top:2.2em;
+  margin-right:15%;
+  margin-bottom:-16px;
+  margin-left:15%;
+  font-family:"Open Sans", Helvetica, sans-serif; 
+  font-size:smaller;
+  /* border:1px solid red; */
+}
+div#tag_set i { 
+  padding:6px 2px 6px 8px;
+  font-style:normal;
+}
+div#tag_set span a { 
+  padding:6px 8px 6px 2px;
+  text-decoration:none; 
+  color:black;
+}
+div#tag_set span { 
+  color:silver; 
+  padding:6px;
+}
+div#tag_set span:hover {
+  padding:6px;
+  border-radius:15px;
+  background: -webkit-gradient(linear, left top, left bottom, 
+    from(thistle), to(indigo));
+}
+div#tag_set span:hover i { color:whitesmoke; }
+div#tag_set span:hover a { color:white; }
+div#tag_set span em { font-size:2em; }
+
 
 div.entry_head {
   background: -webkit-gradient(linear, left top, left bottom, 
     from(#dcdcdc), to(#a9a9a9));
   width:80%;
-  margin:2em 2em 0em 2em;
-  padding:16px;
+  margin:48px 64px 0 64px;
+  padding:12px;
   border-top:  1px solid silver;
   border-right:1px solid silver;
   border-left: 1px solid silver;
@@ -90,36 +127,62 @@ div.entry_head {
   border-top-right-radius: 8px;
   position:relative;
 }
-div.entry_head A { 
+.entry_head A { 
   text-decoration:none; 
   color:black;
 }
-div.entry_head #date {
+.entry_head #date {
+  font-family:"Open Sans", Helvetica, sans-serif; 
+  font-weight:200;
+  font-size:14px;
+  padding:5px;
   position:absolute;
   left:1em;
 }
-div.entry_head #date a { color:dimgray; }
-div.entry_head #date a:hover {
-  color:black;
+.entry_head #date a { 
+  color:dimgray; 
 }
-div.entry_head #title { 
+.entry_head #date a:hover { 
+  margin:0 -5px;
+  padding:4px;
+  border:1px solid silver;
+  border-radius:8px;
+  color:black;
+  background:lightgray;
+}
+.entry_head #title { 
   font-family:"Open Sans", Helvetica, sans-serif; 
   font-weight:bold;
   font-size:x-large; 
-  text-shadow: none;
+  text-shadow:none;
 }
-div.entry_head #title A:hover { 
+.entry_head a {
+  color:#444;
+}
+.entry_head #title A:hover { 
+  color:#000;
   text-shadow: rgb(255, 255, 255) 0px 1px 0px;
 }
-input[type="button"]#edit_btn {
+.entry_head #home {
+  position:absolute;
+  right:160px;
+}
+.entry_head #home a {
+  color:#444;
+}
+.entry_head #home a:hover {
+  color:black;
+  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+}
+.entry_head #edit_btn {
   position:absolute;
   right:1em;
 }
-input[type="button"]#delete_btn {
+.entry_head #delete_btn {
   position:absolute;
   right:52px;
 }
-input[type="button"]#new_btn {
+.entry_head #new_btn {
   position:absolute;
   right:110px;
 }
@@ -128,7 +191,7 @@ div.entry_body {
   text-align:left;
   width:80%;
   margin:0 2em;
-  padding:16px;
+  padding:12px;
   border-right:1px solid silver;
   border-left: 1px solid silver;
 }
@@ -136,7 +199,7 @@ div.entry_text { font-family:Georgia; }
 div.entry_foot {
   width:80%;
   margin:0 2em 2em 2em;
-  padding:16px;
+  padding:12px;
   border-right: 1px solid silver;
   border-left:  1px solid silver;
   border-bottom:1px solid silver;
@@ -153,7 +216,7 @@ div.entry_foot #tags A {
 }
 div.entry_foot #tags A:hover { 
   color:black;
-  text-shadow: 0 0 8px violet;
+  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
 }
 div.entry_foot #tag { 
   margin:0 0.4em;
