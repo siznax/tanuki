@@ -19,7 +19,7 @@
  value="{{ entry.title }}" required>
 </div>
   
-<!-- WOW auto-validation! 
+<!-- WOW auto-validation? 
 <div>
  <label for="email"></label>
  <input name="email" type="email" value="email" required>
@@ -34,8 +34,7 @@
  required>{{ entry.text|safe }}</textarea> 
 </div>
 
-<input id="date_box" type="text" name="date" 
- value="{{ entry.date }}">
+<input id="date_box" type="text" name="date" value="{{ entry.date }}">
 
 <input id="tags_box" type="text" name="tags" 
 {% if entry.tags=='tags' %}
@@ -43,7 +42,8 @@
 {% endif %}
  value="{{ entry.tags }}">
 
-<input id="save_btn" type="submit" value="Save">
+<input id="save_btn" type="submit" value="Save" 
+ onclick="return validate();">
   
 </fieldset>
 

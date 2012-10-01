@@ -4,9 +4,8 @@
 {% if msg %}
 <div align="center" id="result_msg">
 {{ msg|safe }}
-{% if not entries %}
-<input type="button" value="new" id="new_btn"
- onclick="window.location='/new'">
+{% if not entries and not tag_set and index %}
+<input type="button" value="new" id="new_btn" onclick="window.location='/new'">
 {% endif %}
 </div>
 {% endif %}
@@ -14,9 +13,19 @@
 {% if tag_set %}
 <div id="tag_set" align="center">
 {% for tag in tag_set %}
-<span><em><!-- LAME vertical space --></em><i>{{ tag['count'] }}</i><a 
+<span><i>{{ tag['count'] }}</i><a 
  href="/tagged/{{ tag['name'] }}">{{ tag['name'] }}</a></span>
 {% endfor %}
+</div>
+{% endif %}
+
+{% if entries|count() > 1 %}
+<div id="entry_list">
+<ol>
+{% for entry in entries %}
+<li><a href="#entry{{ entry.id }}">{{ entry.title }}</a></li>
+{% endfor %}
+</ol>
 </div>
 {% endif %}
 
@@ -24,45 +33,54 @@
 
 {% for entry in entries %}
 
+<a name="entry{{ entry.id }}"></a>
+
 <div class="entry_head">
 
-<span id="date"><a href="/dated/{{ entry.date }}">{{ entry.date_str }}</a></span>
+<table>
+<tr>
+<td id="date">
+<div id="date"><a href="/dated/{{ entry.date }}">{{ entry.date_str }}</a></div>
+</td>
 
+<td id="title" align="center">
 {% if entries|count() == 1 %}
-{{ home|safe }}
-<span id="title">{{ entry.title }}</span>
+<div id="title"><a href="/">{{ entry.title }}</a></div>
 {% else %}
-<span id="title"><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></span>
+<div id="title"><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></div>
 {% endif %}
+</td>
 
-<input type="button" id="delete_btn"
- onclick="window.location='/confirm/{{ entry.id }}'" 
- value="delete">
+<td align="right">
 
-<input type="button" id="edit_btn"
- onclick="window.location='/edit/{{ entry.id }}'" 
- value="edit">
+<div id="controls">
+<a href="/confirm/{{ entry.id }}"><img src="/static/delete.png"></a>
+<a href="/edit/{{ entry.id }}"><img src="/static/edit.png"></a>
+<a href="/new"><img src="/static/new.png"></a>
+{% if entries|count() == 1 %}
+<a href="/"><img src="/static/home.png"></a>
+{% endif %}
+</div>
 
-<input type="button" id="new_btn"
- onclick="window.location='/new'" 
- value="new">
+</td>
+</tr>
+</table>
 
 </div>
 
-<div class="entry_body">{{ entry.text|safe }}</div>
+<div class="entry_body">{{ entry.text|safe }}<br clear="all" /></div>
 
 <div class="entry_foot">
 <span id="tags">
-
 {% for tag in entry.tags %}
 <span id="tag"><a href="/tagged/{{ tag }}"># {{tag}}</a></span>
 {% endfor %}
-
 </span>
+<a href="/cloud"><img id="cloud" alt="cloud" src="/static/tag.png"></a>
 </div>
 
 {% endfor %}
 
-</div>
+</div><!-- /#entries -->
 
 {% endblock %}

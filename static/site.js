@@ -1,4 +1,16 @@
-// window.onload = function(){ alert("loaded."); }
+// window.onload = function(){ alert("okay"); }
+
+function validate() {
+    date = document.getElementById('date_box');
+    if (date.value.length !== 10 || 
+	date.value.match("\\d{4}-\\d{2}-\\d{2}")==null) {
+	alert("Warning! Malformed date.");
+	date.focus();
+	return false;
+    } else { 
+	return true;
+    }
+}
 
 $(document).ready(function(){
     
