@@ -256,14 +256,14 @@ class Tanuki:
         return render_template( 'index.html', tag_set=tag_set, msg=msg )
 
     def notag( self ):
-        entries = self.entries( None, None, True )
+        entries = self.markup( self.apply_tags( self.entries( None, None, True ) ) )
         msg = "%d not tagged %s %s" % ( len(entries), 
                                         self.img( 'home', '/' ),
                                         self.img( 'cloud', '/cloud' ) )
         return render_template( 'index.html', entries=entries, msg=msg )
         
     def matched( self, terms ):
-        found = self.entries( None, None, False, terms )
+        found = self.markup( self.apply_tags( self.entries( None, None, False, terms ) ) )
         msg = "%d matched { %s } %s %s %s"\
             % ( len(found), 
                 terms,
