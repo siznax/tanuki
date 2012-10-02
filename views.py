@@ -21,6 +21,10 @@ def favicon():
 def index():
     return tanuki.stream()
 
+@app.route('/list')
+def list():
+    return tanuki.list()
+
 @app.route('/page/<int:page>')
 def pager(page):
     return tanuki.stream( page )

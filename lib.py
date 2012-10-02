@@ -203,18 +203,33 @@ class Tanuki:
         if not chunk:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
-            msg = "%s %d to %d of %d entries %s %s %s"\
+            msg = "%s %d to %d of %d entries %s %s %s %s"\
                 % ( self.next_prev( chunk, page ),
                     chunk['start'],
                     chunk['last'], 
                     chunk['total'], 
                     self.img( 'home', '/' ) if page else '',
+                    self.img( 'list', '/list' ),
                     self.img( 'cloud', '/cloud' ),
                     self.img( 'search', '/search' ))
         return render_template( 'index.html',
                                 entries=chunk['entries'],
                                 msg=msg,
                                 start=chunk['start'] )
+
+    def list( self ):
+        entries = self.entries() # consider removing text
+        if not entries:
+            msg = "<h1>Unbelievable. No entries yet.</h1>"
+        else:
+            msg = "%d entries %s %s %s"\
+                % ( len(entries),
+                    self.img( 'home', '/' ),
+                    self.img( 'cloud', '/cloud' ),
+                    self.img( 'search', '/search' ))
+        return render_template( 'index.html',
+                                entries=entries,
+                                msg=msg )
 
     def singleton( self, entry_id ):
         entry = self.entry( entry_id, True )
@@ -223,18 +238,24 @@ class Tanuki:
         return render_template( 'index.html', entries=[ entry ] )
 
     def dated( self, date ):
-        entries = self.entries( date )
+        entries = self.markup( self.apply_tags( self.entries( date ) ) )
         date_str = self.date_str( date )
-        msg = "%d dated %s %s" % ( len(entries), date_str,
-                                   self.img( 'home', '/' ))
+        msg = "%d dated %s %s %s %s %s"\
+            % ( len(entries), 
+                date_str,
+                self.img( 'home', '/' ),
+                self.img( 'list', '/list' ),
+                self.img( 'cloud', '/cloud' ),
+                self.img( 'search', '/search' ))
         return render_template( 'index.html', entries=entries, msg=msg )
 
     def tagged( self, tag ):
         entries = self.markup( self.apply_tags( self.entries( None, tag ) ) )
-        msg = "%d tagged %s %s %s %s"\
+        msg = "%d tagged %s %s %s %s %s"\
             % ( len(entries), 
                 tag,
                 self.img( 'home', '/' ),
+                self.img( 'list', '/list' ),
                 self.img( 'cloud', '/cloud' ),
                 self.img( 'search', '/search' ))
         return render_template( 'index.html', entries=entries, msg=msg )

@@ -23,11 +23,17 @@
 <div id="entry_list">
 <ol start="{{ start }}">
 {% for entry in entries %}
+{% if '/list' in request.path %}
+<li><a href="entry/{{ entry.id }}">{{ entry.title }}</a></li>
+{% else %}
 <li><a href="#entry{{ entry.id }}">{{ entry.title }}</a></li>
+{% endif %}
 {% endfor %}
 </ol>
 </div>
 {% endif %}
+
+{% if '/list' not in request.path %}
 
 <div id="entries" align="center">
 
@@ -80,6 +86,8 @@
 </div>
 
 {% endfor %}
+
+{% endif %}
 
 </div><!-- /#entries -->
 
