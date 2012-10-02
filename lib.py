@@ -14,7 +14,6 @@ class Tanuki:
     def __init__( self, config ):
         self.config = config
         self.date = datetime.date.today().isoformat()
-        self.mode = None
 
     def connect( self ):
         self.con = sqlite3.connect( self.config['DATABASE'] )
@@ -107,11 +106,11 @@ class Tanuki:
             tags.append( row[0] )
         return tags
 
-    def apply_tags( self, entries):
+    def apply_tags( self, entries, editing=False ):
         tagged = []
         for entry in entries:
             tags = self.get_tags( entry['id'] )
-            entry['tags'] = ', '.join(tags) if self.mode=='edit' else tags
+            entry['tags'] = ', '.join(tags) if editing else tags
             tagged.append( entry )
         return tagged
 
@@ -128,7 +127,7 @@ class Tanuki:
                   'date': row[3],
                   'date_str': self.date_str( row[3] ) }
 
-    def entry( self, entry_id, md=False, title=None ):
+    def entry( self, entry_id, md=False, title=None, editing=False ):
         if title:
             sql = 'select * from entries where title=?'
             row = self.db.execute( sql, [title] ).fetchone()
@@ -138,7 +137,7 @@ class Tanuki:
         if not row:
             return None
         entry = self.demux_row( row, md )
-        return self.apply_tags( [entry] )[0]
+        return self.apply_tags( [entry], editing )[0]
 
     def pack( self, rows, limit ):
         entries = []
@@ -172,7 +171,7 @@ class Tanuki:
             rows = self.db.execute( sql )
             limit = True
         [ entries, count ] = self.pack( rows, limit )
-        entries = self.apply_tags( entries  )
+        entries = self.apply_tags( entries )
         if notag:
             self.total_notag = count
         else:
@@ -202,10 +201,11 @@ class Tanuki:
         if not entries:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
-            msg = "%d entries %d tags %s <i>%d not tagged %s</i>"\
+            msg = "%d entries %d tags %s %s <i>%d not tagged %s</i>"\
                 % ( self.total_entries,
                     self.total_tags,
                     self.img( 'home', '/' ),
+                    self.img( 'search', '/search' ),
                     self.total_notag,
                     self.img( 'notag', '/notag' ))
         return render_template( 'index.html', tag_set=tag_set, msg=msg )
@@ -242,9 +242,10 @@ class Tanuki:
         
     def matched( self, terms ):
         found = self.entries( None, None, False, terms )
-        msg = "%d matched { %s } %s %s"\
+        msg = "%d matched { %s } %s %s %s"\
             % ( len(found), 
                 terms,
                 self.img( 'search', '/search' ),
-                self.img( 'home', '/' ))
+                self.img( 'home', '/' ),
+                self.img( 'cloud', '/cloud' ))
         return render_template( 'index.html', entries=found, msg=msg )
