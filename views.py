@@ -14,6 +14,10 @@ app.config.from_envvar('TANUKI_CONFIG', silent=False)
 from lib import Tanuki
 tanuki = Tanuki( app.config )
 
+@app.route('/favicon.ico')
+def favicon():
+    return app.send_static_file("favicon.ico")
+
 @app.route('/')
 def index():
     return tanuki.stream()

@@ -25,7 +25,7 @@ class Tanuki:
         sql = 'select count(*),name from tags group by name order by count(*) desc'
         tmp = [ {'count':r[0],'name':r[1]} for r in self.db.execute( sql ) ]
         self.total_tags = len( tmp )
-        print tmp
+        # print tmp
         return tmp
 
     def img( self, alt, href ):
