@@ -26,7 +26,7 @@ def index():
 def cloud():
     return tanuki.cloud()
 
-@app.route('/entry/<_id>')
+@app.route('/entry/<int:_id>')
 def entry(_id):
     return tanuki.singleton( _id )
 

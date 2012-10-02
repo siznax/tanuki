@@ -142,20 +142,20 @@ class Tanuki:
     def entries( self, date=None, tag=None, notag=False, terms=None ):
         limit = False
         if date:
-            sql = 'select * from entries where date=?'
+            sql = 'select * from entries where date=? order by id desc'
             rows = self.db.execute( sql, [date] )
         elif tag:
-            sql = 'select * from entries,tags where tags.name=? and tags.id=entries.id order by date desc'
+            sql = 'select * from entries,tags where tags.name=? and tags.id=entries.id order by id desc'
             rows = self.db.execute( sql, [tag] )
         elif notag:
-            sql = 'select * from entries where id not in (select id from tags)'
+            sql = 'select * from entries where id not in (select id from tags) order by id desc'
             rows = self.db.execute( sql )
         elif terms:
             terms = '%' + terms  + '%'
             sql = 'select * from entries where (title like ? or text like ?)'
             rows = self.db.execute( sql, [ terms, terms ] )
         else:
-            sql = 'select * from entries order by date desc'
+            sql = 'select * from entries order by date desc,id desc'
             rows = self.db.execute( sql )
             limit = True
         entries = [ self.demux( x, True ) for x in rows ]
