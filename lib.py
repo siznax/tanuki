@@ -230,7 +230,7 @@ class Tanuki:
         return render_template( 'index.html', entries=entries, msg=msg )
 
     def tagged( self, tag ):
-        entries = self.entries( None, tag )
+        entries = self.markup( self.apply_tags( self.entries( None, tag ) ) )
         msg = "%d tagged %s %s %s %s"\
             % ( len(entries), 
                 tag,
