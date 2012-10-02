@@ -9,7 +9,7 @@ body {
 }
 
 div#result_msg {
-  font-family:"Open Sans",Arial; 
+  font-family:"Open Sans", sans-serif;
   text-shadow:0px 1px 0px snow;
   margin-top:32px;
   margin-bottom:-24px;
@@ -45,7 +45,7 @@ div#result_msg {
 div#app_title { 
   margin:0 0 1em 0;
   padding:1em;
-  font-family:"Open Sans";
+  font-family:"Open Sans", sans-serif;
   font-weight:800;
   font-size:x-large;
   text-shadow: rgb(255, 255, 255) 0px 1px 0px;
@@ -89,7 +89,7 @@ div#tag_set {
   margin-top:3em;
   margin-right:15%;
   margin-left:15%;
-  font-family:"Open Sans", Helvetica, sans-serif; 
+  font-family:"Open Sans", sans-serif; 
   line-height:3em;
 }
 div#tag_set i { 
@@ -115,7 +115,7 @@ div#tag_set span:hover i { color:whitesmoke; }
 div#tag_set span:hover a { color:white; }
 
 div#entry_list {
-  font-family:"Open Sans", Helvetica, sans-serif; 
+  font-family:"Open Sans", sans-serif; 
   font-weight:400;
   font-size:smaller;
   margin-left:20%;
@@ -128,7 +128,7 @@ div#entry_list {
 div#tail {
   margin-top:2em;
   margin-bottom:4em;
-  font-family:"Open Sans", Helvetica, sans-serif; 
+  font-family:"Open Sans", sans-serif; 
   font-weight:400;
   color:#666;
   text-shadow:0px 1px 1px white;
@@ -156,7 +156,7 @@ div.entry_head {
 }
 .entry_head #date {
   /* border:1px solid red; */
-  font-family:"Open Sans", Helvetica, sans-serif; 
+  font-family:"Open Sans", sans-serif; 
   font-weight:200;
   font-size:14px;
   padding:5px;
@@ -175,7 +175,7 @@ div.entry_head {
 }
 .entry_head #title { 
   /* border:1px solid blue; */
-  font-family:"Open Sans", Helvetica, sans-serif; 
+  font-family:"Open Sans", sans-serif; 
   font-weight:bold;
   font-size:x-large; 
   padding:0 0.4em;
@@ -235,7 +235,7 @@ div.entry_foot {
   background-color:whitesmoke;
 }
 .entry_foot #tags { 
-  font-family:"Open Sans",Arial; 
+  font-family:"Open Sans", sans-serif; 
 }
 .entry_foot #tags A { 
   text-decoration:none;

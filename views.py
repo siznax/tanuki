@@ -4,8 +4,7 @@ tanuki views
 __author__ = "siznax"
 __version__ = 2012
 
-from flask import Flask, make_response, render_template, \
-    request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 app.config.from_envvar('TANUKI_CONFIG', silent=False)
@@ -79,11 +78,15 @@ def confirm(_id):
 
 @app.before_request
 def before_request():
-    tanuki.connect()
+    if '/static' not in request.path:
+        tanuki.connect()
 
 @app.teardown_request
 def teardown_request(exception):
-    tanuki.con.close()
+    if '/static' not in request.path:
+        if tanuki.DEBUG:
+            print "+ TANUKI closing DB %s" % ( tanuki.con.total_changes )
+        tanuki.con.close()
 
 
 if __name__ == '__main__':

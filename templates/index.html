@@ -19,7 +19,7 @@
 </div>
 {% endif %}
 
-{% if entries|count() > 1 and not request.path=='/' %}
+{% if entries|count() > 1 and not request.path=='/' and '/page' not in request.path %}
 <div id="entry_list">
 <ol start="{{ start }}">
 {% for entry in entries %}

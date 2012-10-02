@@ -4,10 +4,11 @@ tanuki class
 __author__ = "siznax"
 __version__ = 2012
 
-import sqlite3
-from markdown import markdown
-import datetime
 from flask import Flask,render_template,make_response,redirect,url_for
+import markdown
+import datetime
+import sqlite3
+import string
 
 class Tanuki:
 
@@ -15,15 +16,26 @@ class Tanuki:
         self.config = config
         self.date = datetime.date.today().isoformat()
         self.num_per_page = 10
+        self.DEBUG = 1
 
     def connect( self ):
-        self.con = sqlite3.connect( self.config['DATABASE'] )
+        dbfile = self.config['DATABASE']
+        if self.DEBUG: print "+ TANUKI connecting to %s" % ( dbfile )
+        self.con = sqlite3.connect( dbfile )
         self.con.execute('pragma foreign_keys = on') # !important
         self.db = self.con.cursor()
 
+    def dbquery( self, sql, val='' ):
+        msg = "+ TANUKI SQL: %s" % ( sql )
+        if val:
+            msg += " VAL: %s" % ( ''.join( str(val) ) )
+        result = self.db.execute( sql, val )
+        if self.DEBUG: print msg
+        return result
+
     def tag_set( self ):
         sql = 'select count(*),name from tags group by name order by count(*) desc'
-        tmp = [ {'count':r[0],'name':r[1]} for r in self.db.execute( sql ) ]
+        tmp = [ {'count':r[0],'name':r[1]} for r in self.dbquery( sql ) ]
         self.total_tags = len( tmp )
         # print tmp
         return tmp
@@ -44,14 +56,13 @@ class Tanuki:
         return "%s%s" % ( self.environ['HTTP_ORIGIN'], path )
 
     def clear_tags( self, entry_id ):
-        self.db.execute("delete from tags where id=?", [entry_id] )
+        self.dbquery("delete from tags where id=?", [entry_id] )
 
     def norm_tags( self, blob ):
         norm = []
         # lower, strip, split, unique
         for tag in set(''.join(blob.lower().split()).split(',')):
             # remove punctuation
-            import string
             exclude = set(string.punctuation)
             norm.append(''.join(ch for ch in tag if ch not in exclude))
         return norm
@@ -62,7 +73,7 @@ class Tanuki:
             return 
         for tag in self.norm_tags( tags ):
             sql = 'insert into tags values(?,?,?)'
-            self.db.execute( sql, [ entry_id, tag, self.date ] )
+            self.dbquery( sql, [ entry_id, tag, self.date ] )
 
     def upsert( self, req ):
         self.environ = req.environ
@@ -74,14 +85,14 @@ class Tanuki:
                         req.form['entry'],
                         req.form['date'],
                         entry_id )
-                self.db.execute( sql, val )
+                self.dbquery( sql, val )
             else:
                 sql = 'insert into entries values(?,?,?,?)'
                 val = [ None,
                         req.form['title'], 
                         req.form['entry'],
                         req.form['date'] ]
-                cur = self.db.execute( sql, val )
+                cur = self.dbquery( sql, val )
                 entry_id = cur.lastrowid
 
             self.store_tags( entry_id, req.form['tags'] )
@@ -97,13 +108,13 @@ class Tanuki:
     def delete( self, entry_id ):
         self.clear_tags( entry_id )
         sql = 'DELETE from entries WHERE id=?'
-        self.db.execute( sql, [entry_id] )
+        self.dbquery( sql, [entry_id] )
         self.con.commit()
 
     def get_tags( self, entry_id ):
         tags = []
         sql = 'select name from tags where id=?'
-        for row in self.db.execute( sql, [entry_id] ):
+        for row in self.dbquery( sql, [entry_id] ):
             tags.append( row[0] )
         return tags
 
@@ -121,86 +132,89 @@ class Tanuki:
         except:
             return 'MALFORMED'
 
-    def demux( self, row, md=False ):
+    def demux( self, row ):
         return  { 'id': row[0],
                   'title': row[1],
-                  'text': markdown(row[2]) if md else row[2].strip(),
+                  'text': row[2].strip(),
                   'date': row[3],
                   'date_str': self.date_str( row[3] ) }
+
+    def markup( self, entries ): # Warning! this can be slow
+        for x in entries:
+            if self.DEBUG: print "+ TANUKI markup %d" % ( len(x['text'] ) )
+            x['text'] = markdown.markdown( x['text'] )
+        return entries
 
     def entry( self, entry_id, md=False, title=None, editing=False ):
         if title:
             sql = 'select * from entries where title=?'
-            row = self.db.execute( sql, [title] ).fetchone()
+            row = self.dbquery( sql, [title] ).fetchone()
         else:
             sql = 'select * from entries where id=?'
-            row = self.db.execute( sql, [entry_id] ).fetchone()
+            row = self.dbquery( sql, [entry_id] ).fetchone()
         if not row:
             return None
-        entry = self.demux( row, md )
-        return self.apply_tags( [entry], editing )[0]
+        return self.markup( self.apply_tags( [self.demux( row )], editing ) )[0]
 
     def entries( self, date=None, tag=None, notag=False, terms=None ):
         limit = False
         if date:
             sql = 'select * from entries where date=? order by id desc'
-            rows = self.db.execute( sql, [date] )
+            rows = self.dbquery( sql, [date] )
         elif tag:
             sql = 'select * from entries,tags where tags.name=? and tags.id=entries.id order by id desc'
-            rows = self.db.execute( sql, [tag] )
+            rows = self.dbquery( sql, [tag] )
         elif notag:
             sql = 'select * from entries where id not in (select id from tags) order by id desc'
-            rows = self.db.execute( sql )
+            rows = self.dbquery( sql )
         elif terms:
             terms = '%' + terms  + '%'
             sql = 'select * from entries where (title like ? or text like ?)'
-            rows = self.db.execute( sql, [ terms, terms ] )
+            rows = self.dbquery( sql, [ terms, terms ] )
         else:
             sql = 'select * from entries order by date desc,id desc'
-            rows = self.db.execute( sql )
+            rows = self.dbquery( sql )
             limit = True
-        entries = [ self.demux( x, True ) for x in rows ]
-        entries = self.apply_tags( entries )
+        entries = [ self.demux( x ) for x in rows ]
         return entries
 
     def slice( self, entries, page ):
+        total = len(entries)
         num = self.num_per_page
         first = page * num
-        last = first + num if ( first + num ) < len(entries) else len(entries)
-        total = len(entries)
-        entries = entries[first:last]
+        last = first + num if ( first + num ) < total else total
+        chunk = self.markup( self.apply_tags( entries[first:last] ) )
         return { 'num': num,
                  'total': total,
                  'start': first + 1,
                  'last': last,
-                 'entries': entries,
+                 'entries': chunk,
                  'num_pages': total / num }
 
-    def next_prev( self, eslice, page ):
-        n_p = page + 1 if ( page + 1) <= eslice['num_pages'] else 0
+    def next_prev( self, chunk, page ):
+        n_p = page + 1 if ( page + 1) < chunk['num_pages'] else 0
         p_p = page - 1
         n_i = self.img( 'next', "/page/%d" % ( n_p )) if n_p > 0 else ''
         p_i = self.img( 'prev', "/page/%d" % ( p_p)) if p_p >= 0 else ''
         return "<div id=\"next_prev\">\n%s%s\n</div>\n" % ( p_i, n_i ) 
-    
 
     def stream( self, page=0 ):
-        eslice = self.slice( self.entries(), page )
-        if not eslice:
+        chunk = self.slice( self.entries(), page )
+        if not chunk:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
             msg = "%s %d to %d of %d entries %s %s %s"\
-                % ( self.next_prev( eslice, page ),
-                    eslice['start'],
-                    eslice['last'], 
-                    eslice['total'], 
+                % ( self.next_prev( chunk, page ),
+                    chunk['start'],
+                    chunk['last'], 
+                    chunk['total'], 
                     self.img( 'home', '/' ) if page else '',
                     self.img( 'cloud', '/cloud' ),
                     self.img( 'search', '/search' ))
         return render_template( 'index.html',
-                                entries=eslice['entries'],
+                                entries=chunk['entries'],
                                 msg=msg,
-                                start=eslice['start'] )
+                                start=chunk['start'] )
 
     def singleton( self, entry_id ):
         entry = self.entry( entry_id, True )
