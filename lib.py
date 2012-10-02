@@ -120,7 +120,7 @@ class Tanuki:
         except:
             return 'MALFORMED'
 
-    def demux_row( self, row, md=False ):
+    def demux( self, row, md=False ):
         return  { 'id': row[0],
                   'title': row[1],
                   'text': markdown(row[2]) if md else row[2].strip(),
@@ -136,20 +136,8 @@ class Tanuki:
             row = self.db.execute( sql, [entry_id] ).fetchone()
         if not row:
             return None
-        entry = self.demux_row( row, md )
+        entry = self.demux( row, md )
         return self.apply_tags( [entry], editing )[0]
-
-    def pack( self, rows, limit ):
-        entries = []
-        count = 0
-        for row in rows:
-            if limit:
-                if count < 12:
-                    entries.append( self.demux_row( row, True ) )
-            else:
-                entries.append( self.demux_row( row, True ) )
-            count += 1
-        return [ entries, count ]
 
     def entries( self, date=None, tag=None, notag=False, terms=None ):
         limit = False
@@ -170,12 +158,8 @@ class Tanuki:
             sql = 'select * from entries order by date desc'
             rows = self.db.execute( sql )
             limit = True
-        [ entries, count ] = self.pack( rows, limit )
+        entries = [ self.demux( x, True ) for x in rows ]
         entries = self.apply_tags( entries )
-        if notag:
-            self.total_notag = count
-        else:
-            self.total_entries = count
         return entries
 
     def stream( self ):
@@ -185,11 +169,11 @@ class Tanuki:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
             msg = "%d entries %d tags %s %s"\
-                % ( self.total_entries, 
-                    self.total_tags,
+                % ( len(entries),
+                    len(tag_set),
                     self.img( 'cloud', '/cloud' ),
                     self.img( 'search', '/search' ))
-        return render_template( 'index.html', 
+        return render_template( 'index.html',
                                 entries=entries,
                                 msg=msg,
                                 index=True )
@@ -202,11 +186,11 @@ class Tanuki:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
             msg = "%d entries %d tags %s %s <i>%d not tagged %s</i>"\
-                % ( self.total_entries,
-                    self.total_tags,
+                % ( len(entries),
+                    len(tag_set),
                     self.img( 'home', '/' ),
                     self.img( 'search', '/search' ),
-                    self.total_notag,
+                    len(notag),
                     self.img( 'notag', '/notag' ))
         return render_template( 'index.html', tag_set=tag_set, msg=msg )
 
