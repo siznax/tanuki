@@ -63,8 +63,7 @@ def edit(_id):
     tanuki.mode = 'edit' # possibly LAME
     entry = tanuki.entry( _id )
     tanuki.mode = None
-    return render_template( 'edit.html', 
-                            entry=entry ) 
+    return render_template( 'edit.html', entry=entry ) 
 
 @app.route('/delete', methods=['POST'])
 def delete():
@@ -73,8 +72,7 @@ def delete():
 
 @app.route('/confirm/<_id>')
 def confirm(_id):
-    return render_template('confirm.html', 
-                           entry=tanuki.entry(_id) )
+    return render_template('confirm.html', entry=tanuki.entry(_id) )
 
 
 @app.before_request

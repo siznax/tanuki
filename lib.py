@@ -100,13 +100,6 @@ class Tanuki:
         self.db.execute( sql, [entry_id] )
         self.con.commit()
 
-    # def get_tags_sorted( self ):
-    #     tags = []
-    #     sql = 'select count(*),name from tags group by name order by count(*) desc'
-    #     for row in self.db.execute( sql, [entry_id] ):
-    #         tags.append( row[0] )
-    #     return tags
-
     def get_tags( self, entry_id ):
         tags = []
         sql = 'select name from tags where id=?'
@@ -207,7 +200,7 @@ class Tanuki:
         tag_set = self.tag_set()
         notag = self.entries( None, None, True )
         if not entries:
-            msg = "<h1>Unbelievable. No entries yet.</h1>"
+            msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
             msg = "%d entries %d tags %s <i>%d not tagged %s</i>"\
                 % ( self.total_entries,
@@ -215,26 +208,20 @@ class Tanuki:
                     self.img( 'home', '/' ),
                     self.total_notag,
                     self.img( 'notag', '/notag' ))
-        return render_template( 'index.html', 
-                                tag_set=tag_set,
-                                msg=msg )
+        return render_template( 'index.html', tag_set=tag_set, msg=msg )
 
     def singleton( self, entry_id ):
         entry = self.entry( entry_id, True )
         if not entry:
             return redirect( url_for( 'index' ) )
-        return render_template( 'index.html', 
-                                entries=[ entry ] )
+        return render_template( 'index.html', entries=[ entry ] )
 
     def dated( self, date ):
         entries = self.entries( date )
         date_str = self.date_str( date )
-        msg = "%d dated %s %s" % ( len(entries), 
-                                   date_str,
+        msg = "%d dated %s %s" % ( len(entries), date_str,
                                    self.img( 'home', '/' ))
-        return render_template('index.html', 
-                               entries=entries,
-                               msg=msg)
+        return render_template( 'index.html', entries=entries, msg=msg )
 
     def tagged( self, tag ):
         entries = self.entries( None, tag )
@@ -244,18 +231,14 @@ class Tanuki:
                 self.img( 'home', '/' ),
                 self.img( 'cloud', '/cloud' ),
                 self.img( 'search', '/search' ))
-        return render_template('index.html', 
-                               entries=entries,
-                               msg=msg)
+        return render_template( 'index.html', entries=entries, msg=msg )
         
     def notag( self ):
         entries = self.entries( None, None, True )
         msg = "%d not tagged %s %s" % ( len(entries), 
                                         self.img( 'home', '/' ),
                                         self.img( 'cloud', '/cloud' ) )
-        return render_template('index.html', 
-                               entries=entries,
-                               msg=msg)
+        return render_template( 'index.html', entries=entries, msg=msg )
         
     def matched( self, terms ):
         found = self.entries( None, None, False, terms )
@@ -264,4 +247,4 @@ class Tanuki:
                 terms,
                 self.img( 'search', '/search' ),
                 self.img( 'home', '/' ))
-        return render_template('index.html', entries=found, msg=msg )
+        return render_template( 'index.html', entries=found, msg=msg )
