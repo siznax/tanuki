@@ -14,6 +14,7 @@ class Tanuki:
     def __init__( self, config ):
         self.config = config
         self.date = datetime.date.today().isoformat()
+        self.num_per_page = 10
 
     def connect( self ):
         self.con = sqlite3.connect( self.config['DATABASE'] )
@@ -162,37 +163,44 @@ class Tanuki:
         entries = self.apply_tags( entries )
         return entries
 
-    def stream( self ):
-        entries = self.entries()
-        tag_set = self.tag_set()
-        if not entries:
+    def slice( self, entries, page ):
+        num = self.num_per_page
+        first = page * num
+        last = first + num if ( first + num ) < len(entries) else len(entries)
+        total = len(entries)
+        entries = entries[first:last]
+        return { 'num': num,
+                 'total': total,
+                 'start': first + 1,
+                 'last': last,
+                 'entries': entries,
+                 'num_pages': total / num }
+
+    def next_prev( self, eslice, page ):
+        n_p = page + 1 if ( page + 1) <= eslice['num_pages'] else 0
+        p_p = page - 1
+        n_i = self.img( 'next', "/page/%d" % ( n_p )) if n_p > 0 else ''
+        p_i = self.img( 'prev', "/page/%d" % ( p_p)) if p_p >= 0 else ''
+        return "<div id=\"next_prev\">\n%s%s\n</div>\n" % ( p_i, n_i ) 
+    
+
+    def stream( self, page=0 ):
+        eslice = self.slice( self.entries(), page )
+        if not eslice:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
-            msg = "%d entries %d tags %s %s"\
-                % ( len(entries),
-                    len(tag_set),
+            msg = "%s %d to %d of %d entries %s %s %s"\
+                % ( self.next_prev( eslice, page ),
+                    eslice['start'],
+                    eslice['last'], 
+                    eslice['total'], 
+                    self.img( 'home', '/' ) if page else '',
                     self.img( 'cloud', '/cloud' ),
                     self.img( 'search', '/search' ))
         return render_template( 'index.html',
-                                entries=entries,
+                                entries=eslice['entries'],
                                 msg=msg,
-                                index=True )
-
-    def cloud( self ):
-        entries = self.entries()
-        tag_set = self.tag_set()
-        notag = self.entries( None, None, True )
-        if not entries:
-            msg = "<h1>Unbelievable. No tags yet.</h1>"
-        else:
-            msg = "%d entries %d tags %s %s <i>%d not tagged %s</i>"\
-                % ( len(entries),
-                    len(tag_set),
-                    self.img( 'home', '/' ),
-                    self.img( 'search', '/search' ),
-                    len(notag),
-                    self.img( 'notag', '/notag' ))
-        return render_template( 'index.html', tag_set=tag_set, msg=msg )
+                                start=eslice['start'] )
 
     def singleton( self, entry_id ):
         entry = self.entry( entry_id, True )
@@ -217,6 +225,22 @@ class Tanuki:
                 self.img( 'search', '/search' ))
         return render_template( 'index.html', entries=entries, msg=msg )
         
+    def cloud( self ):
+        entries = self.entries()
+        tag_set = self.tag_set()
+        notag = self.entries( None, None, True )
+        if not entries:
+            msg = "<h1>Unbelievable. No tags yet.</h1>"
+        else:
+            msg = "%d entries %d tags %s %s <i>%d not tagged %s</i>"\
+                % ( len(entries),
+                    len(tag_set),
+                    self.img( 'home', '/' ),
+                    self.img( 'search', '/search' ),
+                    len(notag),
+                    self.img( 'notag', '/notag' ))
+        return render_template( 'index.html', tag_set=tag_set, msg=msg )
+
     def notag( self ):
         entries = self.entries( None, None, True )
         msg = "%d not tagged %s %s" % ( len(entries), 

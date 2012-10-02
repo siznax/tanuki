@@ -28,6 +28,19 @@ div#result_msg {
 #result_msg i {
   margin-left:1em;
 }
+#result_msg div#next_prev img {
+  width:32px;
+  height:32px;
+  opacity:0.6;
+}
+#result_msg div#next_prev img:hover {
+  opacity:1;
+}
+#result_msg div#next_prev {
+  position:absolute;
+  top:24px;
+  right:16px;
+}
 
 div#app_title { 
   margin:0 0 1em 0;

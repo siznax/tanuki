@@ -4,7 +4,7 @@
 {% if msg %}
 <div align="center" id="result_msg">
 {{ msg|safe }}
-{% if not entries and not tag_set and index %}
+{% if not entries and not tag_set and request.path=='/' %}
 <input type="button" value="new" id="new_btn" onclick="window.location='/new'">
 {% endif %}
 </div>
@@ -21,7 +21,7 @@
 
 {% if entries|count() > 1 and not request.path=='/' %}
 <div id="entry_list">
-<ol>
+<ol start="{{ start }}">
 {% for entry in entries %}
 <li><a href="#entry{{ entry.id }}">{{ entry.title }}</a></li>
 {% endfor %}
