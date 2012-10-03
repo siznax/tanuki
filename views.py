@@ -21,15 +21,23 @@ def favicon():
 def index():
     return tanuki.stream()
 
-@app.route('/list')
-def list():
-    return tanuki.list()
-
 @app.route('/page/<int:page>')
 def pager(page):
     if page==0:
         return redirect( url_for('index') )
     return tanuki.stream( page )
+
+@app.route('/grid')
+def grid():
+    return tanuki.grid()
+
+@app.route('/grid/<int:page>')
+def grid_pager(page):
+    return tanuki.grid( page )
+
+@app.route('/list')
+def list():
+    return tanuki.list()
 
 @app.route('/cloud')
 def cloud():

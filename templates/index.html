@@ -18,11 +18,14 @@
 <div id="entry_list">
 <ol start="{{ start }}">
 {% for entry in entries %}
+{% set month = entry.month %}
 {% if '/list' in request.path %}
-<li><a href="entry/{{ entry.id }}">{{ entry.title }}</a></li>
+{% if not month==last_month %}<i>{{ month }} {{ entry.year }}</i>{% endif %}<li><a 
+ href="entry/{{ entry.id }}">{{ entry.title }}</a></li>
 {% else %}
 <li><a href="#entry{{ entry.id }}">{{ entry.title }}</a></li>
 {% endif %}
+{% set last_month = month %}
 {% endfor %}
 </ol>
 </div>

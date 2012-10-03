@@ -135,6 +135,11 @@ div#entry_list {
 #entry_list a {
   text-decoration:none;
 }
+#entry_list i {
+  margin-left:-8em;
+  font-style:normal;
+  color:#444;
+}
 
 div#tail {
   margin-top:2em;
@@ -243,6 +248,7 @@ div.entry_body {
   padding:12px;
   border-right:1px solid silver;
   border-left: 1px solid silver;
+  overflow:hidden;
 }
 div.entry_text { font-family:Georgia; }
 div.entry_foot {
@@ -292,4 +298,35 @@ div#search {
 }
 #search input {
   font-size:16pt;
+}
+
+
+div#grid {
+  position:relative;
+  margin-top:2em;
+}
+#grid div {
+  float:left;
+  margin:16px;
+  margin-bottom:8px;
+  margin-right:8px;
+  padding:8px;
+  padding-bottom:16px;
+  width:200px;
+  height:180px;
+  overflow:hidden;
+
+  font-family:sans-serif;
+  font-size:smaller;
+  font-weight:100;
+
+  border:1px solid silver;
+  background:white;
+}
+#grid div b {
+  margin-right:0.4em;
+}
+#grid div p {
+  margin-top:0;
+  font-size:smaller;
 }

@@ -4,7 +4,7 @@ tanuki class
 __author__ = "siznax"
 __version__ = 2012
 
-from flask import Flask,render_template,make_response,redirect,url_for
+from flask import Flask,render_template,make_response,redirect,url_for,Markup
 import markdown
 import datetime
 import sqlite3
@@ -16,7 +16,7 @@ class Tanuki:
         self.config = config
         self.date = datetime.date.today().isoformat()
         self.num_per_page = 10
-        self.DEBUG = 0
+        self.DEBUG = 1
 
     def connect( self ):
         dbfile = self.config['DATABASE']
@@ -135,11 +135,20 @@ class Tanuki:
         except:
             return 'MALFORMED'
 
+    def ymd( self, date ):
+        parsed = datetime.datetime.strptime( date ,'%Y-%m-%d')
+        return [ parsed.strftime('%Y'), 
+                 parsed.strftime('%b'), 
+                 parsed.strftime('%d') ] 
+
     def demux( self, row ):
+        ymd = self.ymd( row[3] ) 
         return  { 'id': row[0],
                   'title': row[1],
                   'text': row[2].strip(),
                   'date': row[3],
+                  'year': ymd[0],
+                  'month': ymd[1],
                   'date_str': self.date_str( row[3] ) }
 
     def markup( self, entries ): # Warning! this can be slow
@@ -198,11 +207,11 @@ class Tanuki:
                  'entries': chunk,
                  'num_pages': total / num }
 
-    def next_prev( self, chunk, page ):
+    def next_prev( self, chunk, page, url='page' ):
         n_p = page + 1 if ( page + 1) <= chunk['num_pages'] else 0
         p_p = page - 1
-        n_i = self.img( 'next', "/page/%d" % ( n_p )) if n_p > 0 else ''
-        p_i = self.img( 'prev', "/page/%d" % ( p_p)) if p_p >= 0 else ''
+        n_i = self.img( 'next', "/%s/%d" % ( url, n_p )) if n_p > 0 else ''
+        p_i = self.img( 'prev', "/%s/%d" % ( url, p_p)) if p_p >= 0 else ''
         return "<div id=\"next_prev\">\n%s%s\n</div>\n" % ( p_i, n_i ) 
 
     def stream( self, page=0 ):
@@ -217,17 +226,46 @@ class Tanuki:
                     "<input type=\"button\" value=\"new\" id=\"new_btn\" "\
                         "onclick=\"window.location='/new'\">" )
         else:
-            msg = "%s %s %d to %d of %d entries %s %s %s %s"\
+            msg = "%s %s %d to %d of %d entries %s %s %s %s %s"\
                 % ( self.img( 'tanuki', None ),
                     self.next_prev( chunk, page ),
                     chunk['start'],
                     chunk['last'], 
                     chunk['total'], 
                     self.img( 'home', '/' ) if page else '',
+                    self.img( 'grid', '/grid' ),
                     self.img( 'list', '/list' ),
                     self.img( 'cloud', '/cloud' ),
                     self.img( 'search', '/search' ))
         return render_template( 'index.html',
+                                entries=chunk['entries'],
+                                msg=msg,
+                                start=chunk['start'] )
+
+    def grid_cells( self, entries ):
+        max_word_len = 32
+        max_text_len = 128
+        for entry in entries:
+            text = Markup(entry['text']).striptags()
+            if len(text) > max_text_len:
+                text = text[0:256] + '...'
+            entry['text'] = text
+        return entries
+
+    def grid( self, page=0 ):
+        chunk = self.slice( self.entries(), page )
+        chunk['entries'] = self.grid_cells( chunk['entries'] )
+        msg = "%s %s %d to %d of %d entries %s %s %s %s"\
+            % ( self.img( 'tanuki', None ),
+                self.next_prev( chunk, page, 'grid' ),
+                chunk['start'],
+                chunk['last'], 
+                chunk['total'], 
+                self.img( 'home', '/' ),
+                self.img( 'list', '/list' ),
+                self.img( 'cloud', '/cloud' ),
+                self.img( 'search', '/search' ))
+        return render_template( 'grid.html',
                                 entries=chunk['entries'],
                                 msg=msg,
                                 start=chunk['start'] )
@@ -237,9 +275,10 @@ class Tanuki:
         if not entries:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
-            msg = "%d entries %s %s %s"\
+            msg = "%d entries %s %s %s %s"\
                 % ( len(entries),
                     self.img( 'home', '/' ),
+                    self.img( 'grid', '/grid' ),
                     self.img( 'cloud', '/cloud' ),
                     self.img( 'search', '/search' ))
         return render_template( 'index.html',
@@ -282,10 +321,11 @@ class Tanuki:
         if not entries:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
-            msg = "%d entries %d tags %s %s %s <i>%d not tagged %s</i>"\
+            msg = "%d entries %d tags %s %s %s %s <i>%d not tagged %s</i>"\
                 % ( len(entries),
                     len(tag_set),
                     self.img( 'home', '/' ),
+                    self.img( 'grid', '/grid' ),
                     self.img( 'list', '/list' ),
                     self.img( 'search', '/search' ),
                     len(notag),
