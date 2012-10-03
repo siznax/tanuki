@@ -151,9 +151,9 @@ div#tail {
 }
 
 div.entry_head {
-  background: -webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#a9a9a9));
+  background:-webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#a9a9a9));
   background:-webkit-gradient(linear,left top,left bottom,from(darkviolet),to(indigo));
-  background: -webkit-gradient(linear, left top, left bottom, from(#fe00a9), to(#b00074));
+  background:-webkit-gradient(linear, left top, left bottom, from(#fe00a9), to(#b00074));
   width:80%;
   margin:48px 64px 0 64px;
   padding:12px;
@@ -313,7 +313,7 @@ div#grid {
   padding:8px;
   padding-bottom:16px;
   width:200px;
-  height:180px;
+  height:160px;
   overflow:hidden;
 
   font-family:sans-serif;

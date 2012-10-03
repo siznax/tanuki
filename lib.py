@@ -243,13 +243,12 @@ class Tanuki:
                                 start=chunk['start'] )
 
     def grid_cells( self, entries ):
-        max_word_len = 32
-        max_text_len = 128
-        for entry in entries:
-            text = Markup(entry['text']).striptags()
-            if len(text) > max_text_len:
-                text = text[0:256] + '...'
-            entry['text'] = text
+        max_cell_len = 255
+        for x in entries:
+            t = Markup( x['text'] ).striptags()
+            if len( t ) > max_cell_len:
+                t = t[:max_cell_len] + '...'
+            x['text'] = t
         return entries
 
     def grid( self, page=0 ):
