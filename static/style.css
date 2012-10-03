@@ -15,7 +15,7 @@ div#result_msg {
   margin-bottom:-24px;
 }
 #result_msg #new_btn {
-  margin-left:2em;
+  margin-left:1em;
 }
 #result_msg img,.entry_foot img {
   height:20px;
@@ -33,6 +33,12 @@ div#result_msg {
 }
 #result_msg i {
   margin-left:1em;
+}
+#result_msg #no_entries {
+  font-size:x-large;
+}
+#result_msg #no_entries img#tanuki {
+  height:64px;
 }
 #result_msg div#next_prev {
   position:absolute;
@@ -159,7 +165,7 @@ div.entry_head {
 }
 .entry_head a { 
   text-decoration:none; 
-  color:mistyrose; /* color:#444; */
+  color:white; /* color:#444; */
 }
 .entry_head #date {
   /* border:1px solid red; */
@@ -168,6 +174,9 @@ div.entry_head {
   font-size:14px;
   padding:5px;
   white-space:nowrap;
+}
+.entry_head #date a { 
+  color:mistyrose;
 }
 .entry_head #date a:hover { 
   margin:0 -5px;

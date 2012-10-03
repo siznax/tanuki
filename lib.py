@@ -210,8 +210,12 @@ class Tanuki:
             chunk = self.slice( self.entries(), page )
         except ValueError:
             return redirect( url_for('index') )
-        if not chunk:
-            msg = "<h1>Unbelievable. No entries yet.</h1>"
+        if not chunk['entries']:
+            msg = "<div id=\"no_entries\">%s %s %s</div>"\
+                % ( self.img( 'tanuki', None ),
+                    "<b>Unbelievable. No entries yet.</b><br />",
+                    "<input type=\"button\" value=\"new\" id=\"new_btn\" "\
+                        "onclick=\"window.location='/new'\">" )
         else:
             msg = "%s %s %d to %d of %d entries %s %s %s %s"\
                 % ( self.img( 'tanuki', None ),

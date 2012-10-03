@@ -2,12 +2,7 @@
 {% block body %}
 
 {% if msg %}
-<div align="center" id="result_msg">
-{{ msg|safe }}
-{% if not entries and not tag_set and request.path=='/' %}
-<input type="button" value="new" id="new_btn" onclick="window.location='/new'">
-{% endif %}
-</div>
+<div align="center" id="result_msg">{{ msg|safe }}</div>
 {% endif %}
 
 {% if tag_set %}
