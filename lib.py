@@ -145,7 +145,7 @@ class Tanuki:
             x['text'] = markdown.markdown( x['text'] )
         return entries
 
-    def entry( self, entry_id, md=False, title=None, editing=False ):
+    def entry( self, entry_id, markup=False, title=None, editing=False ):
         if title:
             sql = 'select * from entries where title=?'
             row = self.dbquery( sql, [title] ).fetchone()
@@ -154,7 +154,9 @@ class Tanuki:
             row = self.dbquery( sql, [entry_id] ).fetchone()
         if not row:
             return None
-        return self.markup( self.apply_tags( [self.demux( row )], editing ) )[0]
+        if markup:
+            return self.markup( self.apply_tags( [self.demux( row )], editing ) )[0]
+        return self.apply_tags( [self.demux( row )], editing )[0]
 
     def entries( self, date=None, tag=None, notag=False, terms=None ):
         limit = False
