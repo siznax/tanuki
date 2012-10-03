@@ -16,7 +16,7 @@ class Tanuki:
         self.config = config
         self.date = datetime.date.today().isoformat()
         self.num_per_page = 10
-        self.DEBUG = 1
+        self.DEBUG = 0
 
     def connect( self ):
         dbfile = self.config['DATABASE']
@@ -40,10 +40,13 @@ class Tanuki:
         # print tmp
         return tmp
 
-    def img( self, alt, href ):
+    def img( self, alt, href=None ):
         img = '<img id="%s" alt="%s" align="top" src="/static/%s.png">'\
             % ( alt, alt, alt )
-        return '<a href="%s">%s</a>' % ( href, img )
+        if href:
+            return '<a href="%s">%s</a>' % ( href, img )
+        else:
+            return img
 
     def new( self ):
         return render_template( 'edit.html', 
@@ -164,7 +167,7 @@ class Tanuki:
             sql = 'select * from entries where date=? order by id desc'
             rows = self.dbquery( sql, [date] )
         elif tag:
-            sql = 'select * from entries,tags where tags.name=? and tags.id=entries.id order by id desc'
+            sql = 'select * from entries,tags where tags.name=? and tags.id=entries.id order by date desc'
             rows = self.dbquery( sql, [tag] )
         elif notag:
             sql = 'select * from entries where id not in (select id from tags) order by id desc'
@@ -210,8 +213,9 @@ class Tanuki:
         if not chunk:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
-            msg = "%s %d to %d of %d entries %s %s %s %s"\
-                % ( self.next_prev( chunk, page ),
+            msg = "%s %s %d to %d of %d entries %s %s %s %s"\
+                % ( self.img( 'tanuki', None ),
+                    self.next_prev( chunk, page ),
                     chunk['start'],
                     chunk['last'], 
                     chunk['total'], 

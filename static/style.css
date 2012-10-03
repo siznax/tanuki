@@ -22,11 +22,22 @@ div#result_msg {
   opacity:0.2;
   padding-left:0.4em;
 }
+#result_msg img#tanuki {
+  height:32px;
+  margin-top:-8px;
+  opacity:1;
+  margin-right:0.4em;
+}
 #result_msg img:hover,.entry_foot img:hover {
   opacity:1;
 }
 #result_msg i {
   margin-left:1em;
+}
+#result_msg div#next_prev {
+  position:absolute;
+  top:24px;
+  right:16px;
 }
 #result_msg div#next_prev img {
   width:32px;
@@ -35,11 +46,6 @@ div#result_msg {
 }
 #result_msg div#next_prev img:hover {
   opacity:1;
-}
-#result_msg div#next_prev {
-  position:absolute;
-  top:24px;
-  right:16px;
 }
 
 div#app_title { 
@@ -50,8 +56,7 @@ div#app_title {
   font-size:x-large;
   text-shadow: rgb(255, 255, 255) 0px 1px 0px;
   background:indigo;
-  background: -webkit-gradient(linear, left top, left bottom, 
-    from(darkviolet), to(indigo));
+  background:-webkit-gradient(linear,left top,left bottom,from(darkviolet),to(indigo));
 }
 div#app_title A {
   text-decoration:none;
@@ -135,8 +140,9 @@ div#tail {
 }
 
 div.entry_head {
-  background: -webkit-gradient(linear, left top, left bottom, 
-    from(#dcdcdc), to(#a9a9a9));
+  background: -webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#a9a9a9));
+  background:-webkit-gradient(linear,left top,left bottom,from(darkviolet),to(indigo));
+  background: -webkit-gradient(linear, left top, left bottom, from(#fe00a9), to(#b00074));
   width:80%;
   margin:48px 64px 0 64px;
   padding:12px;
@@ -149,10 +155,11 @@ div.entry_head {
   -moz-border-radius-topright: 8px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  color:white;
 }
 .entry_head a { 
   text-decoration:none; 
-  color:#444;
+  color:mistyrose; /* color:#444; */
 }
 .entry_head #date {
   /* border:1px solid red; */
@@ -162,16 +169,20 @@ div.entry_head {
   padding:5px;
   white-space:nowrap;
 }
-.entry_head #date a { 
-  color:dimgray; 
-}
 .entry_head #date a:hover { 
   margin:0 -5px;
   padding:4px;
-  border:1px solid silver;
   border-radius:8px;
-  color:black;
+/*
+  border:1px solid silver;
   background:lightgray;
+  color:black;
+  text-shadow:0px 1px 1px white;
+*/
+  border:1px solid #b00074;
+  background:#fa00a9;
+  color:white;
+  text-shadow:0px 2px 1px #b00074;
 }
 .entry_head #title { 
   /* border:1px solid blue; */
@@ -179,10 +190,6 @@ div.entry_head {
   font-weight:bold;
   font-size:x-large; 
   padding:0 0.4em;
-}
-.entry_head #title A:hover { 
-  color:indigo;
-  text-shadow:0px 1px 1px snow;
 }
 .entry_head #controls {
   /* border:1px solid green; */
@@ -197,8 +204,12 @@ div.entry_head {
 .entry_head #controls img:hover {
   padding:5px;
   opacity:1;
+/* 
   border:1px solid silver;
   background:lightgray;
+*/
+  border:1px solid #b00074;
+  background:#00aaff;
 }
 .entry_head table {
   /* border:1px solid magenta; */

@@ -51,7 +51,7 @@
 
 <td id="title" align="center">
 {% if entries|count() == 1 %}
-<div id="title"><a href="/">{{ entry.title }}</a></div>
+<div id="title">{{ entry.title }}</div>
 {% else %}
 <div id="title"><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></div>
 {% endif %}
