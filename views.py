@@ -27,6 +27,8 @@ def list():
 
 @app.route('/page/<int:page>')
 def pager(page):
+    if page==0:
+        return redirect( url_for('index') )
     return tanuki.stream( page )
 
 @app.route('/cloud')

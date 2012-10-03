@@ -188,7 +188,7 @@ class Tanuki:
         num = self.num_per_page
         first = page * num
         last = first + num if ( first + num ) < total else total
-        if first > last:
+        if first >= last:
             raise ValueError
         chunk = self.markup( self.apply_tags( entries[first:last] ) )
         return { 'num': num,
@@ -210,7 +210,7 @@ class Tanuki:
             chunk = self.slice( self.entries(), page )
         except ValueError:
             return redirect( url_for('index') )
-        if not chunk['entries']:
+        if not page and not chunk['entries']:
             msg = "<div id=\"no_entries\">%s %s %s</div>"\
                 % ( self.img( 'tanuki', None ),
                     "<b>Unbelievable. No entries yet.</b><br />",
@@ -282,10 +282,11 @@ class Tanuki:
         if not entries:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
-            msg = "%d entries %d tags %s %s <i>%d not tagged %s</i>"\
+            msg = "%d entries %d tags %s %s %s <i>%d not tagged %s</i>"\
                 % ( len(entries),
                     len(tag_set),
                     self.img( 'home', '/' ),
+                    self.img( 'list', '/list' ),
                     self.img( 'search', '/search' ),
                     len(notag),
                     self.img( 'notag', '/notag' ))
