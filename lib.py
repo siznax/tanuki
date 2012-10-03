@@ -183,6 +183,8 @@ class Tanuki:
         num = self.num_per_page
         first = page * num
         last = first + num if ( first + num ) < total else total
+        if first > last:
+            raise ValueError
         chunk = self.markup( self.apply_tags( entries[first:last] ) )
         return { 'num': num,
                  'total': total,
@@ -192,14 +194,17 @@ class Tanuki:
                  'num_pages': total / num }
 
     def next_prev( self, chunk, page ):
-        n_p = page + 1 if ( page + 1) < chunk['num_pages'] else 0
+        n_p = page + 1 if ( page + 1) <= chunk['num_pages'] else 0
         p_p = page - 1
         n_i = self.img( 'next', "/page/%d" % ( n_p )) if n_p > 0 else ''
         p_i = self.img( 'prev', "/page/%d" % ( p_p)) if p_p >= 0 else ''
         return "<div id=\"next_prev\">\n%s%s\n</div>\n" % ( p_i, n_i ) 
 
     def stream( self, page=0 ):
-        chunk = self.slice( self.entries(), page )
+        try:
+            chunk = self.slice( self.entries(), page )
+        except ValueError:
+            return redirect( url_for('index') )
         if not chunk:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
@@ -234,7 +239,7 @@ class Tanuki:
     def singleton( self, entry_id ):
         entry = self.entry( entry_id, True )
         if not entry:
-            return redirect( url_for( 'index' ) )
+            return redirect( url_for('index') )
         return render_template( 'index.html', entries=[ entry ] )
 
     def dated( self, date ):
