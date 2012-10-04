@@ -17,6 +17,8 @@ class Tanuki:
         self.date = datetime.date.today().isoformat()
         self.num_per_page = 10
         self.DEBUG = 1
+        self.editing = False
+        self.mediatype = 'text'
 
     def connect( self ):
         dbfile = self.config['DATABASE']
@@ -112,6 +114,22 @@ class Tanuki:
             msg = "Try again, title or text not unique."
             return render_template( 'error.html', msg=msg )
 
+    def confirm_msg( self, msg, entry ):
+        deets = "ID: %d<br />\n"\
+            "Title: %s<br />\n"\
+            "Date: %s<br />\n"\
+            % ( entry['id'], entry['title'], entry['date'] )
+        return "<b>%s</b><br />\n"\
+            "<div id=\"details\">%s</div>\n"\
+            % ( msg, deets )
+
+    def confirm( self, entry_id ):
+        entry = self.entry( entry_id )
+        msg = self.confirm_msg( 'Really, destroy?', entry )
+        return render_template( 'confirm.html', 
+                                entry=entry,
+                                msg=msg )
+
     def delete( self, entry_id ):
         self.clear_tags( entry_id )
         sql = 'DELETE from entries WHERE id=?'
@@ -125,13 +143,11 @@ class Tanuki:
             tags.append( row[0] )
         return sorted(tags)
 
-    def apply_tags( self, entries, editing=False ):
-        tagged = []
-        for entry in entries:
-            tags = self.get_tags( entry['id'] )
-            entry['tags'] = ', '.join(tags) if editing else tags
-            tagged.append( entry )
-        return tagged
+    def apply_tags( self, entries ):
+        for x in entries:
+            tags = self.get_tags( x['id'] )
+            x['tags'] = ', '.join(tags) if self.editing else tags
+        return entries
 
     def date_str( self, date ):
         try:
@@ -146,10 +162,11 @@ class Tanuki:
                  parsed.strftime('%d') ] 
 
     def demux( self, row ):
+        # overevaluated, don't try to do much here
         ymd = self.ymd( row[3] ) 
         return  { 'id': row[0],
                   'title': row[1],
-                  'text': row[2].strip(),
+                  'text': row[2], 
                   'date': row[3],
                   'year': ymd[0],
                   'month': ymd[1],
@@ -157,11 +174,48 @@ class Tanuki:
 
     def markup( self, entries ): # Warning! this can be slow
         for x in entries:
-            if self.DEBUG: print "+ TANUKI markup %d" % ( len(x['text'] ) )
+            if self.DEBUG: print "+ TANUKI markup %d %d"\
+                    % ( x['id'], len(x['text'] ) )
             x['text'] = markdown.markdown( x['text'] )
         return entries
 
+    def figure( self, alt, src, caption, media=False ):
+        caption = markdown.markdown( caption )
+        if not media:
+            media = "<img alt=\"%s\" title=\"%s\" src=\"%s\">\n"\
+                % ( alt, alt, src )
+        return "<div id=\"figure\">\n<figure>%s\n"\
+            "<figcaption>%s</figcaption>\n"\
+            "</figure>\n</div>\n"\
+            % ( media, caption )
+
+    def preprocess( self, entries ):
+        # do this before markdown
+        if self.editing:
+            return entries
+        for x in entries:
+            if ( x['text'].startswith('http') or 
+                 x['text'].startswith('<iframe') ):
+                if self.DEBUG: print "+ TANUKI preprocess %d" % ( x['id'] )
+                text = x['text'].strip()
+                lines = text.split("\n")
+                first_line = lines[0].strip()
+                first_word = lines[0].split()[0]
+                cap = "\n".join( lines[1:])
+                if text.startswith('http'):
+                    self.mediatype = 'img'
+                    alt = x['title']
+                    src = first_word
+                    text = self.figure( alt, src, cap )
+                if text.startswith('<iframe'):
+                    self.mediatype = 'video'
+                    text = self.figure( None, None, cap, first_line )
+                x['text'] = text
+        return entries
+
     def entry( self, entry_id, markup=False, title=None, editing=False ):
+        if editing:
+            self.editing = True
         if title:
             sql = 'select * from entries where title=?'
             row = self.dbquery( sql, [title] ).fetchone()
@@ -170,9 +224,13 @@ class Tanuki:
             row = self.dbquery( sql, [entry_id] ).fetchone()
         if not row:
             return None
+        entries = [self.demux( row )]
+        entries = self.preprocess( entries )
+        entries = self.apply_tags( entries )
         if markup:
-            return self.markup( self.apply_tags( [self.demux( row )], editing ) )[0]
-        return self.apply_tags( [self.demux( row )], editing )[0]
+            entries = self.markup( entries )
+        self.editing = False
+        return entries[0]
 
     def entries( self, date=None, tag=None, notag=False, terms=None ):
         limit = False
@@ -203,7 +261,9 @@ class Tanuki:
         last = first + num if ( first + num ) < total else total
         if first >= last:
             raise ValueError
-        chunk = self.markup( self.apply_tags( entries[first:last] ) )
+        chunk = self.preprocess( entries[first:last] )
+        chunk = self.apply_tags( chunk )
+        chunk = self.markup( chunk )
         return { 'num': num,
                  'total': total,
                  'start': first + 1,

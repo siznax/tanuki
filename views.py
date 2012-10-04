@@ -79,15 +79,14 @@ def store():
 def edit(_id):
     return tanuki.edit( _id )
 
+@app.route('/confirm/<_id>')
+def confirm(_id):
+    return tanuki.confirm( _id )
+
 @app.route('/delete', methods=['POST'])
 def delete():
     tanuki.delete( request.form['entry_id'] )
     return redirect(url_for('index'))
-
-@app.route('/confirm/<_id>')
-def confirm(_id):
-    return render_template('confirm.html', entry=tanuki.entry(_id) )
-
 
 @app.before_request
 def before_request():

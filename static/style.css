@@ -284,19 +284,19 @@ div.entry_foot {
   color:darkgray;
 }
 
+div#confirm_outer {
+  text-align:center;
+}
 div#confirm { 
-  margin:2em; 
+  margin:3em 5em; 
   padding:2em;
-  border:1px solid silver;
+  border:1px solid black;
   border-radius:10px;
-  background:whitesmoke;
+  background:khaki;
 }
-div#confirm #msg { 
-  font-size:xx-large; 
-}
-div#confirm #details {
-  margin:1em;
-}
+#confirm b { font-size:xx-large; }
+#confirm #details { margin:1em 25%; text-align:left; }
+#confirm input { font-size:larger; }
 
 div#error_msg { margin:2em; font-size:x-large; }
 
@@ -337,3 +337,6 @@ div#grid {
   margin-top:0;
   font-size:smaller;
 }
+
+div#figure { text-align:center; }
+div#figure figcaption { text-align:left; margin:0 15%; }
