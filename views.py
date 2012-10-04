@@ -77,8 +77,7 @@ def store():
 
 @app.route('/edit/<_id>')
 def edit(_id):
-    entry = tanuki.entry( _id, False, None, True )
-    return render_template( 'edit.html', entry=entry ) 
+    return tanuki.edit( _id )
 
 @app.route('/delete', methods=['POST'])
 def delete():

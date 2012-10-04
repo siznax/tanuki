@@ -72,7 +72,11 @@ div#app_title input {
   margin-left:2em;
 }
 
-div#edit_form { 
+fieldset { border:none; }
+#edit_div {
+  text-align:center;
+}
+form#edit { 
   margin-top:2em;
   padding:1em;
 }
@@ -81,18 +85,17 @@ form#edit input#title {
   font-size:x-large; 
   width:80%;
 }
-fieldset { border:none; }
-#edit_form textarea#entry_text { 
+form#edit textarea#entry_text { 
   padding:8px;
   width:80%;
   height:300px;
   font-size:12pt;
 }
-#edit_form #date_box {
+form#edit #date_box {
   font-size:12pt;
   text-align:center;
 }
-#edit_form #tags_box {
+form#edit #tags_box {
   font-size:12pt;
 }
 
@@ -221,9 +224,13 @@ div.entry_head {
 /* 
   border:1px solid silver;
   background:lightgray;
-*/
+
   border:1px solid #0093dd;
   background:#00aaff;
+*/
+  border:1px solid #b00074;
+  background:#fa00a9;
+  color:white;
 }
 .entry_head table {
   /* border:1px solid magenta; */

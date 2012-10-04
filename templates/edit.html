@@ -1,53 +1,40 @@
 {% extends "layout.html" %}
-{% block body %}
-<div id="edit_form" align="center">
-
+{% 
+  block body 
+%}<div id="edit_div">
 <form id="edit" action="/store" method="POST">
-
 <fieldset>
-
-{% if entry.id %}
-<input type="hidden" name="entry_id" value="{{ entry.id }}">
-{% endif %}
-
-<div>
-<input id="title" name="title" type="text" size="32"
-{% if entry.title=='title' %}
- onfocus="this.value==this.defaultValue?this.value='':null"
-{% endif %}
- value="{{ entry.title }}" required>
-</div>
-  
-<!-- WOW auto-validation? 
-<div>
- <label for="email"></label>
- <input name="email" type="email" value="email" required>
-</div>
--->
-
-<div>  
+{% 
+  if entry.id 
+%}<input type="hidden" name="entry_id" value="{{ entry.id }}">
+{% 
+  endif 
+%}<input id="title" name="title" type="text" size="32"
+{% 
+  if entry.title=='title' 
+%} onfocus="this.value==this.defaultValue?this.value='':null"
+{% 
+  endif 
+%} value="{{ entry.title }}" required>
 <textarea name="entry" id="entry_text"
-{% if entry.text == 'text' %}
- onfocus="this.value==this.defaultValue?this.value='':null"
-{% endif %}
- required>{{ entry.text|safe }}</textarea> 
-</div>
-
+{% 
+  if entry.text == 'text' 
+%} onfocus="this.value==this.defaultValue?this.value='':null"
+{% 
+  endif 
+%} required>{{ entry.text|safe }}</textarea>
+<br />
 <input id="date_box" type="text" name="date" value="{{ entry.date }}">
-
 <input id="tags_box" type="text" name="tags" 
-{% if entry.tags=='tags' %}
- onfocus="this.value==this.defaultValue?this.value='':null"
-{% endif %}
- value="{{ entry.tags }}">
-
+{% 
+  if entry.tags=='tags' 
+%} onfocus="this.value==this.defaultValue?this.value='':null"
+{% 
+  endif 
+%} value="{{ entry.tags }}">
 <input id="save_btn" type="submit" value="Save" 
  onclick="return validate();">
-  
 </fieldset>
-
 </form>
-
 </div>
 {% endblock %}
-

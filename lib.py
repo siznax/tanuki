@@ -55,6 +55,10 @@ class Tanuki:
                                         'title': 'title',
                                         'tags': 'tags' } )
 
+    def edit( self, entry_id ):
+        entry = self.entry( entry_id, False, None, True )
+        return render_template( 'edit.html', entry=entry )
+
     def site_url( self, path):
         return "%s%s" % ( self.environ['HTTP_ORIGIN'], path )
 
@@ -119,7 +123,7 @@ class Tanuki:
         sql = 'select name from tags where id=?'
         for row in self.dbquery( sql, [entry_id] ):
             tags.append( row[0] )
-        return tags
+        return sorted(tags)
 
     def apply_tags( self, entries, editing=False ):
         tagged = []
