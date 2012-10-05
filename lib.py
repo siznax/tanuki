@@ -29,18 +29,14 @@ class Tanuki:
 
     def dbquery( self, sql, val='' ):
         msg = "+ TANUKI SQL: %s" % ( sql )
-        if val:
-            msg += " VAL: %s" % ( ''.join( str(val) ) )
+        if val: msg += " VAL: %s" % ( ''.join( str(val) ) )
         result = self.db.execute( sql, val )
         if self.DEBUG: print msg
         return result
 
     def tag_set( self ):
         sql = 'select count(*),name from tags group by name order by count(*) desc'
-        tmp = [ {'count':r[0],'name':r[1]} for r in self.dbquery( sql ) ]
-        self.total_tags = len( tmp )
-        # print tmp
-        return tmp
+        return [ {'count':r[0],'name':r[1]} for r in self.dbquery( sql ) ]
 
     def tag_hrefs( self, tag_set, br=False ):
         hrefs = []
@@ -60,11 +56,8 @@ class Tanuki:
             return img
 
     def new( self ):
-        return render_template( 'edit.html', 
-                                entry={ 'date': self.date,
-                                        'text': 'text',
-                                        'title': 'title',
-                                        'tags': 'tags' } )
+        n={ 'date':self.date,'text':'text','title':'title','tags':'tags' }
+        return render_template( 'edit.html', entry=n )
 
     def edit( self, entry_id ):
         entry = self.entry( entry_id, False, None, True )
@@ -90,9 +83,18 @@ class Tanuki:
             sql = 'insert into tags values(?,?,?)'
             self.dbquery( sql, [ entry_id, tag, self.date ] )
 
+    def bad_str( self, instr ):
+        try:
+            type(int(instr))
+            return True # disallow INT only
+        except ValueError:
+            return False
+
     def upsert( self, req ):
         self.environ = req.environ
         try:
+            if self.bad_str( req.form['title'] ): raise ValueError
+            if self.bad_str( req.form['entry'] ): raise ValueError
             if 'entry_id' in req.form.keys():
                 entry_id = req.form['entry_id']
                 sql = 'update entries set title=?, text=?, date=? where id=?'
@@ -114,7 +116,12 @@ class Tanuki:
 
             self.con.commit()
             entry = self.entry( None, None, req.form['title'] )
-            return redirect( req.form['referrer'] )
+            url = "%s/entry/%s" % ( self.environ['HTTP_ORIGIN'], entry['id'] )
+            ref = req.form['referrer'] if 'referrer' in req.form else url
+            return redirect( ref )
+        except ValueError:
+            msg = "ValueError raised, try again."
+            return render_template( 'error.html', msg=msg )
         except sqlite3.IntegrityError:
             msg = "Try again, title or text not unique."
             return render_template( 'error.html', msg=msg )
@@ -392,8 +399,7 @@ class Tanuki:
         haztag = self.apply_tags( haztag )
         haztag = self.preprocess( haztag )
         haztag = self.markup( haztag )
-        msg = "%d tagged %s"\
-            % ( len(haztag), tag,
+        msg = "%d tagged %s %s" % ( len(haztag), tag,
                 self.controls( 0, ['home','grid','list','cloud','search'] ) )
         return render_template( 'index.html', 
                                 entries=haztag,
@@ -407,11 +413,9 @@ class Tanuki:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
             msg = "%d entries %d tags %s <i>%d not tagged %s</i>"\
-                % ( len(entries),
-                    len(tag_set),
+                % ( len(entries), len(tag_set),
                     self.controls( 0, ['home','grid','list','search'] ),
-                    len(notag),
-                    self.img( 'notag', '/notag' ))
+                    len(notag), self.img( 'notag', '/notag' ))
         return render_template( 'index.html', tag_set=tag_set, msg=msg )
 
     def notag( self ):
@@ -419,8 +423,8 @@ class Tanuki:
         untagged = self.apply_tags( untagged )
         untagged = self.preprocess( untagged )
         untagged = self.markup( untagged )
-        msg = "%d not tagged %s" % ( len(untagged), 
-                                     self.img( 'cloud', '/cloud' ) )
+        msg = "%d not tagged %s"\
+            % ( len(untagged), self.img( 'cloud', '/cloud' ) )
         return render_template( 'index.html', entries=untagged, msg=msg )
         
     def matched( self, terms ):
@@ -428,8 +432,6 @@ class Tanuki:
         found = self.apply_tags( found )
         found = self.preprocess( found )
         found = self.markup( found )
-        msg = "%d matched { %s } %s %s"\
-            % ( len(found), terms,
-                self.img( 'search', '/search' ),
-                self.img( 'home', '/' ) )
+        msg = "%d matched { %s } %s"\
+            % ( len(found), terms, self.controls( 0, [ 'search','home' ] ))
         return render_template( 'index.html', entries=found, msg=msg )
