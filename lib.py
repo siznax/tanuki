@@ -4,7 +4,7 @@ tanuki class
 __author__ = "siznax"
 __version__ = 2012
 
-from flask import Flask,render_template,make_response,redirect,url_for,Markup
+from flask import Flask,render_template,make_response,redirect,url_for,Markup,request
 import markdown
 import datetime
 import sqlite3
@@ -41,6 +41,15 @@ class Tanuki:
         # print tmp
         return tmp
 
+    def tag_hrefs( self, tag_set, br=False ):
+        hrefs = []
+        for t in tag_set:
+            href = "<a href=\"/tagged/%s\"># %s</a>" % ( t, t )
+            hrefs.append(href)
+        if br:
+            return "<br />".join( hrefs )
+        return " ".join( hrefs )
+
     def img( self, alt, href=None ):
         img = '<img id="%s" alt="%s" align="top" src="/static/%s.png">'\
             % ( alt, alt, alt )
@@ -59,9 +68,6 @@ class Tanuki:
     def edit( self, entry_id ):
         entry = self.entry( entry_id, False, None, True )
         return render_template( 'edit.html', entry=entry )
-
-    def site_url( self, path):
-        return "%s%s" % ( self.environ['HTTP_ORIGIN'], path )
 
     def clear_tags( self, entry_id ):
         self.dbquery("delete from tags where id=?", [entry_id] )
@@ -107,8 +113,7 @@ class Tanuki:
 
             self.con.commit()
             entry = self.entry( None, None, req.form['title'] )
-            goto = self.site_url( "/entry/%s" % ( entry['id']) )
-            return redirect( goto )
+            return redirect( req.form['referrer'] )
         except sqlite3.IntegrityError:
             msg = "Try again, title or text not unique."
             return render_template( 'error.html', msg=msg )
@@ -179,22 +184,38 @@ class Tanuki:
             x['text'] = markdown.markdown( x['text'] )
         return entries
 
-    def figure( self, entry_id, alt, src, caption, media=False ):
+    def controls( self, entry_id, wanted=None ):
+        c = { 'home': self.img( 'home', '/' )\
+                  if not request.path=='/' else '',
+              'new': self.img( 'new', '/new' ),
+              'entry': self.img( 'entry', "/entry/%d" % ( entry_id ))\
+                  if not '/entry' in request.path else '',
+              'edit': self.img( 'edit', "/edit/%d" % ( entry_id )),
+              'list': self.img( 'list', '/list' ),
+              'cloud': self.img( 'cloud', '/cloud' ),
+              'search': self.img( 'search', '/search' ),
+              'grid': self.img( 'grid', '/grid' ) }
+        s = ''
+        for w in wanted:
+            s += "%s" % ( c[w] )
+        return s
+
+    def inline( self, entry_id, alt, src, caption, media=False ):
         caption = markdown.markdown( caption )
+        if '/entry' in request.path: entry_img = ''
         if not media:
             media = "<a href=\"/entry/%d\">"\
                 "<img alt=\"%s\" title=\"%s\" src=\"%s\"></a>\n"\
                 % ( entry_id, alt, alt, src )
         return "<div id=\"figure\">\n"\
-            "<span id=\"goto\">\n%s\n%s\n%s\n</span>"\
-            "<figure>%s\n"\
+            "<span id=\"controls\">%s</span>\n"\
+            "<span id=\"tags\">%s</span>\n"\
+            "<figure>\n%s"\
             "<figcaption>%s</figcaption>\n"\
             "</figure>\n</div>\n"\
-            % ( self.img( 'entry', "/entry/%d" % ( entry_id )), 
-                self.img( 'edit', "/edit/%d" % ( entry_id )), 
-                self.img( 'home', "/" ), 
-                media, 
-                caption )
+            % ( self.controls( entry_id, [ 'home', 'entry', 'edit' ] ),
+                self.tag_hrefs( self.get_tags( entry_id), True),
+                media, caption )
 
     def preprocess( self, entries ):
         # do this before markdown
@@ -213,10 +234,10 @@ class Tanuki:
                     x['mediatype'] = 'img'
                     alt = x['title']
                     src = first_word
-                    text = self.figure( x['id'], alt, src, cap )
+                    text = self.inline( x['id'], alt, src, cap )
                 if text.startswith('<iframe'):
                     x['mediatype'] = 'video'
-                    text = self.figure( x['id'], None, None, cap, first_line )
+                    text = self.inline( x['id'], None, None, cap, first_line )
                 x['text'] = text
         return entries
 
@@ -301,8 +322,8 @@ class Tanuki:
                 % ( self.img( 'tanuki', None ),
                     self.next_prev( chunk, page ),
                     chunk['start'],
-                    chunk['last'], 
-                    chunk['total'], 
+                    chunk['last'],
+                    chunk['total'],
                     self.img( 'home', '/' ) if page else '',
                     self.img( 'grid', '/grid' ),
                     self.img( 'list', '/list' ),

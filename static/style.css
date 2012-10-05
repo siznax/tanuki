@@ -17,7 +17,7 @@ div#result_msg {
 #result_msg #new_btn {
   margin-left:1em;
 }
-#result_msg img,.entry_foot img {
+#result_msg img,.entry_foot img,span#controls img {
   height:20px;
   opacity:0.2;
   padding-left:0.4em;
@@ -28,7 +28,7 @@ div#result_msg {
   opacity:1;
   margin-right:0.4em;
 }
-#result_msg img:hover,.entry_foot img:hover {
+#result_msg img:hover,.entry_foot img:hover,#goto img:hover {
   opacity:1;
 }
 #result_msg i {
@@ -337,35 +337,27 @@ div#grid {
   font-size:smaller;
 }
 
-div#figure { text-align:center; }
-div#figure figcaption { text-align:left; margin:0 15%; }
-
 div.entry_inline { 
   width:80%;
   margin-top:64px;
   margin-bottom:2em;
   position:relative;
 }
-div.entry_inline span#goto {
+.entry_inline #figure { text-align:center; }
+.entry_inline figcaption { text-align:left; margin:0 15%; }
+.entry_inline #controls img#home { position:absolute; right:0;}
+.entry_inline #controls img#entry { position:absolute; right:0; margin-top:32px; }
+.entry_inline #controls img#edit  { position:absolute; right:0; margin-top:64px; }
+.entry_inline #controls img#cloud { position:absolute; right:0; margin-top:96px; }
+.entry_inline #tags { 
+  font-family:sans-serif; 
+  font-weight:100;
+  position:absolute; 
+  left:0; 
+  text-align:left;
+  font-size:12px;
 }
-div.entry_inline span#goto img {
-  height:32px;
-  opacity:0.2;
-}
-div.entry_inline span#goto img:hover {
-  opacity:1;
-}
-div.entry_inline span#goto img#entry {
-  position:absolute;
-  right:0;
-}
-div.entry_inline span#goto img#edit {
-  position:absolute;
-  right:0;
-  margin-top:48px;
-}
-div.entry_inline span#goto img#home {
-  position:absolute;
-  right:0;
-  margin-top:96px;
+.entry_inline #tags a { 
+  text-decoration:none;
+  color:#999;
 }
