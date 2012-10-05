@@ -7,8 +7,10 @@ __version__ = 2012
 from flask import Flask,render_template,make_response,redirect,url_for,Markup,request
 import markdown
 import datetime
+import re
 import sqlite3
 import string
+import sys
 
 class Tanuki:
 
@@ -17,6 +19,7 @@ class Tanuki:
         self.date = datetime.date.today().isoformat()
         self.stream_per_page = 1
         self.grid_per_page = 12
+        self.max_hits = 10
         self.DEBUG = 1
         self.editing = False
 
@@ -47,9 +50,9 @@ class Tanuki:
             return "<br />".join( hrefs )
         return " ".join( hrefs )
 
-    def img( self, alt, href=None ):
+    def img( self, alt, href=None):
         img = '<img id="%s" alt="%s" align="top" src="/static/%s.png">'\
-            % ( alt, alt, alt )
+            % ( alt, alt,  alt )
         if href:
             return '<a href="%s">%s</a>' % ( href, img )
         else:
@@ -169,6 +172,9 @@ class Tanuki:
     def demux( self, row ):
         # overevaluated, don't try to do much here
         ymd = self.ymd( row[3] ) 
+        text = row[2]
+        if request.path=='/list' or request.path=='/cloud':
+            text = None # unless we need it
         return  { 'id': row[0],
                   'title': row[1],
                   'text': row[2], 
@@ -180,8 +186,9 @@ class Tanuki:
 
     def markup( self, entries ): # Warning! this can be slow
         for x in entries:
-            if self.DEBUG: print "+ TANUKI markup %d %d"\
-                    % ( x['id'], len(x['text'] ) )
+            if self.DEBUG: 
+                print "+ TANUKI markup %d %d bytes"\
+                    % ( x['id'], sys.getsizeof(x['text'] ) )
             x['text'] = markdown.markdown( x['text'] )
         return entries
 
@@ -189,7 +196,7 @@ class Tanuki:
         c = { 'home': self.img( 'home', '/' )\
                   if not request.path=='/' else '',
               'new': self.img( 'new', '/new' ),
-              'entry': self.img( 'entry', "/entry/%d" % ( entry_id ))\
+              'entry': self.img( 'entry', "/entry/%d" % ( entry_id ) )\
                   if not '/entry' in request.path else '',
               'edit': self.img( 'edit', "/edit/%d" % ( entry_id )),
               'delete': self.img( 'delete', "/confirm/%d" % ( entry_id )),
@@ -226,19 +233,21 @@ class Tanuki:
         if self.editing:
             return entries
         for x in entries:
-            if ( x['text'].startswith('http') or 
-                 x['text'].startswith('<iframe') ):
-                if self.DEBUG: print "+ TANUKI preprocess %d" % ( x['id'] )
+            if x['text'].startswith('http'):
+                x['mediatype'] = 'img'
+            elif re.match( r'^<video|<iframe|<object',x['text'] ):
+                x['mediatype'] = 'video'
+            if not x['mediatype'] == 'text':
+                if self.DEBUG: 
+                    print "+ TANUKI preprocess %d" % ( x['id'] )
                 text = x['text'].strip()
                 lines = text.split("\n")
                 first_line = lines[0].strip()
                 first_word = lines[0].split()[0]
                 cap = "\n".join( lines[1:])
-                if text.startswith('http'):
-                    x['mediatype'] = 'img'
+                if x['mediatype'] == 'img':
                     text = self.inline( x, x['title'], first_word, cap )
-                if text.startswith('<iframe'):
-                    x['mediatype'] = 'video'
+                if x['mediatype'] == 'video':
                     text = self.inline( x, None, None, cap, first_line )
                 x['text'] = text
         return entries
@@ -282,6 +291,8 @@ class Tanuki:
             rows = self.dbquery( sql )
             limit = True
         entries = [ self.demux( x ) for x in rows ]
+        if self.DEBUG: 
+            print "+ TANUKI entries %d bytes" % ( sys.getsizeof(entries) )
         return entries
 
     def slice( self, entries, page, num ):
@@ -307,6 +318,10 @@ class Tanuki:
         p_i = self.img( 'prev', "/%s/%d" % ( url, p_p)) if p_p >= 0 else ''
         return "<div id=\"next_prev\">\n%s%s\n</div>\n" % ( p_i, n_i ) 
 
+    def from_to( self, start, last ):
+        if not start==last: return "%s of %s" % ( start,last )
+        return start
+        
     def stream( self, page=0 ):
         try:
             chunk = self.slice( self.entries(), page, self.stream_per_page )
@@ -319,14 +334,10 @@ class Tanuki:
                     "<input type=\"button\" value=\"new\" id=\"new_btn\" "\
                         "onclick=\"window.location='/new'\">" )
         else:
-            if not chunk['start']==chunk['last']:
-                from_to = "%s of %s" % ( chunk['start'], chunk['last'] )
-            else:
-                from_to = chunk['start']
             msg = "%s %s %s of %d entries %s"\
                 % ( self.img( 'tanuki', None ),
                     self.next_prev( chunk, page ),
-                    from_to,
+                    self.from_to( chunk['start'],chunk['last'] ),
                     chunk['total'],
                     self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
         return render_template( 'index.html',
@@ -346,11 +357,10 @@ class Tanuki:
     def grid( self, page=0 ):
         chunk = self.slice( self.entries(), page, self.grid_per_page )
         chunk['entries'] = self.grid_cells( chunk['entries'] )
-        msg = "%s %s %d to %d of %d entries %s"\
+        msg = "%s %s %s of %d entries %s"\
             % ( self.img( 'tanuki', None ),
                 self.next_prev( chunk, page, 'grid' ),
-                chunk['start'],
-                chunk['last'], 
+                self.from_to( chunk['start'],chunk['last'] ), 
                 chunk['total'], 
                 self.controls( 0, ['home','grid','list','cloud','search'] ) )
         return render_template( 'grid.html',
@@ -419,9 +429,9 @@ class Tanuki:
         
     def matched( self, terms ):
         found = self.entries( None, None, False, terms )
-        found = self.apply_tags( found )
-        found = self.preprocess( found )
-        found = self.markup( found )
+        tophits = self.slice( found, 0, self.max_hits )
         msg = "%d matched { %s } %s"\
             % ( len(found), terms, self.controls( 0, [ 'search','home' ] ))
-        return render_template( 'index.html', entries=found, msg=msg )
+        return render_template( 'index.html', 
+                                entries=tophits['entries'],
+                                msg=msg )
