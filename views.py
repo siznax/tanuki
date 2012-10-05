@@ -4,7 +4,7 @@ tanuki views
 __author__ = "siznax"
 __version__ = 2012
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask,render_template,request,redirect,url_for
 
 app = Flask(__name__)
 app.config.from_envvar('TANUKI_CONFIG', silent=False)

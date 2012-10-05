@@ -246,7 +246,6 @@ div.entry_head {
   width:120px;
 }
 
-
 div.entry_body {
   background:white;
   text-align:left;
@@ -340,3 +339,33 @@ div#grid {
 
 div#figure { text-align:center; }
 div#figure figcaption { text-align:left; margin:0 15%; }
+
+div.entry_inline { 
+  width:80%;
+  margin-top:64px;
+  margin-bottom:2em;
+  position:relative;
+}
+div.entry_inline span#goto {
+}
+div.entry_inline span#goto img {
+  height:32px;
+  opacity:0.2;
+}
+div.entry_inline span#goto img:hover {
+  opacity:1;
+}
+div.entry_inline span#goto img#entry {
+  position:absolute;
+  right:0;
+}
+div.entry_inline span#goto img#edit {
+  position:absolute;
+  right:0;
+  margin-top:48px;
+}
+div.entry_inline span#goto img#home {
+  position:absolute;
+  right:0;
+  margin-top:96px;
+}

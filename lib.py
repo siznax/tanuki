@@ -18,7 +18,6 @@ class Tanuki:
         self.num_per_page = 10
         self.DEBUG = 1
         self.editing = False
-        self.mediatype = 'text'
 
     def connect( self ):
         dbfile = self.config['DATABASE']
@@ -170,7 +169,8 @@ class Tanuki:
                   'date': row[3],
                   'year': ymd[0],
                   'month': ymd[1],
-                  'date_str': self.date_str( row[3] ) }
+                  'date_str': self.date_str( row[3] ),
+                  'mediatype': 'text' }
 
     def markup( self, entries ): # Warning! this can be slow
         for x in entries:
@@ -179,15 +179,22 @@ class Tanuki:
             x['text'] = markdown.markdown( x['text'] )
         return entries
 
-    def figure( self, alt, src, caption, media=False ):
+    def figure( self, entry_id, alt, src, caption, media=False ):
         caption = markdown.markdown( caption )
         if not media:
-            media = "<img alt=\"%s\" title=\"%s\" src=\"%s\">\n"\
-                % ( alt, alt, src )
-        return "<div id=\"figure\">\n<figure>%s\n"\
+            media = "<a href=\"/entry/%d\">"\
+                "<img alt=\"%s\" title=\"%s\" src=\"%s\"></a>\n"\
+                % ( entry_id, alt, alt, src )
+        return "<div id=\"figure\">\n"\
+            "<span id=\"goto\">\n%s\n%s\n%s\n</span>"\
+            "<figure>%s\n"\
             "<figcaption>%s</figcaption>\n"\
             "</figure>\n</div>\n"\
-            % ( media, caption )
+            % ( self.img( 'entry', "/entry/%d" % ( entry_id )), 
+                self.img( 'edit', "/edit/%d" % ( entry_id )), 
+                self.img( 'home', "/" ), 
+                media, 
+                caption )
 
     def preprocess( self, entries ):
         # do this before markdown
@@ -203,13 +210,13 @@ class Tanuki:
                 first_word = lines[0].split()[0]
                 cap = "\n".join( lines[1:])
                 if text.startswith('http'):
-                    self.mediatype = 'img'
+                    x['mediatype'] = 'img'
                     alt = x['title']
                     src = first_word
-                    text = self.figure( alt, src, cap )
+                    text = self.figure( x['id'], alt, src, cap )
                 if text.startswith('<iframe'):
-                    self.mediatype = 'video'
-                    text = self.figure( None, None, cap, first_line )
+                    x['mediatype'] = 'video'
+                    text = self.figure( x['id'], None, None, cap, first_line )
                 x['text'] = text
         return entries
 
@@ -290,7 +297,7 @@ class Tanuki:
                     "<input type=\"button\" value=\"new\" id=\"new_btn\" "\
                         "onclick=\"window.location='/new'\">" )
         else:
-            msg = "%s %s %d to %d of %d entries %s %s %s %s %s"\
+            msg = "%s %s %d to %d of %d entries %s %s %s %s %s %s"\
                 % ( self.img( 'tanuki', None ),
                     self.next_prev( chunk, page ),
                     chunk['start'],
@@ -300,7 +307,8 @@ class Tanuki:
                     self.img( 'grid', '/grid' ),
                     self.img( 'list', '/list' ),
                     self.img( 'cloud', '/cloud' ),
-                    self.img( 'search', '/search' ))
+                    self.img( 'search', '/search' ), 
+                    self.img( 'new', '/new' ))
         return render_template( 'index.html',
                                 entries=chunk['entries'],
                                 msg=msg,
@@ -367,15 +375,20 @@ class Tanuki:
         return render_template( 'index.html', entries=entries, msg=msg )
 
     def tagged( self, tag ):
-        entries = self.markup( self.apply_tags( self.entries( None, tag ) ) )
+        haztag = self.entries( None, tag )
+        haztag = self.preprocess( haztag )
+        haztag = self.apply_tags( haztag )
+        haztag = self.markup( haztag )
         msg = "%d tagged %s %s %s %s %s"\
-            % ( len(entries), 
+            % ( len(haztag), 
                 tag,
                 self.img( 'home', '/' ),
                 self.img( 'list', '/list' ),
                 self.img( 'cloud', '/cloud' ),
                 self.img( 'search', '/search' ))
-        return render_template( 'index.html', entries=entries, msg=msg )
+        return render_template( 'index.html', 
+                                entries=haztag,
+                                msg=msg )
         
     def cloud( self ):
         entries = self.entries()
@@ -396,14 +409,20 @@ class Tanuki:
         return render_template( 'index.html', tag_set=tag_set, msg=msg )
 
     def notag( self ):
-        entries = self.markup( self.apply_tags( self.entries( None, None, True ) ) )
-        msg = "%d not tagged %s %s" % ( len(entries), 
+        untagged = self.entries( None, None, True )
+        untagged = self.preprocess( untagged )
+        untagged = self.apply_tags( untagged )
+        untagged = self.markup( untagged )
+        msg = "%d not tagged %s %s" % ( len(untagged), 
                                         self.img( 'home', '/' ),
                                         self.img( 'cloud', '/cloud' ) )
-        return render_template( 'index.html', entries=entries, msg=msg )
+        return render_template( 'index.html', entries=untagged, msg=msg )
         
     def matched( self, terms ):
-        found = self.markup( self.apply_tags( self.entries( None, None, False, terms ) ) )
+        found = self.entries( None, None, False, terms )
+        found = self.preprocess( found )
+        found = self.apply_tags( found )
+        found = self.markup( found )
         msg = "%d matched { %s } %s %s %s"\
             % ( len(found), 
                 terms,
