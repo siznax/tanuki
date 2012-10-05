@@ -195,7 +195,8 @@ class Tanuki:
               'list': self.img( 'list', '/list' ),
               'cloud': self.img( 'cloud', '/cloud' ),
               'search': self.img( 'search', '/search' ),
-              'grid': self.img( 'grid', '/grid' ) }
+              'grid': self.img( 'grid', '/grid' )\
+                  if not request.path=='/grid' else '' }
         s = ''
         for w in wanted:
             s += "%s" % ( c[w] )
@@ -322,17 +323,12 @@ class Tanuki:
                 from_to = "%s of %s" % ( chunk['start'], chunk['last'] )
             else:
                 from_to = chunk['start']
-            msg = "%s %s %s of %d entries %s %s %s %s %s %s"\
+            msg = "%s %s %s of %d entries %s"\
                 % ( self.img( 'tanuki', None ),
                     self.next_prev( chunk, page ),
                     from_to,
                     chunk['total'],
-                    self.img( 'home', '/' ) if page else '',
-                    self.img( 'grid', '/grid' ),
-                    self.img( 'list', '/list' ),
-                    self.img( 'cloud', '/cloud' ),
-                    self.img( 'search', '/search' ), 
-                    self.img( 'new', '/new' ))
+                    self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
         return render_template( 'index.html',
                                 entries=chunk['entries'],
                                 msg=msg,
@@ -350,16 +346,13 @@ class Tanuki:
     def grid( self, page=0 ):
         chunk = self.slice( self.entries(), page, self.grid_per_page )
         chunk['entries'] = self.grid_cells( chunk['entries'] )
-        msg = "%s %s %d to %d of %d entries %s %s %s %s"\
+        msg = "%s %s %d to %d of %d entries %s"\
             % ( self.img( 'tanuki', None ),
                 self.next_prev( chunk, page, 'grid' ),
                 chunk['start'],
                 chunk['last'], 
                 chunk['total'], 
-                self.img( 'home', '/' ),
-                self.img( 'list', '/list' ),
-                self.img( 'cloud', '/cloud' ),
-                self.img( 'search', '/search' ))
+                self.controls( 0, ['home','grid','list','cloud','search'] ) )
         return render_template( 'grid.html',
                                 entries=chunk['entries'],
                                 msg=msg,
@@ -370,12 +363,9 @@ class Tanuki:
         if not entries:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
-            msg = "%d entries %s %s %s %s"\
+            msg = "%d entries %s"\
                 % ( len(entries),
-                    self.img( 'home', '/' ),
-                    self.img( 'grid', '/grid' ),
-                    self.img( 'cloud', '/cloud' ),
-                    self.img( 'search', '/search' ))
+                    self.controls( 0, ['home','grid','cloud','search'] ) )
         return render_template( 'index.html',
                                 entries=entries,
                                 msg=msg )
@@ -391,13 +381,10 @@ class Tanuki:
         entries = self.apply_tags( entries )
         entries = self.markup( entries )
         date_str = self.date_str( date )
-        msg = "%d dated %s %s %s %s %s"\
+        msg = "%d dated %s %s"\
             % ( len(entries), 
                 date_str,
-                self.img( 'home', '/' ),
-                self.img( 'list', '/list' ),
-                self.img( 'cloud', '/cloud' ),
-                self.img( 'search', '/search' ))
+                self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
         return render_template( 'index.html', entries=entries, msg=msg )
 
     def tagged( self, tag ):
@@ -405,13 +392,9 @@ class Tanuki:
         haztag = self.apply_tags( haztag )
         haztag = self.preprocess( haztag )
         haztag = self.markup( haztag )
-        msg = "%d tagged %s %s %s %s %s"\
-            % ( len(haztag), 
-                tag,
-                self.img( 'home', '/' ),
-                self.img( 'list', '/list' ),
-                self.img( 'cloud', '/cloud' ),
-                self.img( 'search', '/search' ))
+        msg = "%d tagged %s"\
+            % ( len(haztag), tag,
+                self.controls( 0, ['home','grid','list','cloud','search'] ) )
         return render_template( 'index.html', 
                                 entries=haztag,
                                 msg=msg )
@@ -423,13 +406,10 @@ class Tanuki:
         if not entries:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
-            msg = "%d entries %d tags %s %s %s %s <i>%d not tagged %s</i>"\
+            msg = "%d entries %d tags %s <i>%d not tagged %s</i>"\
                 % ( len(entries),
                     len(tag_set),
-                    self.img( 'home', '/' ),
-                    self.img( 'grid', '/grid' ),
-                    self.img( 'list', '/list' ),
-                    self.img( 'search', '/search' ),
+                    self.controls( 0, ['home','grid','list','search'] ),
                     len(notag),
                     self.img( 'notag', '/notag' ))
         return render_template( 'index.html', tag_set=tag_set, msg=msg )
@@ -439,9 +419,8 @@ class Tanuki:
         untagged = self.apply_tags( untagged )
         untagged = self.preprocess( untagged )
         untagged = self.markup( untagged )
-        msg = "%d not tagged %s %s" % ( len(untagged), 
-                                        self.img( 'home', '/' ),
-                                        self.img( 'cloud', '/cloud' ) )
+        msg = "%d not tagged %s" % ( len(untagged), 
+                                     self.img( 'cloud', '/cloud' ) )
         return render_template( 'index.html', entries=untagged, msg=msg )
         
     def matched( self, terms ):
@@ -449,10 +428,8 @@ class Tanuki:
         found = self.apply_tags( found )
         found = self.preprocess( found )
         found = self.markup( found )
-        msg = "%d matched { %s } %s %s %s"\
-            % ( len(found), 
-                terms,
+        msg = "%d matched { %s } %s %s"\
+            % ( len(found), terms,
                 self.img( 'search', '/search' ),
-                self.img( 'home', '/' ),
-                self.img( 'cloud', '/cloud' ))
+                self.img( 'home', '/' ) )
         return render_template( 'index.html', entries=found, msg=msg )
