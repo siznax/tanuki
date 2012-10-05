@@ -96,12 +96,11 @@ class Tanuki:
             if self.bad_str( req.form['title'] ): raise ValueError
             if self.bad_str( req.form['entry'] ): raise ValueError
             if 'entry_id' in req.form.keys():
-                entry_id = req.form['entry_id']
                 sql = 'update entries set title=?, text=?, date=? where id=?'
                 val = ( req.form['title'], 
                         req.form['entry'],
                         req.form['date'],
-                        entry_id )
+                        req.form['entry_id'] )
                 self.dbquery( sql, val )
             else:
                 sql = 'insert into entries values(?,?,?,?)'
@@ -113,8 +112,8 @@ class Tanuki:
                 entry_id = cur.lastrowid
 
             self.store_tags( entry_id, req.form['tags'] )
-
             self.con.commit()
+
             entry = self.entry( None, None, req.form['title'] )
             url = "%s/entry/%s" % ( self.environ['HTTP_ORIGIN'], entry['id'] )
             ref = req.form['referrer'] if 'referrer' in req.form else url
@@ -127,33 +126,26 @@ class Tanuki:
             return render_template( 'error.html', msg=msg )
 
     def confirm_msg( self, msg, entry ):
-        deets = "ID: %d<br />\n"\
-            "Title: %s<br />\n"\
-            "Date: %s<br />\n"\
+        deets = "ID: %d<br />\nTitle: %s<br />\nDate: %s<br />\n"\
             % ( entry['id'], entry['title'], entry['date'] )
-        return "<b>%s</b><br />\n"\
-            "<div id=\"details\">%s</div>\n"\
+        return "<b>%s</b><br />\n<div id=\"details\">%s</div>\n"\
             % ( msg, deets )
 
     def confirm( self, entry_id ):
         entry = self.entry( entry_id )
         msg = self.confirm_msg( 'Really, destroy?', entry )
-        return render_template( 'confirm.html', 
-                                entry=entry,
-                                msg=msg )
+        return render_template( 'confirm.html', entry=entry, msg=msg )
 
     def delete( self, entry_id ):
         self.clear_tags( entry_id )
-        sql = 'DELETE from entries WHERE id=?'
-        self.dbquery( sql, [entry_id] )
+        self.dbquery( 'DELETE from entries WHERE id=?', [entry_id] )
         self.con.commit()
 
-    def get_tags( self, entry_id ):
-        tags = []
-        sql = 'select name from tags where id=?'
-        for row in self.dbquery( sql, [entry_id] ):
-            tags.append( row[0] )
-        return sorted(tags)
+    def get_tags( self, eid ):
+        t = []
+        for r in self.dbquery( 'select name from tags where id=?', [eid] ):
+            t.append( r[0] )
+        return sorted(t)
 
     def apply_tags( self, entries ):
         for x in entries:
@@ -226,8 +218,7 @@ class Tanuki:
                 self.tag_hrefs( entry['tags'], True),
                 media, caption )
 
-    def preprocess( self, entries ):
-        # do this before markdown
+    def preprocess( self, entries ): # before markdown
         if self.editing:
             return entries
         for x in entries:
@@ -241,9 +232,7 @@ class Tanuki:
                 cap = "\n".join( lines[1:])
                 if text.startswith('http'):
                     x['mediatype'] = 'img'
-                    alt = x['title']
-                    src = first_word
-                    text = self.inline( x, alt, src, cap )
+                    text = self.inline( x, x['title'], first_word, cap )
                 if text.startswith('<iframe'):
                     x['mediatype'] = 'video'
                     text = self.inline( x, None, None, cap, first_line )
