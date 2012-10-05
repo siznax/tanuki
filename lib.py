@@ -200,21 +200,21 @@ class Tanuki:
             s += "%s" % ( c[w] )
         return s
 
-    def inline( self, entry_id, alt, src, caption, media=False ):
+    def inline( self, entry, alt, src, caption, media=False ):
         caption = markdown.markdown( caption )
         if '/entry' in request.path: entry_img = ''
         if not media:
             media = "<a href=\"/entry/%d\">"\
                 "<img alt=\"%s\" title=\"%s\" src=\"%s\"></a>\n"\
-                % ( entry_id, alt, alt, src )
+                % ( entry['id'], alt, alt, src )
         return "<div id=\"figure\">\n"\
             "<span id=\"controls\">%s</span>\n"\
             "<span id=\"tags\">%s</span>\n"\
             "<figure>\n%s"\
             "<figcaption>%s</figcaption>\n"\
             "</figure>\n</div>\n"\
-            % ( self.controls( entry_id, [ 'home', 'entry', 'edit' ] ),
-                self.tag_hrefs( self.get_tags( entry_id), True),
+            % ( self.controls( entry['id'], [ 'home', 'entry', 'edit' ] ),
+                self.tag_hrefs( entry['tags'], True),
                 media, caption )
 
     def preprocess( self, entries ):
@@ -234,10 +234,10 @@ class Tanuki:
                     x['mediatype'] = 'img'
                     alt = x['title']
                     src = first_word
-                    text = self.inline( x['id'], alt, src, cap )
+                    text = self.inline( x, alt, src, cap )
                 if text.startswith('<iframe'):
                     x['mediatype'] = 'video'
-                    text = self.inline( x['id'], None, None, cap, first_line )
+                    text = self.inline( x, None, None, cap, first_line )
                 x['text'] = text
         return entries
 
@@ -253,8 +253,8 @@ class Tanuki:
         if not row:
             return None
         entries = [self.demux( row )]
-        entries = self.preprocess( entries )
         entries = self.apply_tags( entries )
+        entries = self.preprocess( entries )
         if markup:
             entries = self.markup( entries )
         self.editing = False
@@ -289,8 +289,8 @@ class Tanuki:
         last = first + num if ( first + num ) < total else total
         if first >= last:
             raise ValueError
-        chunk = self.preprocess( entries[first:last] )
-        chunk = self.apply_tags( chunk )
+        chunk = self.apply_tags( entries[first:last] )
+        chunk = self.preprocess( chunk )
         chunk = self.markup( chunk )
         return { 'num': num,
                  'total': total,
@@ -384,7 +384,9 @@ class Tanuki:
         return render_template( 'index.html', entries=[ entry ] )
 
     def dated( self, date ):
-        entries = self.markup( self.apply_tags( self.entries( date ) ) )
+        entries = self.entries( date )
+        entries = self.apply_tags( entries )
+        entries = self.markup( entries )
         date_str = self.date_str( date )
         msg = "%d dated %s %s %s %s %s"\
             % ( len(entries), 
@@ -397,8 +399,8 @@ class Tanuki:
 
     def tagged( self, tag ):
         haztag = self.entries( None, tag )
-        haztag = self.preprocess( haztag )
         haztag = self.apply_tags( haztag )
+        haztag = self.preprocess( haztag )
         haztag = self.markup( haztag )
         msg = "%d tagged %s %s %s %s %s"\
             % ( len(haztag), 
@@ -431,8 +433,8 @@ class Tanuki:
 
     def notag( self ):
         untagged = self.entries( None, None, True )
-        untagged = self.preprocess( untagged )
         untagged = self.apply_tags( untagged )
+        untagged = self.preprocess( untagged )
         untagged = self.markup( untagged )
         msg = "%d not tagged %s %s" % ( len(untagged), 
                                         self.img( 'home', '/' ),
@@ -441,8 +443,8 @@ class Tanuki:
         
     def matched( self, terms ):
         found = self.entries( None, None, False, terms )
-        found = self.preprocess( found )
         found = self.apply_tags( found )
+        found = self.preprocess( found )
         found = self.markup( found )
         msg = "%d matched { %s } %s %s %s"\
             % ( len(found), 
