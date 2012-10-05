@@ -102,6 +102,7 @@ class Tanuki:
                         req.form['date'],
                         req.form['entry_id'] )
                 self.dbquery( sql, val )
+                entry_id = req.form['entry_id']
             else:
                 sql = 'insert into entries values(?,?,?,?)'
                 val = [ None,
@@ -373,15 +374,14 @@ class Tanuki:
         return render_template( 'index.html', entries=[ entry ] )
 
     def dated( self, date ):
-        entries = self.entries( date )
-        entries = self.apply_tags( entries )
-        entries = self.markup( entries )
-        date_str = self.date_str( date )
+        stamped = self.entries( date )
+        stamped = self.apply_tags( stamped )
+        stamped = self.preprocess( stamped )
+        stamped = self.markup( stamped )
         msg = "%d dated %s %s"\
-            % ( len(entries), 
-                date_str,
+            % ( len(stamped), self.date_str( date ),
                 self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
-        return render_template( 'index.html', entries=entries, msg=msg )
+        return render_template( 'index.html', entries=stamped, msg=msg )
 
     def tagged( self, tag ):
         haztag = self.entries( None, tag )
