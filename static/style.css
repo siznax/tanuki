@@ -345,11 +345,10 @@ div.entry_inline {
 }
 .entry_inline #figure { text-align:center; }
 .entry_inline figcaption { text-align:left; margin:0 15%; }
-.entry_inline #controls img#home { position:absolute; right:0;}
-.entry_inline #controls img#entry { position:absolute; right:0; margin-top:32px; }
-.entry_inline #controls img#edit  { position:absolute; right:0; margin-top:64px; }
-.entry_inline #controls img#cloud { position:absolute; right:0; margin-top:96px; }
-.entry_inline #tags { 
+.entry_inline #controls img#entry  { position:absolute; right:0; }
+.entry_inline #controls img#edit   { position:absolute; right:0; margin-top:32px; }
+.entry_inline #controls img#delete { position:absolute; right:0; margin-top:64px; }
+.entry_inline #tags,.entry_inline #date { 
   font-family:sans-serif; 
   font-weight:100;
   position:absolute; 
@@ -357,7 +356,10 @@ div.entry_inline {
   text-align:left;
   font-size:12px;
 }
-.entry_inline #tags a { 
+.entry_inline #tags {
+  margin-top:1.2em;
+}
+.entry_inline #tags a,.entry_inline #date a { 
   text-decoration:none;
   color:#999;
 }

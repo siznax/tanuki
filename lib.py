@@ -192,6 +192,7 @@ class Tanuki:
               'entry': self.img( 'entry', "/entry/%d" % ( entry_id ))\
                   if not '/entry' in request.path else '',
               'edit': self.img( 'edit', "/edit/%d" % ( entry_id )),
+              'delete': self.img( 'delete', "/confirm/%d" % ( entry_id )),
               'list': self.img( 'list', '/list' ),
               'cloud': self.img( 'cloud', '/cloud' ),
               'search': self.img( 'search', '/search' ),
@@ -211,11 +212,13 @@ class Tanuki:
                 % ( entry['id'], alt, alt, src )
         return "<div id=\"figure\">\n"\
             "<span id=\"controls\">%s</span>\n"\
+            "<span id=\"date\">%s</span>\n"\
             "<span id=\"tags\">%s</span>\n"\
             "<figure>\n%s"\
             "<figcaption>%s</figcaption>\n"\
             "</figure>\n</div>\n"\
-            % ( self.controls( entry['id'], [ 'home', 'entry', 'edit' ] ),
+            % ( self.controls( entry['id'], [ 'entry','edit','delete' ] ),
+                "<a href=\"/dated/%s\">%s</a>" % ( entry['date'], self.date_str( entry['date'] ) ),
                 self.tag_hrefs( entry['tags'], True),
                 media, caption )
 
@@ -390,9 +393,7 @@ class Tanuki:
         haztag = self.markup( haztag )
         msg = "%d tagged %s %s" % ( len(haztag), tag,
                 self.controls( 0, ['home','grid','list','cloud','search'] ) )
-        return render_template( 'index.html', 
-                                entries=haztag,
-                                msg=msg )
+        return render_template( 'index.html', entries=haztag, msg=msg )
         
     def cloud( self ):
         entries = self.entries()
