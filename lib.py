@@ -15,7 +15,8 @@ class Tanuki:
     def __init__( self, config ):
         self.config = config
         self.date = datetime.date.today().isoformat()
-        self.num_per_page = 10
+        self.stream_per_page = 1
+        self.grid_per_page = 12
         self.DEBUG = 1
         self.editing = False
 
@@ -282,9 +283,8 @@ class Tanuki:
         entries = [ self.demux( x ) for x in rows ]
         return entries
 
-    def slice( self, entries, page ):
+    def slice( self, entries, page, num ):
         total = len(entries)
-        num = self.num_per_page
         first = page * num
         last = first + num if ( first + num ) < total else total
         if first >= last:
@@ -308,7 +308,7 @@ class Tanuki:
 
     def stream( self, page=0 ):
         try:
-            chunk = self.slice( self.entries(), page )
+            chunk = self.slice( self.entries(), page, self.stream_per_page )
         except ValueError:
             return redirect( url_for('index') )
         if not page and not chunk['entries']:
@@ -318,11 +318,14 @@ class Tanuki:
                     "<input type=\"button\" value=\"new\" id=\"new_btn\" "\
                         "onclick=\"window.location='/new'\">" )
         else:
-            msg = "%s %s %d to %d of %d entries %s %s %s %s %s %s"\
+            if not chunk['start']==chunk['last']:
+                from_to = "%s of %s" % ( chunk['start'], chunk['last'] )
+            else:
+                from_to = chunk['start']
+            msg = "%s %s %s of %d entries %s %s %s %s %s %s"\
                 % ( self.img( 'tanuki', None ),
                     self.next_prev( chunk, page ),
-                    chunk['start'],
-                    chunk['last'],
+                    from_to,
                     chunk['total'],
                     self.img( 'home', '/' ) if page else '',
                     self.img( 'grid', '/grid' ),
@@ -345,7 +348,7 @@ class Tanuki:
         return entries
 
     def grid( self, page=0 ):
-        chunk = self.slice( self.entries(), page )
+        chunk = self.slice( self.entries(), page, self.grid_per_page )
         chunk['entries'] = self.grid_cells( chunk['entries'] )
         msg = "%s %s %d to %d of %d entries %s %s %s %s"\
             % ( self.img( 'tanuki', None ),
