@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/static/style.css">
 <!-- <script src="/static/jquery.js"></script> -->
 <script src="/static/site.js"></script>
-{% if request.referrer and '/edit' in request.referrer %}
+{% if request.referrer and ('/edit' in request.referrer or '/new' in request.referrer ) %}
 <META http-equiv="refresh" content="1">
 {% endif %}
 </head>
