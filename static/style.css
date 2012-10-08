@@ -321,13 +321,9 @@ div#grid {
   width:200px;
   height:160px;
   overflow:hidden;
-
-  font-family:sans-serif;
-  font-size:smaller;
-  font-weight:100;
-
-  border:1px solid silver;
-  background:white;
+}
+#grid div a {
+  text-decoration:none;
 }
 #grid div b {
   margin-right:0.4em;
@@ -335,6 +331,38 @@ div#grid {
 #grid div p {
   margin-top:0;
   font-size:smaller;
+}
+#grid div.text {
+  font-family:sans-serif;
+  font-size:smaller;
+  font-weight:100;
+  background:ghostwhite;
+  border:1px solid silver;
+}
+div.img {
+  margin:0;
+  padding:0;
+  border:1px solid silver;
+}
+div.img img {
+  width:200px;
+}
+div.video {
+  margin:0;
+  padding:0;
+  text-align:center;
+  border:none;
+  background:none;
+  border:1px solid silver;
+}
+div.video iframe,div.video embed {
+  width:200px;
+  height:108px;
+}
+div.img b,div.video b {
+  font-family:sans-serif;
+  font-weight:400;
+  font-size:9px;
 }
 
 div.entry_inline { 

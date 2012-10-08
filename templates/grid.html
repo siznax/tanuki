@@ -3,10 +3,16 @@
 <div align="center" id="result_msg">{{ msg|safe }}</div>
 <div id="grid">
 {% for entry in entries %}
-<div id="entry{{ entry.id }}">
-<b><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></b>
-<p>{{ entry.text }}</p>
-</div>
+<div class="{{ entry.mediatype }}" id="entry{{ entry.id }}">{%
+  if not entry.mediatype=='img'
+%}<b><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></b>{% 
+  endif %}{%
+  if not entry.mediatype=='text' 
+%}{{ entry.text|safe }}{% 
+  else 
+%}<p>{{ entry.text }}</p>{% 
+  endif 
+%}</div>
 {% endfor %}
 </div>
 {% endblock %}

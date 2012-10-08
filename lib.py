@@ -22,6 +22,7 @@ class Tanuki:
         self.max_hits = 10
         self.DEBUG = 1
         self.editing = False
+        self.mode = None
 
     def connect( self ):
         dbfile = self.config['DATABASE']
@@ -233,22 +234,30 @@ class Tanuki:
         if self.editing:
             return entries
         for x in entries:
+            mediatype = x['mediatype']
             if x['text'].startswith('http'):
-                x['mediatype'] = 'img'
-            elif re.match( r'^<video|<iframe|<object',x['text'] ):
-                x['mediatype'] = 'video'
-            if not x['mediatype'] == 'text':
-                if self.DEBUG: 
-                    print "+ TANUKI preprocess %d" % ( x['id'] )
+                mediatype = 'img'
+            if re.match( r'^<video|<iframe|<object',x['text'] ):
+                mediatype = 'video'
+            if not mediatype == 'text':
+                if self.DEBUG: print "+ TANUKI preprocess %d" % ( x['id'] )
                 text = x['text'].strip()
                 lines = text.split("\n")
                 first_line = lines[0].strip()
                 first_word = lines[0].split()[0]
                 cap = "\n".join( lines[1:])
-                if x['mediatype'] == 'img':
-                    text = self.inline( x, x['title'], first_word, cap )
-                if x['mediatype'] == 'video':
-                    text = self.inline( x, None, None, cap, first_line )
+                if self.mode == 'grid':
+                    text = first_line
+                    if mediatype == 'img':
+                        img = "<img src=\"%s\">" % ( first_word )
+                        href = "/entry/%d" % ( x['id'] )
+                        text = "<a href=\"%s\">%s</a>" % ( href, img )
+                else:
+                    if mediatype == 'img':
+                        text = self.inline( x, x['title'], first_word, cap )
+                    if mediatype == 'video':
+                        text = self.inline( x, None, None, cap, first_line )
+                x['mediatype'] = mediatype
                 x['text'] = text
         return entries
 
@@ -303,7 +312,10 @@ class Tanuki:
             raise ValueError
         chunk = self.apply_tags( entries[first:last] )
         chunk = self.preprocess( chunk )
-        chunk = self.markup( chunk )
+        if self.mode == 'grid':
+            chunk = self.grid_cells( chunk )
+        else:
+            chunk = self.markup( chunk )
         return { 'num': num,
                  'total': total,
                  'start': first + 1,
@@ -348,21 +360,24 @@ class Tanuki:
     def grid_cells( self, entries ):
         max_cell_len = 255
         for x in entries:
-            t = Markup( x['text'] ).striptags()
-            if len( t ) > max_cell_len:
-                t = t[:max_cell_len] + '...'
+            t = x['text']
+            if x['mediatype'] == 'text':
+                t = Markup( markdown.markdown( t ) ).striptags()
+                if len( t ) > max_cell_len:
+                    t = t[:max_cell_len] + '...'
             x['text'] = t
         return entries
 
     def grid( self, page=0 ):
+        self.mode = 'grid'
         chunk = self.slice( self.entries(), page, self.grid_per_page )
-        chunk['entries'] = self.grid_cells( chunk['entries'] )
         msg = "%s %s %s of %d entries %s"\
             % ( self.img( 'tanuki', None ),
                 self.next_prev( chunk, page, 'grid' ),
                 self.from_to( chunk['start'],chunk['last'] ), 
                 chunk['total'], 
                 self.controls( 0, ['home','grid','list','cloud','search'] ) )
+        self.mode = None
         return render_template( 'grid.html',
                                 entries=chunk['entries'],
                                 msg=msg,
