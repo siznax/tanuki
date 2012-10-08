@@ -185,6 +185,12 @@ class Tanuki:
                   'date_str': self.date_str( row[3] ),
                   'mediatype': 'text' }
 
+    def markdown( self, entry_id, text ):
+        if self.DEBUG:
+            print "+ TANUKI markdown %d %d bytes"\
+                % ( entry_id, sys.getsizeof( text ) )
+        return markdown.markdown( text )
+
     def markup( self, entries ): # Warning! this can be slow
         for x in entries:
             if self.DEBUG: 
@@ -212,7 +218,7 @@ class Tanuki:
         return s
 
     def inline( self, entry, alt, src, caption, media=False ):
-        caption = markdown.markdown( caption )
+        caption = self.markdown( entry['id'], caption )
         if '/entry' in request.path: entry_img = ''
         if not media:
             media = "<a href=\"/entry/%d\">"\
@@ -362,7 +368,9 @@ class Tanuki:
         for x in entries:
             t = x['text']
             if x['mediatype'] == 'text':
-                t = Markup( markdown.markdown( t ) ).striptags()
+                html = self.markdown( x['id'], t )
+                x['img'] = self.find_img( html )
+                t = Markup( html ).striptags()
                 if len( t ) > max_cell_len:
                     t = t[:max_cell_len] + '...'
             x['text'] = t
@@ -450,3 +458,10 @@ class Tanuki:
         return render_template( 'index.html', 
                                 entries=tophits['entries'],
                                 msg=msg )
+
+    def find_img( self, html ):
+        import lxml.html
+        doc = lxml.html.document_fromstring( html )
+        for src in doc.xpath("//img/@src"):
+            if self.DEBUG: print "+ TANUKI img %s" % ( src )
+            return src

@@ -256,6 +256,9 @@ div.entry_body {
   border-left: 1px solid silver;
   overflow:hidden;
 }
+.entry_body img,.entry_inline img {
+  max-width:600px;
+}
 div.entry_text { font-family:Georgia; }
 div.entry_foot {
   width:80%;
@@ -344,7 +347,7 @@ div.img {
   padding:0;
   border:1px solid silver;
 }
-div.img img {
+div.img img,div.text img {
   width:200px;
 }
 div.video {

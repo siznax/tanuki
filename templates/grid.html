@@ -1,16 +1,20 @@
 {% extends "layout.html" %}
 {% block body %}
 <div align="center" id="result_msg">{{ msg|safe }}</div>
-<div id="grid">
-{% for entry in entries %}
+<div id="grid">{% 
+  for entry in entries 
+%}
 <div class="{{ entry.mediatype }}" id="entry{{ entry.id }}">{%
-  if not entry.mediatype=='img'
-%}<b><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></b>{% 
-  endif %}{%
-  if not entry.mediatype=='text' 
+  if not entry.mediatype=='text'
 %}{{ entry.text|safe }}{% 
-  else 
-%}<p>{{ entry.text }}</p>{% 
+  else %}{%
+    if entry.img 
+%}<a href="/entry/{{ entry.id }}"><img alt="{{ entry.title }}" 
+ title="{{ entry.title }}" src="{{ entry.img }}"></a>{% 
+    else 
+%}<b><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></b>
+<p>{{ entry.text }}</p>{%   
+    endif %}{%
   endif 
 %}</div>
 {% endfor %}
