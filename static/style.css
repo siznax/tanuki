@@ -4,7 +4,6 @@ body {
   margin:0;
   padding:0;
   font-family:Georgia;
-  font-size:14pt;
   background:lightgray url('/static/noise.png');
 }
 
@@ -131,7 +130,6 @@ div#tag_set span:hover a { color:white; }
 div#entry_list {
   font-family:"Open Sans", sans-serif; 
   font-weight:400;
-  font-size:smaller;
   margin-left:20%;
   margin-top:3em;
 }
@@ -333,7 +331,6 @@ div#grid {
 }
 #grid div p {
   margin-top:0;
-  font-size:smaller;
 }
 #grid div.text {
   font-family:sans-serif;
@@ -376,9 +373,10 @@ div.entry_inline {
 }
 .entry_inline #figure { text-align:center; }
 .entry_inline figcaption { text-align:left; margin:0 15%; }
-.entry_inline #controls img#entry  { position:absolute; right:0; }
-.entry_inline #controls img#edit   { position:absolute; right:0; margin-top:32px; }
-.entry_inline #controls img#delete { position:absolute; right:0; margin-top:64px; }
+.entry_inline #controls img#home   { position:absolute; right:0; }
+.entry_inline #controls img#entry  { position:absolute; right:0; margin-top:32px; }
+.entry_inline #controls img#edit   { position:absolute; right:0; margin-top:64px; }
+.entry_inline #controls img#delete { position:absolute; right:0; margin-top:96px; }
 .entry_inline #tags,.entry_inline #date { 
   font-family:sans-serif; 
   font-weight:100;

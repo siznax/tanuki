@@ -231,8 +231,8 @@ class Tanuki:
             "<figure>\n%s"\
             "<figcaption>%s</figcaption>\n"\
             "</figure>\n</div>\n"\
-            % ( self.controls( entry['id'], [ 'entry','edit','delete' ] ),
-                "<a href=\"/dated/%s\">%s</a>" % ( entry['date'], self.date_str( entry['date'] ) ),
+            % ( self.controls( entry['id'], [ 'home','entry','edit','delete' ] ),
+                "<a href=\"/dated/%s\">%s</a>" % ( entry['date'], entry['date'] ),
                 self.tag_hrefs( entry['tags'], True),
                 media, caption )
 
