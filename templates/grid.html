@@ -5,16 +5,17 @@
   for entry in entries 
 %}
 <div class="{{ entry.mediatype }}" id="entry{{ entry.id }}">{%
-  if not entry.mediatype=='text'
-%}{{ entry.text|safe }}{% 
-  else %}{%
+  if entry.mediatype=='text' %}{% 
     if entry.img 
 %}<a href="/entry/{{ entry.id }}"><img alt="{{ entry.title }}" 
  title="{{ entry.title }}" src="{{ entry.img }}"></a>{% 
     else 
-%}<b><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></b>
-<p>{{ entry.text }}</p>{%   
+%}<b><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></b><p>{{ entry.text }}</p>{%
     endif %}{%
+  elif entry.mediatype=='img'
+%}{{ entry.text|safe }}{% 
+  elif entry.mediatype=='video' 
+%}<a href="/entry/{{entry.id}}">{{ entry.title }}</a><br />{{ entry.text|safe }}{%
   endif 
 %}</div>
 {% endfor %}

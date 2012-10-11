@@ -255,7 +255,8 @@ class Tanuki:
                 if self.mode == 'grid':
                     text = first_line
                     if mediatype == 'img':
-                        img = "<img src=\"%s\">" % ( first_word )
+                        img = "<img alt=\"%s\" title=\"%s\" src=\"%s\">"\
+                            % ( x['title'], x['title'], first_word )
                         href = "/entry/%d" % ( x['id'] )
                         text = "<a href=\"%s\">%s</a>" % ( href, img )
                 else:
