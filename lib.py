@@ -397,8 +397,9 @@ class Tanuki:
         if not entries:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
-            msg = "%d entries %s"\
-                % ( len(entries),
+            msg = "%s %d entries %s"\
+                % ( self.img( 'tanuki', None ),
+                    len(entries),
                     self.controls( 0, ['home','grid','cloud','search'] ) )
         return render_template( 'index.html',
                                 entries=entries,
@@ -425,7 +426,9 @@ class Tanuki:
         haztag = self.apply_tags( haztag )
         haztag = self.preprocess( haztag )
         haztag = self.markup( haztag )
-        msg = "%d tagged %s %s" % ( len(haztag), tag,
+        msg = "%s %d tagged %s %s"\
+            % ( self.img( 'tanuki', None ),
+                len(haztag), tag,
                 self.controls( 0, ['home','grid','list','cloud','search'] ) )
         return render_template( 'index.html', entries=haztag, msg=msg )
         
@@ -436,8 +439,9 @@ class Tanuki:
         if not entries:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
-            msg = "%d entries %d tags %s <i>%d not tagged %s</i>"\
-                % ( len(entries), len(tag_set),
+            msg = "%s %d entries %d tags %s <i>%d not tagged %s</i>"\
+                % ( self.img( 'tanuki', None ),
+                    len(entries), len(tag_set),
                     self.controls( 0, ['home','grid','list','search'] ),
                     len(notag), self.img( 'notag', '/notag' ))
         return render_template( 'index.html', tag_set=tag_set, msg=msg )
@@ -453,7 +457,10 @@ class Tanuki:
         
     def matched( self, terms ):
         found = self.entries( None, None, False, terms )
-        tophits = self.slice( found, 0, self.max_hits )
+        try:
+            tophits = self.slice( found, 0, self.max_hits )
+        except ValueError:
+            tophits = { 'entries': [] }
         msg = "%d matched { %s } %s"\
             % ( len(found), terms, self.controls( 0, [ 'search','home' ] ))
         return render_template( 'index.html', 
