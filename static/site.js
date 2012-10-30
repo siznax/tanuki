@@ -1,5 +1,10 @@
 // window.onload = function(){ alert("okay"); }
 
+function swapColorCSS( sheet ) { 
+    href = '/static/' + sheet;
+    document.getElementById( 'color' ).setAttribute( 'href', href );
+}
+
 function validate() {
     date = document.getElementById('date_box');
     if (date.value.length !== 10 || 
