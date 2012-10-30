@@ -178,9 +178,8 @@ div.entry_foot {
 .entry_foot #tags A { 
   text-decoration:none;
 }
-.entry_foot #tag { 
-  margin:0 0.4em;
-}
+.entry_foot #tag { margin:0 0.4em; }
+.entry_foot #tag i { padding-right:0.4em; font-style:normal; }
 
 div#confirm_outer {
   text-align:center;
