@@ -5,6 +5,7 @@ __author__ = "siznax"
 __version__ = 2012
 
 from flask import Flask,render_template,make_response,redirect,url_for,Markup,request
+from werkzeug.exceptions import NotFound
 import markdown
 import datetime
 import re
@@ -23,6 +24,8 @@ class Tanuki:
         self.DEBUG = 1
         self.editing = False
         self.mode = None
+        if self.DEBUG:
+            print self.config
 
     def connect( self ):
         dbfile = self.config['DATABASE']
@@ -32,6 +35,9 @@ class Tanuki:
         self.db = self.con.cursor()
 
     def dbquery( self, sql, val='' ):
+        if not request.host == self.config['WRITE_HOST']:
+            if not sql.startswith('select'):
+                raise RuntimeError
         msg = "+ TANUKI SQL: %s" % ( sql )
         if val: msg += " VAL: %s" % ( ''.join( str(val) ) )
         result = self.db.execute( sql, val )
@@ -64,6 +70,8 @@ class Tanuki:
         return render_template( 'edit.html', entry=n )
 
     def edit( self, entry_id ):
+        if not request.host == self.config['WRITE_HOST']:
+            raise NotFound()
         entry = self.entry( entry_id, False, None, True )
         return render_template( 'edit.html', entry=entry )
 
@@ -137,6 +145,8 @@ class Tanuki:
             % ( msg, deets )
 
     def confirm( self, entry_id ):
+        if not request.host == self.config['WRITE_HOST']:
+            raise NotFound()
         entry = self.entry( entry_id )
         msg = self.confirm_msg( 'Really, destroy?', entry )
         return render_template( 'confirm.html', entry=entry, msg=msg )
@@ -200,18 +210,27 @@ class Tanuki:
         return entries
 
     def controls( self, entry_id, wanted=None ):
-        c = { 'home': self.img( 'home', '/' )\
-                  if not request.path=='/' else '',
-              'new': self.img( 'new', '/new' ),
-              'entry': self.img( 'entry', "/entry/%d" % ( entry_id ) )\
-                  if not '/entry' in request.path else '',
-              'edit': self.img( 'edit', "/edit/%d" % ( entry_id )),
-              'delete': self.img( 'delete', "/confirm/%d" % ( entry_id )),
-              'list': self.img( 'list', '/list' ),
-              'cloud': self.img( 'cloud', '/cloud' ),
+        home_img = self.img( 'home', '/' )\
+            if not request.path == '/' else ''
+        new_img = self.img( 'new', '/new' )\
+            if request.host == self.config['WRITE_HOST'] else ''
+        entry_img = self.img( 'entry', "/entry/%d" % ( entry_id ) )\
+            if not '/entry' in request.path else ''
+        edit_img = self.img( 'edit', "/edit/%d" % ( entry_id ))\
+            if request.host == self.config['WRITE_HOST'] else ''
+        delete_img = self.img( 'delete', "/confirm/%d" % ( entry_id ))\
+            if request.host == self.config['WRITE_HOST'] else ''
+        grid_img = self.img( 'grid', '/grid' )\
+            if not request.path == '/grid' else ''
+        c = { 'home'  : home_img,
+              'new'   : new_img,
+              'entry' : entry_img,
+              'edit'  : edit_img,
+              'delete': delete_img,
+              'list'  : self.img( 'list', '/list' ),
+              'cloud' : self.img( 'cloud', '/cloud' ),
               'search': self.img( 'search', '/search' ),
-              'grid': self.img( 'grid', '/grid' )\
-                  if not request.path=='/grid' else '' }
+              'grid'  : grid_img }
         s = ''
         for w in wanted:
             s += "%s" % ( c[w] )

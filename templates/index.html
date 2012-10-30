@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block body %}
-
 {% if msg %}
 <div align="center" id="result_msg">{{ msg|safe }}</div>
 {% endif %}
@@ -55,9 +54,11 @@
 </td>
 <td align="right">
 <div id="controls">
+{% if request.host == config['WRITE_HOST'] %}
 <a href="/confirm/{{ entry.id }}"><img src="/static/delete.png"></a>
 <a href="/edit/{{ entry.id }}"><img src="/static/edit.png"></a>
 <a href="/new"><img src="/static/new.png"></a>
+{% endif %}
 {% if entries|count() == 1 %}
 <a href="/"><img src="/static/home.png"></a>
 {% endif %}
