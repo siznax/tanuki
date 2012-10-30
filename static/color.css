@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,800,700);
+
 body {
   font-family:Georgia;
   background:lightgray url('/static/noise.png');
@@ -20,6 +22,7 @@ div#tag_set span:hover {
 }
 div#tag_set span:hover i { color:whitesmoke; }
 div#tag_set span:hover a { color:white; }
+
 div#entry_list { font-family:"Open Sans", sans-serif; font-weight:400; }
 #entry_list i { color:#444; }
 div#tail {
@@ -81,9 +84,15 @@ div.entry_foot {
   background-color:whitesmoke;
 }
 .entry_foot #tags { font-family:"Open Sans", sans-serif; }
-.entry_foot #tags A { color:darkgray; text-shadow:0px 1px 0px white; }
-.entry_foot #tags A:hover { color:#222; text-shadow:2px 2px 0px white; }
+.entry_foot #tags A { color:darkgray; }
 .entry_foot #tag { color:darkgray; }
+.entry_foot #tags i { color:#ccc; }
+.entry_foot #tags span { padding:6px 8px; border-radius:16px; color:black; }
+.entry_foot #tags span:hover { 
+  background:-webkit-gradient(linear,left top,left bottom,from(thistle),to(indigo));
+}
+.entry_foot #tags span:hover a { color:white; }
+
 div#confirm { border:1px solid black; background:khaki; }
 #grid div.text {
   font-family:sans-serif;
