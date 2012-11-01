@@ -59,7 +59,7 @@ div.entry_head {
   font-weight:100;
   font-size:14px;
 }
-.entry_head #date a { color:#ccc; }
+.entry_head #date a { color:#ccc; padding:1px; }
 .entry_head #date a:hover {
   border:1px solid black;
   background:-webkit-gradient(linear,left top,left bottom,from(mediumorchid),to(indigo));
@@ -87,13 +87,13 @@ div.entry_foot {
   border-bottom:1px solid black;
   background-color:dimgray;
 }
-.entry_foot #tags { font-family:"Open Sans", sans-serif; font-size:0.8em; }
+.entry_foot #tags { font-family:"Open Sans",sans-serif; font-size:0.8em; }
 .entry_foot #tags a { color:#ccc; text-shadow:1px 1px 1px black; }
 .entry_foot #tags i { color:#ccc; }
 .entry_foot #tags span { 
   padding:6px 8px; 
+  border:1px solid dimgray;
   border-radius:16px; 
-  border:1px solid #444;
   color:black; 
 }
 .entry_foot #tags span:hover { 
