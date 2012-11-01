@@ -72,7 +72,7 @@ div#tag_set {
   line-height:3em;
 }
 div#tag_set i { 
-  padding:6px 2px 6px 8px;
+  padding:6px 4px 6px 8px;
   font-style:normal;
 }
 div#tag_set span a { 
@@ -118,14 +118,13 @@ div.entry_head {
   text-decoration:none; 
 }
 .entry_head #date {
-  padding:5px;
+  padding:6px;
   white-space:nowrap;
 }
 .entry_head #date a:hover { 
   margin:0 -5px;
-  padding:4px;
+  padding:5px;
   border-radius:8px;
-  border:1px solid #ccc;
 }
 .entry_head #title { 
   padding:0 0.4em;
@@ -137,10 +136,6 @@ div.entry_head {
   height:24px;
   padding:6px;
   border-radius:8px;
-}
-.entry_head #controls img:hover {
-  padding:5px;
-  border:1px solid #ccc;
 }
 .entry_head table {
   width:100%;
@@ -177,9 +172,10 @@ div.entry_foot {
 }
 .entry_foot #tags A { 
   text-decoration:none;
+  padding:0 0.4em;
 }
 .entry_foot #tag { margin:0 0.4em; }
-.entry_foot #tag i { padding-right:0.4em; font-style:normal; }
+.entry_foot #tag i { font-style:normal; }
 
 div#confirm_outer {
   text-align:center;
