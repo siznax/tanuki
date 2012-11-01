@@ -12,6 +12,7 @@ Usage:
         PASSWORD = 'default'
         WRITE_HOST = 'localhost:5001'
         STYLESHEET = '/static/light.css'
+    export TANUKI_CONFIG=`pwd`"/CONFIG"
     python views.py
 
 Recommended:
