@@ -42,9 +42,9 @@ div.entry_head {
   background:-webkit-gradient(linear,left top,left bottom,from(#dcdcdc), to(#a9a9a9));
   background:-webkit-gradient(linear,left top,left bottom,from(darkviolet),to(indigo));
   background:-webkit-gradient(linear,left top,left bottom,from(#444), to(#000));
-  border-top:  1px solid black;
+  border-top:  1px solid #333;
   border-right:1px solid black;
-  border-left: 1px solid black;
+  border-left: 1px solid #333;
   -webkit-border-top-left-radius: 8px;
   -webkit-border-top-right-radius: 8px;
   -moz-border-radius-topleft: 8px;
@@ -78,12 +78,12 @@ div.entry_head {
 div.entry_body {
   background:whitesmoke;
   border-right:1px solid black;
-  border-left: 1px solid black;
+  border-left: 1px solid #333;
 }
 div.entry_text { font-family:Georgia; }
 div.entry_foot {
   border-right: 1px solid black;
-  border-left:  1px solid black;
+  border-left:  1px solid #333;
   border-bottom:1px solid black;
   background-color:dimgray;
 }
