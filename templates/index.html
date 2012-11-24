@@ -19,11 +19,9 @@
 {% for entry in entries %}
 {% set month = entry.month %}
 {% if '/list' in request.path %}
-{% if not month==last_month %}<i>{{ month }} {{ entry.year }}</i>{% endif %}<li><a 
- href="entry/{{ entry.id }}">{{ entry.title }}</a></li>
-{% else %}
-<li><a href="#entry{{ entry.id }}">{{ entry.title }}</a></li>
+{% if not month==last_month %}<i>{{ month }} {{ entry.year }}</i>{% endif %}
 {% endif %}
+<li><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></li>
 {% set last_month = month %}
 {% endfor %}
 </ol>
