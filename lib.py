@@ -404,7 +404,7 @@ class Tanuki:
                 self.next_prev( chunk, page, 'grid' ),
                 self.from_to( chunk['start'],chunk['last'] ), 
                 chunk['total'], 
-                self.controls( 0, ['home','grid','list','cloud','search'] ) )
+                self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
         self.mode = None
         return render_template( 'grid.html',
                                 entries=chunk['entries'],
@@ -419,7 +419,7 @@ class Tanuki:
             msg = "%s %d entries %s"\
                 % ( self.img( 'tanuki', None ),
                     len(entries),
-                    self.controls( 0, ['home','grid','cloud','search'] ) )
+                    self.controls( 0, ['home','grid','cloud','search','new'] ) )
         return render_template( 'index.html',
                                 entries=entries,
                                 msg=msg )
@@ -448,7 +448,7 @@ class Tanuki:
         msg = "%s %d tagged %s %s"\
             % ( self.img( 'tanuki', None ),
                 len(haztag), tag,
-                self.controls( 0, ['home','grid','list','cloud','search'] ) )
+                self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
         return render_template( 'index.html', entries=haztag, msg=msg )
         
     def cloud( self ):
@@ -461,7 +461,7 @@ class Tanuki:
             msg = "%s %d entries %d tags %s <i>%d not tagged %s</i>"\
                 % ( self.img( 'tanuki', None ),
                     len(entries), len(tag_set),
-                    self.controls( 0, ['home','grid','list','search'] ),
+                    self.controls( 0, ['home','grid','list','search','new'] ),
                     len(notag), self.img( 'notag', '/notag' ))
         return render_template( 'index.html', tag_set=tag_set, msg=msg )
 
