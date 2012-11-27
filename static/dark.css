@@ -2,10 +2,12 @@
 
 body {
   font-family:Georgia;
-  background:#444;
+  background:#444 url('/static/black.jpg');
   font-size:1.2em;
   color:black;
 }
+
+HL { background:khaki; }
 
 div#result_msg {
   font-family:"Open Sans", sans-serif;
@@ -118,7 +120,10 @@ div.img b,div.video a {
   font-weight:400;
   font-size:9px;
 }
-.entry_inline #tags a,.entry_inline #date a { color:#999; }
-.entry_inline a { color:#999; text-decoration:none; }
+.entry_inline { color:#999; font-size:smaller; }
+.entry_inline #tags a,.entry_inline #date a { color:#666; }
+.entry_inline #tags a:hover { color:mediumorchid; }
+.entry_inline #date a:hover { color:mediumorchid; }
+.entry_inline a { color:white; text-decoration:none; }
 .entry_inline a:hover { color:mediumorchid; text-shadow:1px 1px 1px black; }
 .entry_inline #controls img:hover { opacity:1; }
