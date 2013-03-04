@@ -17,7 +17,6 @@ class Tanuki:
 
     def __init__( self, config ):
         self.config = config
-        self.date = datetime.date.today().isoformat()
         self.stream_per_page = 1
         self.grid_per_page = 12
         self.max_hits = 10
@@ -57,8 +56,12 @@ class Tanuki:
             return "<br />".join( hrefs )
         return " ".join( hrefs )
 
-    def img( self, alt, href=None):
-        img = '<img id="%s" alt="%s" align="top" src="/static/%s.png">'\
+    def div( self, _id, _class, href=None ):
+        onclick = 'onclick="window.location=\'%s\';"' % href if href else ''
+        return '<div id="%s" class="%s" %s></div>' % ( _id, _class or '', onclick )
+
+    def img( self, alt, href=None ):
+        img = '<img id="%s" alt="%s" src="/static/%s.png">'\
             % ( alt, alt,  alt )
         if href:
             return '<a href="%s">%s</a>' % ( href, img )
@@ -66,7 +69,8 @@ class Tanuki:
             return img
 
     def new( self ):
-        n={ 'date':self.date,'text':'text','title':'title','tags':'tags' }
+        date = datetime.date.today().isoformat()
+        n={ 'date':date,'text':'text','title':'title','tags':'tags' }
         return render_template( 'edit.html', entry=n )
 
     def edit( self, entry_id ):
@@ -93,7 +97,8 @@ class Tanuki:
             return 
         for tag in self.norm_tags( tags ):
             sql = 'insert into tags values(?,?,?)'
-            self.dbquery( sql, [ entry_id, tag, self.date ] )
+            date = datetime.date.today().isoformat()
+            self.dbquery( sql, [ entry_id, tag, date ] )
 
     def bad_str( self, instr ):
         try:
@@ -210,27 +215,17 @@ class Tanuki:
         return entries
 
     def controls( self, entry_id, wanted=None ):
-        home_img = self.img( 'home', '/' )\
-            if not request.path == '/' else ''
-        new_img = self.img( 'new', '/new' )\
-            if request.host == self.config['WRITE_HOST'] else ''
-        entry_img = self.img( 'entry', "/entry/%d" % ( entry_id ) )\
-            if not '/entry' in request.path else ''
-        edit_img = self.img( 'edit', "/edit/%d" % ( entry_id ))\
-            if request.host == self.config['WRITE_HOST'] else ''
-        delete_img = self.img( 'delete', "/confirm/%d" % ( entry_id ))\
-            if request.host == self.config['WRITE_HOST'] else ''
-        grid_img = self.img( 'grid', '/grid' )\
-            if not request.path == '/grid' else ''
-        c = { 'home'  : home_img,
-              'new'   : new_img,
-              'entry' : entry_img,
-              'edit'  : edit_img,
-              'delete': delete_img,
-              'list'  : self.img( 'list', '/list' ),
-              'cloud' : self.img( 'cloud', '/cloud' ),
-              'search': self.img( 'search', '/search' ),
-              'grid'  : grid_img }
+        c = { 
+            'home'  : self.div( 'home', 'btn', '/' ) if not request.path == '/' else '',
+            'new'   : self.div( 'new', 'btn', '/new' ) if request.host == self.config['WRITE_HOST'] else '',
+            'entry' : self.div( 'entry', 'btn', "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
+            'edit'  : self.img( 'edit', "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+            'delete': self.img( 'delete', "/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+            'list'  : self.div( 'list', 'btn', '/list' ),
+            'cloud' : self.div( 'cloud', 'btn', '/cloud' ),
+            'search': self.div( 'search', 'btn', '/search' ),
+            'grid'  : self.div( 'grid', 'btn', '/grid' ) if not request.path == '/grid' else '' 
+            }
         s = ''
         for w in wanted:
             s += "%s" % ( c[w] )
@@ -250,7 +245,7 @@ class Tanuki:
             "<figure>\n%s"\
             "<figcaption>%s</figcaption>\n"\
             "</figure>\n</div>\n"\
-            % ( self.controls( entry['id'], [ 'home','entry','edit','delete' ] ),
+            % ( self.controls( entry['id'], [ 'home','entry','edit','delete','new' ] ),
                 "<a href=\"/dated/%s\">%s</a>" % ( entry['date'], entry['date'] ),
                 self.tag_hrefs( entry['tags'], True),
                 media, caption )
@@ -350,14 +345,14 @@ class Tanuki:
                  'num_pages': total / num }
 
     def next_prev( self, chunk, page, url='page' ):
-        n_p = page + 1 if ( page + 1) <= chunk['num_pages'] else 0
-        p_p = page - 1
-        n_i = self.img( 'next', "/%s/%d" % ( url, n_p )) if n_p > 0 else ''
-        p_i = self.img( 'prev', "/%s/%d" % ( url, p_p)) if p_p >= 0 else ''
-        return "<div id=\"next_prev\">\n%s%s\n</div>\n" % ( p_i, n_i ) 
+        np = page + 1 if ( page + 1) <= chunk['num_pages'] else 0
+        pp = page - 1
+        n = self.div( 'next', None, "/%s/%d" % ( url, np )) if np > 0 else ''
+        p = self.div( 'prev', None, "/%s/%d" % ( url, pp )) if pp >= 0 else ''
+        return "%s%s\n" % ( p, n )
 
     def from_to( self, start, last ):
-        if not start==last: return "%s of %s" % ( start,last )
+        if not start==last: return "%s&ndash;%s" % ( start,last )
         return start
         
     def stream( self, page=0 ):
@@ -396,15 +391,20 @@ class Tanuki:
             x['text'] = t
         return entries
 
+    def result_words( self, total, from_to=None ):
+        if ( from_to ):
+            return "<div id=\"words\">%s of %d entries</div>" % ( from_to, total )
+        else:
+            return "<div id=\"words\">%d entries</div>" % ( total )
+
     def grid( self, page=0 ):
         self.mode = 'grid'
         chunk = self.slice( self.entries(), page, self.grid_per_page )
-        msg = "%s %s %s of %d entries %s"\
+        msg = "%s %s %s %s"\
             % ( self.img( 'tanuki', None ),
-                self.next_prev( chunk, page, 'grid' ),
-                self.from_to( chunk['start'],chunk['last'] ), 
-                chunk['total'], 
-                self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
+                self.result_words( chunk['total'], self.from_to( chunk['start'],chunk['last'] ) ),
+                self.controls( 0, ['home','grid','list','cloud','search','new'] ),
+                self.next_prev( chunk, page, 'grid' ) )
         self.mode = None
         return render_template( 'grid.html',
                                 entries=chunk['entries'],
@@ -416,9 +416,9 @@ class Tanuki:
         if not entries:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
-            msg = "%s %d entries %s"\
+            msg = "%s %s %s"\
                 % ( self.img( 'tanuki', None ),
-                    len(entries),
+                    self.result_words( len(entries) ),
                     self.controls( 0, ['home','grid','cloud','search','new'] ) )
         return render_template( 'index.html',
                                 entries=entries,

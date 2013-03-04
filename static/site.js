@@ -17,8 +17,3 @@ function validate() {
     }
 }
 
-$(document).ready(function(){
-    
-    // $("body").css("border","3px solid orange");
-
-});

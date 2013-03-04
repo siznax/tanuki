@@ -3,21 +3,19 @@ body {
   padding:0;
 }
 
-div#result_msg {
-  margin-top:32px;
-  margin-bottom:-24px;
+#result_msg {
+  margin:0 auto;
+  margin-top:12px;
+  text-align:center;
+  width:400px;
+  height:32px;
 }
 #result_msg #new_btn {
   margin-left:1em;
 }
-#result_msg img,.entry_foot img,span#controls img {
-  height:20px;
-  padding-left:0.4em;
-}
-#result_msg img#tanuki {
+#result_msg img,span#controls img {
   height:32px;
-  margin-top:-8px;
-  margin-right:0.4em;
+  padding-left:0.4em;
 }
 #result_msg i {
   margin-left:1em;
@@ -27,15 +25,6 @@ div#result_msg {
 }
 #result_msg #no_entries img#tanuki {
   height:64px;
-}
-#result_msg div#next_prev {
-  position:absolute;
-  top:24px;
-  right:16px;
-}
-#result_msg div#next_prev img {
-  width:32px;
-  height:32px;
 }
 
 fieldset { border:none; }
@@ -54,8 +43,9 @@ form#edit input#title {
 form#edit textarea#entry_text { 
   padding:8px;
   width:80%;
-  height:300px;
-  font-size:12pt;
+  height:400px;
+  font-family:Monaco;
+  font-size:12px;
 }
 form#edit #date_box {
   font-size:12pt;
@@ -162,7 +152,9 @@ div.entry_body {
 .entry_body img,.entry_inline img {
   max-width:600px;
 }
-div.entry_foot {
+
+.entry_foot {
+  display:block;
   width:80%;
   margin:0 2em 2em 2em;
   padding:12px;
@@ -174,8 +166,18 @@ div.entry_foot {
   text-decoration:none;
   padding:0 0.4em;
 }
-.entry_foot #tag { margin:0 0.4em; }
-.entry_foot #tag i { font-style:normal; }
+.entry_foot .tag { 
+  margin-right:0.4em; 
+}
+.entry_foot .tag i { 
+  font-style:normal; 
+}
+.entry_foot img  {
+  width:32px;
+  opacity:0.7;
+  vertical-align:middle;
+  margin-left:0.4em;
+}
 
 div#confirm_outer {
   text-align:center;
@@ -199,9 +201,12 @@ div#search {
 }
 
 
-div#grid {
-  position:relative;
-  margin-top:2em;
+#grid.frame {
+  /* border:1px solid pink; */
+  position:absolute;
+  top:32px;
+  left:0;
+  margin-top:24px;
 }
 #grid div {
   float:left;
@@ -254,6 +259,7 @@ div.entry_inline {
 .entry_inline #controls img#entry  { position:absolute; right:0; margin-top:32px; }
 .entry_inline #controls img#edit   { position:absolute; right:0; margin-top:64px; }
 .entry_inline #controls img#delete { position:absolute; right:0; margin-top:96px; }
+.entry_inline #controls img#new    { position:absolute; right:0; margin-top:128px; }
 .entry_inline #tags,.entry_inline #date { 
   font-family:sans-serif; 
   font-weight:100;

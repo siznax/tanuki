@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
-<div align="center" id="result_msg">{{ msg|safe }}</div>
-<div id="grid">{% 
+<div id="result_msg">{{ msg|safe }}</div>
+<div id="grid" class="frame">{% 
   for entry in entries 
 %}
 <div class="{{ entry.mediatype }}" id="entry{{ entry.id }}">{%
