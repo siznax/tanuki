@@ -18,7 +18,6 @@ class Tanuki:
     def __init__( self, config ):
         self.config = config
         self.stream_per_page = 12
-        self.grid_per_page = 12
         self.max_hits = 10
         self.DEBUG = 1
         self.editing = False
@@ -391,7 +390,10 @@ class Tanuki:
         else:
             msg = self.result_words( len(entries) )
             controls = self.controls( 0, ['home','list','tags','search','new'] )
-        return render_template( 'list.html', msg=msg, controls=controls, entries=entries )
+        return render_template( 'list.html', 
+                                msg=msg, 
+                                controls=controls, 
+                                entries=entries )
 
     def singleton( self, entry_id ):
         self.mode = None
@@ -402,7 +404,8 @@ class Tanuki:
         return render_template( 'entry.html', 
                                 controls=self.controls( entry_id, controls ),
                                 next_prev=None,
-                                entry=entry )
+                                entry=entry,
+                                title=entry['title'])
 
     def dated( self, date ):
         stamped = self.entries( date )

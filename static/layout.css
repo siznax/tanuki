@@ -9,7 +9,7 @@ a:hover {
     text-decoration:underline;
 }
 div { 
-  padding:1em;
+    padding:1em;
 }
 
 /* ===================== CONTENT ============================ */
@@ -247,32 +247,3 @@ form#edit #tags_box {
     border-radius:16px;
 }
 
-/* ===================== GRID =============================== */
-
-#grid.frame {
-  /* border:1px solid pink; */
-  position:absolute;
-  top:32px;
-  left:0;
-  margin-top:24px;
-}
-#grid div {
-  float:left;
-  margin:16px;
-  margin-bottom:8px;
-  margin-right:8px;
-  padding:8px;
-  padding-bottom:16px;
-  width:200px;
-  height:160px;
-  overflow:hidden;
-}
-#grid div a {
-  text-decoration:none;
-}
-#grid div b {
-  margin-right:0.4em;
-}
-#grid div p {
-  margin-top:0;
-}

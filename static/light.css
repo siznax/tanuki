@@ -48,16 +48,19 @@ body {
 
 /* ===================== TAG_SET ============================ */
 
-#tag_set span a { color:black; }
-#tag_set span { color:silver; }
-#tag_set span:hover {
-  background:-webkit-gradient(linear,left top,left bottom,from(thistle),to(indigo));
+#tag_set span { 
+    color:silver; 
 }
-#tag_set span:hover i { color:whitesmoke; }
-#tag_set span:hover a { color:white; }
-
-#confirm { 
-    border:1px solid black; 
-    background:khaki; 
+#tag_set span a { 
+    color:black; 
+}
+#tag_set span:hover {
+    background:-webkit-gradient(linear,left top,left bottom,from(thistle),to(indigo));
+}
+#tag_set span:hover i { 
+    color:whitesmoke; 
+}
+#tag_set span:hover a { 
+    color:white; 
 }
 
