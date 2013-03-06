@@ -6,12 +6,14 @@ __version__ = 2012
 
 from flask import Flask,render_template,make_response,redirect,url_for,Markup,request
 from werkzeug.exceptions import NotFound
+
 import markdown
 import datetime
 import re
 import sqlite3
 import string
 import sys
+import urlparse
 
 class Tanuki:
 
@@ -253,7 +255,6 @@ class Tanuki:
                 lines = text.split("\n")
                 first_line = lines[0].strip()
                 first_word = lines[0].split()[0]
-                cap = "\n".join( lines[1:])
                 if mediatype == 'img':
                     text = "\n".join( [ self.href2img( first_word, x['title'] ) ] + lines[1:] )
                 x['mediatype'] = mediatype
@@ -368,12 +369,20 @@ class Tanuki:
 
     def grid_cells( self, entries ):
         for x in entries:
-            t = x['text']
-            if x['mediatype'] == 'text':
-                html = self.markdown( x['id'], t )
+            if x['mediatype'] == 'text': 
+                # strip tags and extract img src                
+                html = self.markdown( x['id'], x['text'] )
                 x['img'] = self.find_img( html )
-                t = Markup( html ).striptags()
-            x['text'] = t
+                x['text'] = Markup( html ).striptags()
+            if x['mediatype'] == 'video':
+                # stub out iframe src
+                stub = 'IFRAME STUB'
+                netloc = 'netloc'
+                src = re.search(r'src="(.*)"',x['text']).groups()
+                if src:
+                    url = urlparse.urlparse( src[0] )
+                    stub = '{ <a href="%s">%s</a> }' % ( src[0], url.netloc )
+                x['text'] = re.sub( r'<iframe.*iframe>', stub, x['text'] )
         return entries
 
     def result_words( self, total, from_to=None ):
@@ -395,7 +404,7 @@ class Tanuki:
                                 entries=entries )
 
     def singleton( self, entry_id ):
-        self.mode = None
+        self.mode = 'singleton'
         entry = self.entry( entry_id, True )
         if not entry:
             return redirect( url_for('index') )
@@ -405,7 +414,7 @@ class Tanuki:
                                 next_prev=None,
                                 entry=entry,
                                 title=entry['title'],
-                                body_class='singleton')
+                                body_class=self.mode)
 
     def dated( self, date ):
         self.mode = None
