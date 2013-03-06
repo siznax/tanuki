@@ -367,7 +367,6 @@ class Tanuki:
             return src
 
     def grid_cells( self, entries ):
-        max_cell_len = 255
         for x in entries:
             t = x['text']
             if x['mediatype'] == 'text':
@@ -405,7 +404,8 @@ class Tanuki:
                                 controls=self.controls( entry_id, controls ),
                                 next_prev=None,
                                 entry=entry,
-                                title=entry['title'])
+                                title=entry['title'],
+                                body_class='singleton')
 
     def dated( self, date ):
         self.mode = None

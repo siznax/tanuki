@@ -3,6 +3,9 @@ body {
     font-family:"Open Sans", sans-serif; 
     background:lightgray url('/static/noise.png');
 }
+body.singleton {
+    background:whitesmoke;
+}
 #header {
     text-shadow:0px 1px 0px snow;
 }
