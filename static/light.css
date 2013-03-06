@@ -6,6 +6,9 @@ body {
 body.singleton {
     background:whitesmoke;
 }
+pre code { 
+    color:forestgreen;
+}
 #header {
     text-shadow:0px 1px 0px snow;
 }
@@ -19,11 +22,9 @@ body.singleton {
 }
 .tag, #entry_tags A { 
     color:#999;
-    text-shadow:0px 1px 0px white; 
 }
 .tag:hover, #entry_tags A:hover {
     color:purple;
-    text-shadow:2px 2px 0px white;
 }
 .entry_foot, #entry_tag { 
     color:darkgray; 
@@ -32,10 +33,20 @@ body.singleton {
 /* ===================== STREAM ============================= */
 
 .entry.stream:hover {
-    background:khaki;
+    background:plum;
 }
 .entry.stream:hover .entry_body {
     color:black;
+    background:white;
+}
+.entry.stream #entry_date a {
+    color:#999;
+}
+.entry.stream:hover #entry_date a,
+.entry.stream:hover #entry_tags, 
+.entry.stream:hover #entry_tags a,
+.entry.stream:hover .tag {
+    color:mediumblue;
 }
 .entry.stream .entry_body {
     border:1px solid silver;

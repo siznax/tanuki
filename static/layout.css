@@ -65,9 +65,6 @@ div {
     font-size:small;
     border-radius:6px;
 }
-.entry.stream:hover {
-    color:black;
-}
 .entry.stream .entry_head {
     padding:4px;
     font-weight:bold;

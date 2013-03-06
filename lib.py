@@ -370,7 +370,7 @@ class Tanuki:
     def grid_cells( self, entries ):
         for x in entries:
             if x['mediatype'] == 'text': 
-                # strip tags and extract img src                
+                # strip tags and extract img src 
                 html = self.markdown( x['id'], x['text'] )
                 x['img'] = self.find_img( html )
                 x['text'] = Markup( html ).striptags()
@@ -397,7 +397,7 @@ class Tanuki:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
             msg = self.result_words( len(entries) )
-            controls = self.controls( 0, ['home','list','tags','search','new'] )
+            controls = self.controls( 0, ['home','tags','search','new'] )
         return render_template( 'list.html', 
                                 msg=msg, 
                                 controls=controls, 
