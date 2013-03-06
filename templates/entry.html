@@ -9,27 +9,15 @@
 
 {% if next_prev %}<div id="next_prev">{{ next_prev|safe }}</div>{% endif %}
 
-{% set path_class='' %}
-{% if request.path=='/' %}{% set path_class='stream' %}{% endif %}
-{% if '/page' in request.path %}{% set path_class='stream' %}{% endif %}
-
-<div id="entries">
-
-{% for entry in entries %}
-
 <div id="{{ entry.id }}" class="entry {{ entry.mediatype }} {{ path_class }}"
  onclick="window.location='/entry/{{entry.id}}'">
  <a name="entry{{ entry.id }}"></a>
- <div class="entry_head">{{ entry.title }}</div>
+ <div class="entry_head">
+  <span id="title">{{ entry.title }}</span>
+  <span id="date">{{ entry.date_str }}</span>
+ </div>
  <div class="entry_body">{{ entry.text|safe }}</div>
  <div class="entry_foot">
-  <div id="entry_date">{%
-    if entries|count() > 1 
-%}<a href="/entry/{{ entry.id }}">{{ entry.date_str }}</a>{%
-    else 
-%}<a href="{{ request.referrer }}">{{ entry.date_str }}</a>{%
-    endif
-%}</div>
   <div id="entry_tags">{{ entry.mediatype }} {% 
     for tag in entry.tags
 %} <span class="tag"><i>#</i><a href="/tagged/{{ tag }}">{{tag}}</a></span> {% 
@@ -37,10 +25,6 @@
 %}</div><!-- /entry_tags -->
  </div><!-- /entry_foot -->
 </div><!-- /entry -->
-
-{% endfor %}
-
-</div><!-- /entries -->
 
 {% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
 

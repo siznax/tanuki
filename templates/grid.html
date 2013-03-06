@@ -1,6 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-<div id="result_msg">{{ msg|safe }}</div>
+
+<div id="content">
+
+{% if msg %}<div id="header">{{ msg|safe }}</div>{% endif %}
+
+{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
+
 <div id="grid" class="frame">{% 
   for entry in entries 
 %}
@@ -18,6 +24,11 @@
 %}<a href="/entry/{{entry.id}}">{{ entry.title }}</a><br />{{ entry.text|safe }}{%
   endif 
 %}</div>
+
 {% endfor %}
+
 </div>
+
+</div>
+
 {% endblock %}

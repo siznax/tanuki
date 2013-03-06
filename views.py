@@ -19,8 +19,8 @@ def favicon():
 
 @app.route('/')
 def index():
-    # return tanuki.stream()
-    return tanuki.grid()
+    return tanuki.stream()
+    # return tanuki.grid()
 
 @app.route('/page/<int:page>')
 def pager(page):
@@ -28,29 +28,13 @@ def pager(page):
         return redirect( url_for('index') )
     return tanuki.stream( page )
 
-@app.route('/grid')
-def grid():
-    return tanuki.grid()
-
-@app.route('/grid/<int:page>')
-def grid_pager(page):
-    return tanuki.grid( page )
-
 @app.route('/list')
 def list():
     return tanuki.list()
 
-@app.route('/cloud')
+@app.route('/tags')
 def cloud():
-    return tanuki.cloud()
-
-@app.route('/entry/<int:_id>')
-def entry(_id):
-    return tanuki.singleton( _id )
-
-@app.route('/dated/<date>')
-def dated(date):
-    return tanuki.dated( date )
+    return tanuki.tags()
 
 @app.route('/tagged/<tag>')
 def tagged(tag):
@@ -59,6 +43,14 @@ def tagged(tag):
 @app.route('/notag')
 def notag():
     return tanuki.notag()
+
+@app.route('/entry/<int:_id>')
+def entry(_id):
+    return tanuki.singleton( _id )
+
+@app.route('/dated/<date>')
+def dated(date):
+    return tanuki.dated( date )
 
 @app.route('/search')
 def search():

@@ -1,106 +1,63 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,800,700);
-
 body {
-  font-family:Georgia;
-  background:lightgray url('/static/noise.png');
-  font-size:1.2em;
+    font-family:"Open Sans", sans-serif; 
+    background:lightgray url('/static/noise.png');
+}
+#header {
+    text-shadow:0px 1px 0px snow;
+}
+.entry_head #title {
+    text-shadow:0px 1px 0px white; 
+}
+.entry_head #date {
+    float:right;
+    color:#999;
+    text-shadow:0px 1px 0px white; 
+}
+.tag, #entry_tags A { 
+    color:darkgray; 
+    text-shadow:0px 1px 0px white; 
+}
+.tag:hover, #entry_tags A:hover { 
+    color:purple;
+    text-shadow:2px 2px 0px white; 
+}
+.entry_foot, #entry_tag { 
+    color:darkgray; 
 }
 
-div#result_msg {
-  font-family:"Open Sans", sans-serif;
-  text-shadow:0px 1px 0px snow;
+/* ===================== STREAM ============================= */
+
+.entry.stream:hover {
+    color:black;
 }
-#result_msg img,.entry_foot img,span#controls img { opacity:0.2; }
-#result_msg img#tanuki { opacity:1; }
-#result_msg img:hover,.entry_foot img:hover,#goto img:hover { opacity:1; }
-#result_msg div#next_prev img { opacity:0.6; }
-#result_msg div#next_prev img:hover { opacity:1; }
-div#tag_set { font-family:"Open Sans", sans-serif; }
-div#tag_set span a { color:black; }
-div#tag_set span { color:silver; }
-div#tag_set span:hover {
+.entry.stream .entry_body {
+    border:1px solid silver;
+    background-color:whitesmoke;
+    color:#999;
+}
+
+/* ===================== LIST =============================== */
+
+#entry_list { 
+    font-weight:400; 
+}
+#entry_list i { 
+    color:#444; 
+}
+
+/* ===================== TAG_SET ============================ */
+
+#tag_set span a { color:black; }
+#tag_set span { color:silver; }
+#tag_set span:hover {
   background:-webkit-gradient(linear,left top,left bottom,from(thistle),to(indigo));
 }
-div#tag_set span:hover i { color:whitesmoke; }
-div#tag_set span:hover a { color:white; }
-div#entry_list { font-family:"Open Sans", sans-serif; font-weight:400; }
-#entry_list i { color:#444; }
-div#tail {
-  font-family:"Open Sans", sans-serif; 
-  font-weight:400;
-  color:#666;
-  text-shadow:0px 1px 1px white;
+#tag_set span:hover i { color:whitesmoke; }
+#tag_set span:hover a { color:white; }
+
+#confirm { 
+    border:1px solid black; 
+    background:khaki; 
 }
-div.entry_head {
-  background:-webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#a9a9a9));
-  background:-webkit-gradient(linear,left top,left bottom,from(darkviolet),to(indigo));
-  background:-webkit-gradient(linear, left top, left bottom, from(#fe00a9), to(#b00074));
-  border-top:  1px solid silver;
-  border-right:1px solid silver;
-  border-left: 1px solid silver;
-  -webkit-border-top-left-radius: 8px;
-  -webkit-border-top-right-radius: 8px;
-  -moz-border-radius-topleft: 8px;
-  -moz-border-radius-topright: 8px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  color:white;
-}
-.entry_head a { color:white; /* color:#444; */ }
-.entry_head #date {
-  font-family:"Open Sans", sans-serif; 
-  font-weight:200;
-  font-size:14px;
-}
-.entry_head #date a { color:mistyrose; padding:1px; }
-.entry_head #date a:hover { 
-  border:1px solid #b00074;
-  background:#fa00a9;
-  color:white;
-  text-shadow:0px 2px 1px #b00074;
-}
-.entry_head #title { 
-  font-family:"Open Sans", sans-serif; 
-  font-weight:bold;
-  font-size:x-large; 
-}
-.entry_head #controls img { opacity:0.3; }
-.entry_head #controls img:hover {
-  opacity:1;
-  padding:5px;
-  border:1px solid #b00074;
-  background:#fa00a9;
-  color:white;
-}
-div.entry_body {
-  background:white;
-  border-right:1px solid silver;
-  border-left: 1px solid silver;
-}
-div.entry_text { font-family:Georgia; }
-div.entry_foot {
-  border-right: 1px solid silver;
-  border-left:  1px solid silver;
-  border-bottom:1px solid silver;
-  background-color:whitesmoke;
-}
-.entry_foot #tags { font-family:"Open Sans", sans-serif; }
-.entry_foot #tags A { color:darkgray; text-shadow:0px 1px 0px white; }
-.entry_foot #tags A:hover { color:#222; text-shadow:2px 2px 0px white; }
-.entry_foot #tag { color:darkgray; }
-div#confirm { border:1px solid black; background:khaki; }
-#grid div.text {
-  font-family:sans-serif;
-  font-size:smaller;
-  font-weight:100;
-  background:ghostwhite;
-  border:1px solid silver;
-}
-div.img { border:1px solid silver; }
-div.video { border:1px solid silver; }
-div.img b,div.video a {
-  font-family:sans-serif;
-  font-weight:400;
-  font-size:9px;
-}
-.entry_inline #tags a,.entry_inline #date a { color:#999; }
+

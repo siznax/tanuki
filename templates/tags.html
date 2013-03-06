@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div id="content">
+
+{% if msg %}<div id="header">{{ msg|safe }}</div>{% endif %}
+
+{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
+
+{% if tag_set %}
+<div id="tag_set">
+{% for tag in tag_set %}
+<span><i>{{ tag['count'] }}</i><a 
+ href="/tagged/{{ tag['name'] }}">{{ tag['name'] }}</a></span>
+{% endfor %}
+</div>
+{% endif %}
+
+{% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
+
+</div>
+
+{% endblock %}

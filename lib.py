@@ -17,7 +17,7 @@ class Tanuki:
 
     def __init__( self, config ):
         self.config = config
-        self.stream_per_page = 1
+        self.stream_per_page = 12
         self.grid_per_page = 12
         self.max_hits = 10
         self.DEBUG = 1
@@ -44,7 +44,7 @@ class Tanuki:
         return result
 
     def tag_set( self ):
-        sql = 'select count(*),name from tags group by name order by count(*) desc'
+        sql = 'select count(*),name from tags group by name order by name'
         return [ {'count':r[0],'name':r[1]} for r in self.dbquery( sql ) ]
 
     def tag_hrefs( self, tag_set, br=False ):
@@ -77,7 +77,12 @@ class Tanuki:
         if not request.host == self.config['WRITE_HOST']:
             raise NotFound()
         entry = self.entry( entry_id, False, None, True )
-        return render_template( 'edit.html', entry=entry )
+        referrer = request.referrer
+        if not referrer:
+            referrer = "/entry/%s" % entry_id
+        return render_template( 'edit.html', 
+                                entry=entry,
+                                referrer=referrer )
 
     def clear_tags( self, entry_id ):
         self.dbquery("delete from tags where id=?", [entry_id] )
@@ -189,7 +194,7 @@ class Tanuki:
         # overevaluated, don't try to do much here
         ymd = self.ymd( row[3] ) 
         text = row[2]
-        if request.path=='/list' or request.path=='/cloud':
+        if request.path=='/list' or request.path=='/tags':
             text = None # unless we need it
         return  { 'id': row[0],
                   'title': row[1],
@@ -216,39 +221,23 @@ class Tanuki:
 
     def controls( self, entry_id, wanted=None ):
         c = { 
-            'home'  : self.div( 'home', 'btn', '/' ) if not request.path == '/' else '',
+            'home'  : self.div( 'home', 'btn', '/' ),
             'new'   : self.div( 'new', 'btn', '/new' ) if request.host == self.config['WRITE_HOST'] else '',
             'entry' : self.div( 'entry', 'btn', "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
-            'edit'  : self.img( 'edit', "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
-            'delete': self.img( 'delete', "/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+            'edit'  : self.div( 'edit', 'btn', "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+            'delete': self.div( 'delete', 'btn', "/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
             'list'  : self.div( 'list', 'btn', '/list' ),
-            'cloud' : self.div( 'cloud', 'btn', '/cloud' ),
-            'search': self.div( 'search', 'btn', '/search' ),
-            'grid'  : self.div( 'grid', 'btn', '/grid' ) if not request.path == '/grid' else '' 
+            'tags'  : self.div( 'tags', 'btn', '/tags' ),
+            'search': self.div( 'search', 'btn', '/search' )
             }
         s = ''
         for w in wanted:
             s += "%s" % ( c[w] )
         return s
 
-    def inline( self, entry, alt, src, caption, media=False ):
-        caption = self.markdown( entry['id'], caption )
-        if '/entry' in request.path: entry_img = ''
-        if not media:
-            media = "<a href=\"/entry/%d\">"\
-                "<img alt=\"%s\" title=\"%s\" src=\"%s\"></a>\n"\
-                % ( entry['id'], alt, alt, src )
-        return "<div id=\"figure\">\n"\
-            "<span id=\"controls\">%s</span>\n"\
-            "<span id=\"date\">%s</span>\n"\
-            "<span id=\"tags\">%s</span>\n"\
-            "<figure>\n%s"\
-            "<figcaption>%s</figcaption>\n"\
-            "</figure>\n</div>\n"\
-            % ( self.controls( entry['id'], [ 'home','entry','edit','delete','new' ] ),
-                "<a href=\"/dated/%s\">%s</a>" % ( entry['date'], entry['date'] ),
-                self.tag_hrefs( entry['tags'], True),
-                media, caption )
+    def href2img( self, href, alt ):
+        img = '<img alt="%s" title="%s" src="%s">' % ( alt, alt, href )
+        return '<a href="%s">%s</a>' % ( href, img )
 
     def preprocess( self, entries ): # before markdown
         if self.editing:
@@ -266,20 +255,12 @@ class Tanuki:
                 first_line = lines[0].strip()
                 first_word = lines[0].split()[0]
                 cap = "\n".join( lines[1:])
-                if self.mode == 'grid':
-                    text = first_line
-                    if mediatype == 'img':
-                        img = "<img alt=\"%s\" title=\"%s\" src=\"%s\">"\
-                            % ( x['title'], x['title'], first_word )
-                        href = "/entry/%d" % ( x['id'] )
-                        text = "<a href=\"%s\">%s</a>" % ( href, img )
-                else:
-                    if mediatype == 'img':
-                        text = self.inline( x, x['title'], first_word, cap )
-                    if mediatype == 'video':
-                        text = self.inline( x, None, None, cap, first_line )
+                if mediatype == 'img':
+                    text = "\n".join( [ self.href2img( first_word, x['title'] ) ] + lines[1:] )
                 x['mediatype'] = mediatype
                 x['text'] = text
+            if self.mode == 'stream':
+                x['title'] = x['title'][:32]
         return entries
 
     def entry( self, entry_id, markup=False, title=None, editing=False ):
@@ -333,7 +314,7 @@ class Tanuki:
             raise ValueError
         chunk = self.apply_tags( entries[first:last] )
         chunk = self.preprocess( chunk )
-        if self.mode == 'grid':
+        if self.mode == 'stream':
             chunk = self.grid_cells( chunk )
         else:
             chunk = self.markup( chunk )
@@ -347,8 +328,8 @@ class Tanuki:
     def next_prev( self, chunk, page, url='page' ):
         np = page + 1 if ( page + 1) <= chunk['num_pages'] else 0
         pp = page - 1
-        n = self.div( 'next', None, "/%s/%d" % ( url, np )) if np > 0 else ''
-        p = self.div( 'prev', None, "/%s/%d" % ( url, pp )) if pp >= 0 else ''
+        n = self.div( 'next', 'btn', "/%s/%d" % ( url, np )) if np > 0 else ''
+        p = self.div( 'prev', 'btn', "/%s/%d" % ( url, pp )) if pp >= 0 else ''
         return "%s%s\n" % ( p, n )
 
     def from_to( self, start, last ):
@@ -356,10 +337,12 @@ class Tanuki:
         return start
         
     def stream( self, page=0 ):
+        self.mode = 'stream'
         try:
             chunk = self.slice( self.entries(), page, self.stream_per_page )
         except ValueError:
             return redirect( url_for('index') )
+        controls = None
         if not page and not chunk['entries']:
             msg = "<div id=\"no_entries\">%s %s %s</div>"\
                 % ( self.img( 'tanuki', None ),
@@ -367,16 +350,22 @@ class Tanuki:
                     "<input type=\"button\" value=\"new\" id=\"new_btn\" "\
                         "onclick=\"window.location='/new'\">" )
         else:
-            msg = "%s %s %s of %d entries %s"\
-                % ( self.img( 'tanuki', None ),
-                    self.next_prev( chunk, page ),
-                    self.from_to( chunk['start'],chunk['last'] ),
-                    chunk['total'],
-                    self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
+            controls = ['home','list','tags','search','new']
+            from_to = self.from_to( chunk['start'], chunk['last'] )
+            msg = "%s of %d entries" % ( from_to, chunk['total'] )
         return render_template( 'index.html',
+                                controls=self.controls( 0, controls ),
+                                next_prev=self.next_prev( chunk, page ),
                                 entries=chunk['entries'],
                                 msg=msg,
                                 start=chunk['start'] )
+
+    def find_img( self, html ):
+        import lxml.html
+        doc = lxml.html.document_fromstring( html )
+        for src in doc.xpath("//img/@src"):
+            if self.DEBUG: print "+ TANUKI img %s" % ( src )
+            return src
 
     def grid_cells( self, entries ):
         max_cell_len = 255
@@ -386,49 +375,34 @@ class Tanuki:
                 html = self.markdown( x['id'], t )
                 x['img'] = self.find_img( html )
                 t = Markup( html ).striptags()
-                if len( t ) > max_cell_len:
-                    t = t[:max_cell_len] + '...'
             x['text'] = t
         return entries
 
     def result_words( self, total, from_to=None ):
         if ( from_to ):
-            return "<div id=\"words\">%s of %d entries</div>" % ( from_to, total )
+            return "%s of %d entries" % ( from_to, total )
         else:
-            return "<div id=\"words\">%d entries</div>" % ( total )
-
-    def grid( self, page=0 ):
-        self.mode = 'grid'
-        chunk = self.slice( self.entries(), page, self.grid_per_page )
-        msg = "%s %s %s %s"\
-            % ( self.img( 'tanuki', None ),
-                self.result_words( chunk['total'], self.from_to( chunk['start'],chunk['last'] ) ),
-                self.controls( 0, ['home','grid','list','cloud','search','new'] ),
-                self.next_prev( chunk, page, 'grid' ) )
-        self.mode = None
-        return render_template( 'grid.html',
-                                entries=chunk['entries'],
-                                msg=msg,
-                                start=chunk['start'] )
+            return "%d entries" % ( total )
 
     def list( self ):
         entries = self.entries() # consider removing text
         if not entries:
             msg = "<h1>Unbelievable. No entries yet.</h1>"
         else:
-            msg = "%s %s %s"\
-                % ( self.img( 'tanuki', None ),
-                    self.result_words( len(entries) ),
-                    self.controls( 0, ['home','grid','cloud','search','new'] ) )
-        return render_template( 'index.html',
-                                entries=entries,
-                                msg=msg )
+            msg = self.result_words( len(entries) )
+            controls = self.controls( 0, ['home','list','tags','search','new'] )
+        return render_template( 'list.html', msg=msg, controls=controls, entries=entries )
 
     def singleton( self, entry_id ):
+        self.mode = None
         entry = self.entry( entry_id, True )
         if not entry:
             return redirect( url_for('index') )
-        return render_template( 'index.html', entries=[ entry ] )
+        controls = ['home','list','tags','search','new','edit','delete']
+        return render_template( 'entry.html', 
+                                controls=self.controls( entry_id, controls ),
+                                next_prev=None,
+                                entry=entry )
 
     def dated( self, date ):
         stamped = self.entries( date )
@@ -437,7 +411,7 @@ class Tanuki:
         stamped = self.markup( stamped )
         msg = "%d dated %s %s"\
             % ( len(stamped), self.date_str( date ),
-                self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
+                self.controls( 0, ['home','list','tags','search','new'] ) )
         return render_template( 'index.html', entries=stamped, msg=msg )
 
     def tagged( self, tag ):
@@ -445,50 +419,46 @@ class Tanuki:
         haztag = self.apply_tags( haztag )
         haztag = self.preprocess( haztag )
         haztag = self.markup( haztag )
-        msg = "%s %d tagged %s %s"\
-            % ( self.img( 'tanuki', None ),
-                len(haztag), tag,
-                self.controls( 0, ['home','grid','list','cloud','search','new'] ) )
-        return render_template( 'index.html', entries=haztag, msg=msg )
+        controls = ['home','list','tags','search','new']
+        msg = "%d tagged %s" % ( len(haztag), tag )
+        return render_template( 'list.html', 
+                                msg=msg,
+                                controls=self.controls( 0, controls ),
+                                entries=haztag ) 
         
-    def cloud( self ):
+    def tags( self ):
         entries = self.entries()
         tag_set = self.tag_set()
         notag = self.entries( None, None, True )
         if not entries:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
-            msg = "%s %d entries %d tags %s <i>%d not tagged %s</i>"\
-                % ( self.img( 'tanuki', None ),
-                    len(entries), len(tag_set),
-                    self.controls( 0, ['home','grid','list','search','new'] ),
-                    len(notag), self.img( 'notag', '/notag' ))
-        return render_template( 'index.html', tag_set=tag_set, msg=msg )
+            msg = "%d entries | %d tags | <i>%d not tagged</i>"\
+                % ( len(entries), len(tag_set), len(notag) )
+        controls = self.controls( 0, ['home','list','search','new'] )
+        return render_template( 'tags.html', 
+                                msg=msg, 
+                                controls=controls, 
+                                tag_set=tag_set )
 
     def notag( self ):
         untagged = self.entries( None, None, True )
         untagged = self.apply_tags( untagged )
         untagged = self.preprocess( untagged )
         untagged = self.markup( untagged )
-        msg = "%d not tagged %s"\
-            % ( len(untagged), self.img( 'cloud', '/cloud' ) )
-        return render_template( 'index.html', entries=untagged, msg=msg )
+        return render_template( 'list.html', 
+                                msg = "%d not tagged" % len(untagged),
+                                entries=untagged )
         
     def matched( self, terms ):
         found = self.entries( None, None, False, terms )
         try:
-            tophits = self.slice( found, 0, self.max_hits )
+            top = self.slice( found, 0, self.max_hits )
         except ValueError:
-            tophits = { 'entries': [] }
-        msg = "%d matched { %s } %s"\
-            % ( len(found), terms, self.controls( 0, [ 'search','home' ] ))
+            top = { 'entries': [] }
+        controls = ['home','list','tags','search','new']
         return render_template( 'index.html', 
-                                entries=tophits['entries'],
-                                msg=msg )
+                                msg = "%d matched { %s }" % ( len(found), terms ),
+                                controls = self.controls( 0, controls ),
+                                entries=top['entries'] )
 
-    def find_img( self, html ):
-        import lxml.html
-        doc = lxml.html.document_fromstring( html )
-        for src in doc.xpath("//img/@src"):
-            if self.DEBUG: print "+ TANUKI img %s" % ( src )
-            return src
