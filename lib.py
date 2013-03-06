@@ -408,6 +408,7 @@ class Tanuki:
                                 title=entry['title'])
 
     def dated( self, date ):
+        self.mode = None
         stamped = self.entries( date )
         stamped = self.apply_tags( stamped )
         stamped = self.preprocess( stamped )
@@ -418,6 +419,7 @@ class Tanuki:
         return render_template( 'index.html', entries=stamped, msg=msg )
 
     def tagged( self, tag ):
+        self.mode = None
         haztag = self.entries( None, tag )
         haztag = self.apply_tags( haztag )
         haztag = self.preprocess( haztag )
@@ -430,14 +432,15 @@ class Tanuki:
                                 entries=haztag ) 
         
     def tags( self ):
+        self.mode = None
         entries = self.entries()
         tag_set = self.tag_set()
         notag = self.entries( None, None, True )
         if not entries:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
-            msg = "%d entries | %d tags | <i>%d not tagged</i>"\
-                % ( len(entries), len(tag_set), len(notag) )
+            msg = '%d tags | %d entries | <i>%d <a href="/notag">notag</a></i>'\
+                % ( len(tag_set), len(entries), len(notag) )
         controls = self.controls( 0, ['home','list','search','new'] )
         return render_template( 'tags.html', 
                                 msg=msg, 
@@ -445,6 +448,7 @@ class Tanuki:
                                 tag_set=tag_set )
 
     def notag( self ):
+        self.mode = None
         untagged = self.entries( None, None, True )
         untagged = self.apply_tags( untagged )
         untagged = self.preprocess( untagged )
@@ -454,6 +458,7 @@ class Tanuki:
                                 entries=untagged )
         
     def matched( self, terms ):
+        self.mode = None
         found = self.entries( None, None, False, terms )
         try:
             top = self.slice( found, 0, self.max_hits )
