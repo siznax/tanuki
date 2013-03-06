@@ -66,6 +66,7 @@ div {
     float:left;
     width:256px;
     font-size:small;
+    border-radius:6px;
 }
 .entry.stream:hover {
     color:black;

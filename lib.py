@@ -460,7 +460,7 @@ class Tanuki:
         except ValueError:
             top = { 'entries': [] }
         controls = ['home','list','tags','search','new']
-        return render_template( 'index.html', 
+        return render_template( 'list.html', 
                                 msg = "%d matched { %s }" % ( len(found), terms ),
                                 controls = self.controls( 0, controls ),
                                 entries=top['entries'] )

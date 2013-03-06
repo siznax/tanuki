@@ -15,12 +15,12 @@ body {
     text-shadow:0px 1px 0px white; 
 }
 .tag, #entry_tags A { 
-    color:darkgray; 
+    color:#999;
     text-shadow:0px 1px 0px white; 
 }
-.tag:hover, #entry_tags A:hover { 
+.tag:hover, #entry_tags A:hover {
     color:purple;
-    text-shadow:2px 2px 0px white; 
+    text-shadow:2px 2px 0px white;
 }
 .entry_foot, #entry_tag { 
     color:darkgray; 
@@ -29,6 +29,9 @@ body {
 /* ===================== STREAM ============================= */
 
 .entry.stream:hover {
+    background:khaki;
+}
+.entry.stream:hover .entry_body {
     color:black;
 }
 .entry.stream .entry_body {

@@ -17,8 +17,7 @@
 
 {% for entry in entries %}
 
-<div id="{{ entry.id }}" class="entry {{ entry.mediatype }} {{ path_class }}"
- onclick="window.location='/entry/{{entry.id}}'">
+<div id="{{ entry.id }}" class="entry {{ entry.mediatype }} {{ path_class }}">
  <a name="entry{{ entry.id }}"></a>
  <div class="entry_head">{{ entry.title }}</div>
  <div class="entry_body">{{ entry.text|safe }}</div>

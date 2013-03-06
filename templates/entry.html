@@ -9,8 +9,7 @@
 
 {% if next_prev %}<div id="next_prev">{{ next_prev|safe }}</div>{% endif %}
 
-<div id="{{ entry.id }}" class="entry {{ entry.mediatype }} {{ path_class }}"
- onclick="window.location='/entry/{{entry.id}}'">
+<div id="{{ entry.id }}" class="entry {{ entry.mediatype }} {{ path_class }}">
  <a name="entry{{ entry.id }}"></a>
  <div class="entry_head">
   <span id="title">{{ entry.title }}</span>
