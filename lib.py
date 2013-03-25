@@ -72,18 +72,27 @@ class Tanuki:
     def new( self ):
         date = datetime.date.today().isoformat()
         n={ 'date':date,'text':'text','title':'title','tags':'tags' }
-        return render_template( 'edit.html', entry=n )
+        controls = ['home','list','tags','search']
+        return render_template( 'edit.html', 
+                                entry=n, 
+                                controls = self.controls( 0, controls ),
+                                title='new entry' )
 
     def edit( self, entry_id ):
+        self.mode = 'edit'
         if not request.host == self.config['WRITE_HOST']:
             raise NotFound()
         entry = self.entry( entry_id, False, None, True )
         referrer = request.referrer
         if not referrer:
             referrer = "/entry/%s" % entry_id
+        controls = ['home','list','tags','search']
         return render_template( 'edit.html', 
-                                entry=entry,
-                                referrer=referrer )
+                                entry = entry,
+                                referrer = referrer,
+                                title = "edit %s: %s" % ( entry_id, entry['title'] ),
+                                controls = self.controls( 0, controls ),
+                                body_class = self.mode)
 
     def clear_tags( self, entry_id ):
         self.dbquery("delete from tags where id=?", [entry_id] )
@@ -222,18 +231,18 @@ class Tanuki:
 
     def controls( self, entry_id, wanted=None ):
         c = { 
-            'home'  : self.div( 'home', 'btn', '/' ),
-            'new'   : self.div( 'new', 'btn', '/new' ) if request.host == self.config['WRITE_HOST'] else '',
-            'entry' : self.div( 'entry', 'btn', "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
-            'edit'  : self.div( 'edit', 'btn', "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
-            'delete': self.div( 'delete', 'btn', "/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
-            'list'  : self.div( 'list', 'btn', '/list' ),
-            'tags'  : self.div( 'tags', 'btn', '/tags' ),
-            'search': self.div( 'search', 'btn', '/search' )
+            'home'  : self.img('home',  '/' ),
+            'new'   : self.img('new',   '/new' ) if request.host == self.config['WRITE_HOST'] else '',
+            'entry' : self.img('entry', "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
+            'edit'  : self.img('edit',  "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+            'delete': self.img('delete',"/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+            'list'  : self.img('list',  '/list' ),
+            'tags'  : self.img('tags',  '/tags' ),
+            'search': self.img('search','/search' )
             }
-        s = ''
+        s = "\n"
         for w in wanted:
-            s += "%s" % ( c[w] )
+            s += "%s\n" % ( c[w] )
         return s
 
     def href2img( self, href, alt ):
@@ -244,23 +253,19 @@ class Tanuki:
         if self.editing:
             return entries
         for x in entries:
-            mediatype = x['mediatype']
+            if self.DEBUG: 
+                print "+ TANUKI preprocess %d" % ( x['id'] )
             if x['text'].startswith('http'):
-                mediatype = 'img'
-            if re.match( r'^<video|<iframe|<object',x['text'] ):
-                mediatype = 'video'
-            if not mediatype == 'text':
-                if self.DEBUG: print "+ TANUKI preprocess %d" % ( x['id'] )
+                x['mediatype'] = 'img'
                 text = x['text'].strip()
                 lines = text.split("\n")
                 first_line = lines[0].strip()
                 first_word = lines[0].split()[0]
-                if mediatype == 'img':
-                    text = "\n".join( [ self.href2img( first_word, x['title'] ) ] + lines[1:] )
-                x['mediatype'] = mediatype
-                x['text'] = text
-            if self.mode == 'stream':
-                x['title'] = x['title'][:32]
+                img_tag = self.href2img( first_line, x['title'] )
+                x['text'] = "%s\n%s" % ( img_tag, "\n".join( lines[1:] ) )
+                x['img'] = self.find_img( x['text'] )
+            if re.match( r'^<video|<iframe|<object',x['text'] ):
+                x['mediatype'] = 'video'
         return entries
 
     def entry( self, entry_id, markup=False, title=None, editing=False ):
@@ -306,17 +311,17 @@ class Tanuki:
             print "+ TANUKI entries %d bytes" % ( sys.getsizeof(entries) )
         return entries
 
-    def slice( self, entries, page, num ):
+    def slice( self, entries, page, num, noop=False ):
         total = len(entries)
         first = page * num
         last = first + num if ( first + num ) < total else total
         if first >= last:
             raise ValueError
-        chunk = self.apply_tags( entries[first:last] )
-        chunk = self.preprocess( chunk )
-        if self.mode == 'stream':
-            chunk = self.grid_cells( chunk )
+        if noop:
+            chunk = entries[first:last]
         else:
+            chunk = self.apply_tags( entries[first:last] )
+            chunk = self.preprocess( chunk )
             chunk = self.markup( chunk )
         return { 'num': num,
                  'total': total,
@@ -336,6 +341,24 @@ class Tanuki:
         if not start==last: return "%s&ndash;%s" % ( start,last )
         return start
         
+    def index( self, page=0 ):
+        tags = [] #configure
+        entries = {}
+        tag_set = self.tag_set()
+        names = [ t['name'] for t in tag_set ]
+        for tag in tags:
+            entries[ tag ] = { 
+                'count': tag_set[ names.index( tag ) ]['count'],
+                'entries': self.entries( None, tag )[0:10] }
+        notag = self.entries( None, None, True )
+        controls = ['home','list','tags','search','new']
+        return render_template( 'index.html',
+                                controls = self.controls( 0, controls ),
+                                tags = tags,
+                                tag_set = tag_set,
+                                entries = entries,
+                                notag = notag )
+
     def stream( self, page=0 ):
         self.mode = 'stream'
         try:
@@ -364,8 +387,25 @@ class Tanuki:
         import lxml.html
         doc = lxml.html.document_fromstring( html )
         for src in doc.xpath("//img/@src"):
-            if self.DEBUG: print "+ TANUKI img %s" % ( src )
             return src
+
+    def iframe_src( self, text ):
+        src = re.search(r'src="([^"]*)"', text )
+        if src:
+            return src.groups()[0]
+        src = re.search(r"src='([^']*)'", text )
+        if src:
+            return src.groups()[0]
+        return None
+
+    def iframe_stub( self, text ):
+        stub = 'IFRAME STUB'
+        netloc = 'netloc'
+        src = self.iframe_src( text )
+        if src:
+            url = urlparse.urlparse( src )
+            stub = '{ <a href="%s">%s</a> }' % ( src, url.netloc )
+        return re.sub( r'<iframe.*iframe>', stub, text )
 
     def grid_cells( self, entries ):
         for x in entries:
@@ -375,14 +415,7 @@ class Tanuki:
                 x['img'] = self.find_img( html )
                 x['text'] = Markup( html ).striptags()
             if x['mediatype'] == 'video':
-                # stub out iframe src
-                stub = 'IFRAME STUB'
-                netloc = 'netloc'
-                src = re.search(r'src="(.*)"',x['text']).groups()
-                if src:
-                    url = urlparse.urlparse( src[0] )
-                    stub = '{ <a href="%s">%s</a> }' % ( src[0], url.netloc )
-                x['text'] = re.sub( r'<iframe.*iframe>', stub, x['text'] )
+                x['text'] = self.iframe_stub( x['text'] )
         return entries
 
     def result_words( self, total, from_to=None ):
@@ -422,10 +455,12 @@ class Tanuki:
         stamped = self.apply_tags( stamped )
         stamped = self.preprocess( stamped )
         stamped = self.markup( stamped )
-        msg = "%d dated %s %s"\
-            % ( len(stamped), self.date_str( date ),
-                self.controls( 0, ['home','list','tags','search','new'] ) )
-        return render_template( 'index.html', entries=stamped, msg=msg )
+        msg = "%d dated %s" % ( len(stamped), self.date_str( date ) )
+        controls = self.controls( 0, ['home','list','tags','search','new'] )
+        return render_template( 'index.html', 
+                                entries=stamped, 
+                                controls = controls,
+                                msg=msg )
 
     def tagged( self, tag ):
         self.mode = None
@@ -438,6 +473,7 @@ class Tanuki:
         return render_template( 'list.html', 
                                 msg=msg,
                                 controls=self.controls( 0, controls ),
+                                title = msg,
                                 entries=haztag ) 
         
     def tags( self ):
@@ -462,9 +498,14 @@ class Tanuki:
         untagged = self.apply_tags( untagged )
         untagged = self.preprocess( untagged )
         untagged = self.markup( untagged )
+        controls = ['home','list','tags','search','new']
         return render_template( 'list.html', 
                                 msg = "%d not tagged" % len(untagged),
+                                controls = self.controls( 0, controls), 
                                 entries=untagged )
+    def search( self ):
+        controls = self.controls( 0, ['home','list','tags','new'] )
+        return render_template('search.html', controls = controls )
         
     def matched( self, terms ):
         self.mode = None
@@ -477,5 +518,5 @@ class Tanuki:
         return render_template( 'list.html', 
                                 msg = "%d matched { %s }" % ( len(found), terms ),
                                 controls = self.controls( 0, controls ),
-                                entries=top['entries'] )
+                                entries = top['entries'] )
 

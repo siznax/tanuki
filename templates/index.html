@@ -7,43 +7,37 @@
 
 {% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
 
-{% if next_prev %}<div id="next_prev">{{ next_prev|safe }}</div>{% endif %}
+<!-- TAG SET -->
 
-{% set path_class='' %}
-{% if request.path=='/' %}{% set path_class='stream' %}{% endif %}
-{% if '/page' in request.path %}{% set path_class='stream' %}{% endif %}
+<div id="tags" class="feature">
+<div style="margin:1em;">
+{{tag_set|length()}} tags 
+{ 
+{% for tag in tag_set %}<a href="/tagged/{{tag.name}}">{{tag.name}}</a> {% endfor %}
+} {{ notag|length() }} <a href="/notag">notag</a>
+</div>
+</div>
 
-<div id="entries">
+<!-- FEATURED TAGS -->
 
-{% for entry in entries %}
+{% for tag in tags %}
 
-<div id="{{ entry.id }}" class="entry {{ entry.mediatype }} {{ path_class }}">
- <a name="entry{{ entry.id }}"></a>
- <div class="entry_head">{{ entry.title }}</div>
- <div class="entry_body">{% 
-    if entry.img 
-%}<img src="{{entry.img}}">{% 
-    endif 
-%}{{ entry.text|safe }}</div>
- <div class="entry_foot">
-  <div id="entry_date">{%
-    if entries|count() > 1 
-%}<a href="/entry/{{ entry.id }}">{{ entry.date_str }}</a>{%
-    else 
-%}<a href="{{ request.referrer }}">{{ entry.date_str }}</a>{%
-    endif
-%}</div>
-  <div id="entry_tags">{{ entry.mediatype }} {% 
-    for tag in entry.tags
-%} <span class="tag"><i>#</i><a href="/tagged/{{ tag }}">{{tag}}</a></span> {% 
-    endfor 
-%}</div><!-- /entry_tags -->
- </div><!-- /entry_foot -->
-</div><!-- /entry -->
+<div id="{{tag}}" class="feature">
+<ul>
+<lh><a href="/tagged/{{tag}}">{{ tag }}</a> ({{ entries[ tag ]['count'] }})</lh>
+{% for i in range(10) %}
+{% set tagged = entries[ tag ]['entries'] %}
+{% if i < tagged|length() %}
+{% set entry = tagged[i] %} 
+<li><a href="/entry/{{entry.id}}">{{ entry.title }}</a>
+{% else %}
+<li style="list-style-type:none;">&nbsp;</li>
+{% endif %}
+{% endfor %}
+</ul>
+</div>
 
 {% endfor %}
-
-</div><!-- /entries -->
 
 {% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
 

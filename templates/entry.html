@@ -1,8 +1,6 @@
 {% include "layout.html" %}
 {% block body %}
 
-<div id="content">
-
 {% if msg %}<div id="header">{{ msg|safe }}</div>{% endif %}
 
 {% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
@@ -26,7 +24,5 @@
 </div><!-- /entry -->
 
 {% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
-
-</div><!-- /content -->
 
 {% endblock %}

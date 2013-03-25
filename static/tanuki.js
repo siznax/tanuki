@@ -10,8 +10,8 @@ $( function() {
     $( ".entry.video.stream .entry_body" ).click( function() {
 	var html = event.target.innerHTML;
 	var href = html.match(/href="([^\"]*)"/)[1];
+	console.log( href );
 	event.target.innerHTML = '<iframe src="' + href + '"></iframe>';
-	console.log( event.target );
     });
 
 

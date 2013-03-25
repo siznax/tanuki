@@ -8,16 +8,16 @@
 {% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
 
 <div id="entry_list">
-<ol start="{{ start }}">
+<ul start="{{ start }}">
 {% for entry in entries %}
 {% set month = entry.month %}
 {% if '/list' in request.path %}
-{% if not month==last_month %}<i>{{ month }} {{ entry.year }}</i>{% endif %}
+{% if not month==last_month %}<lh><div>{{ month }} {{ entry.year }}</div></lh>{% endif %}
 {% endif %}
 <li><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></li>
 {% set last_month = month %}
 {% endfor %}
-</ol>
+</ul>
 </div>
 
 {% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}

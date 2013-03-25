@@ -19,7 +19,7 @@ def favicon():
 
 @app.route('/')
 def index():
-    return tanuki.stream()
+    return tanuki.index()
 
 @app.route('/page/<int:page>')
 def pager(page):
@@ -53,7 +53,7 @@ def dated(date):
 
 @app.route('/search')
 def search():
-    return render_template('search.html')
+    return tanuki.search()
 
 @app.route('/matched', methods=['GET'] )
 def matched():

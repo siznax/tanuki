@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
-{% 
-  block body 
-%}<div id="edit_div">
+{%  block body %}
+
+{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
+
+<div id="edit_div">
 <form id="edit" action="/store" method="POST">
 <fieldset>
 {% 

@@ -1,3 +1,4 @@
+/* div { border:1px solid magenta; } */
 body { 
     margin:0;
     padding:0;
@@ -16,8 +17,9 @@ div {
 
 #content {
     margin:0 auto;
-    margin-left:2em;
-    margin-right:3em;
+}
+#content.tags {
+    width:80%;
 }
 #header, #footer {
     margin:0;
@@ -25,11 +27,33 @@ div {
     text-align:center;
 }
 
+.feature {
+    /* border:1px solid red; */
+    margin:0;
+    padding:0;
+    float:left;
+    width:400px;
+    height:200px;
+    overflow:hidden;
+}
+.feature li {
+    font-size:small;
+}
+.feature lh a {
+    font-weight:bold;
+}
+#tags.feature {
+    /* border:1px solid silver; */
+}
+
 /* ===================== ENTRY ============================== */
 
+.entry {
+    margin-right:64px;
+    margin-bottom:64px;
+    overflow:hidden;
+}
 .entry_head {
-    padding-top:0;
-    padding-bottom:0;
 }
 .entry_head #title {
     font-size:x-large;
@@ -39,64 +63,46 @@ div {
     float:right;
 }
 .entry_body {
+    padding-top:0;
+    padding-bottom:0;
 }
-.entry_foot {
-    padding:0;
-}
-#entry_date, #entry_tags {
+.entry_body p:first-child { 
+    margin-top:0;
     padding-top:0;
 }
-#entry_date {
-    float:right;
+.entry_body p:last-child {
+    margin-bottom:0;
+    padding-bottom:0;
+}
+.entry_body img {
+    max-width:100%;
+}
+.entry_foot {
+    margin:0;
+    padding:0;
+}
+#entry_tags {
 }
 #entry_tags i { 
     font-style:normal; 
 }
 
-/* ===================== STREAM ============================= */
-
-#entries {
-    margin:0;
-    padding:0;
-}
-.entry.stream { 
-    float:left;
-    width:256px;
-    font-size:small;
-    border-radius:6px;
-}
-.entry.stream .entry_head {
-    padding:4px;
-    font-weight:bold;
-}
-.entry.stream .entry_body {
-    font-size:10px;
-    padding:8px;
-    height:180px;
-    overflow:hidden;
-}
-.entry.stream .entry_foot {
-    padding:4px;
-}
-.entry.stream #entry_date, .entry.stream #entry_tags {
-    padding:0;
-}
-.entry.stream img { 
-    margin:0 auto;
-    width:100%;
-    clear:both;
-}
-.entry.stream iframe {
-    width:240px;
-    height:180px;
-}
-
 /* ===================== CONTROLS =========================== */
 
 #controls {
+    /* border:1px solid red; */
     position:fixed;
     top:0;
     right:0;
+    width:24px;
+}
+#controls img {
+    padding-top:8px;
+    width:24px;
+    height:24px;
+}
+#controls img {
+    float:left;
 }
 #next_prev {
     margin:0;
@@ -117,46 +123,6 @@ div {
 }
 div.btn:hover {
     cursor:pointer;
-}
-#home.btn {
-  background:url('/static/tanuki.png');
-  background-size:100% auto;
-}
-#new.btn {
-  background:url('/static/new.png');
-  background-size:100% auto;
-}
-#edit.btn {
-  background:url('/static/edit.png');
-  background-size:100% auto;
-}
-#delete.btn {
-  background:url('/static/delete.png');
-  background-size:100% auto;
-}
-#grid.btn {
-  background:url('/static/grid.png');
-  background-size:100% auto;
-}
-#list.btn {
-  background:url('/static/list.png');
-  background-size:100% auto;
-}
-#tags.btn {
-  background:url('/static/tag.png');
-  background-size:100% auto;
-}
-#search.btn {
-  background:url('/static/search.png');
-  background-size:100% auto;
-}
-#next.btn {
-  background:url('/static/next.png');
-  background-size:100% auto;
-}
-#prev.btn {
-  background:url('/static/prev.png');
-  background-size:100% auto;
 }
 
 /* ===================== FORMS ============================== */
@@ -211,14 +177,17 @@ form#edit #tags_box {
 
 /* ===================== LIST =============================== */
 
-#entry_list {
+#entry_list ul {
+    list-style-type:none;
+}
+#entry_list li:before {
+    content:"» ";
+}
+#entry_list lh div {
     margin:0;
     padding:0;
-    margin-left:8em;
-}
-#entry_list i {
-    margin-left:-8em;
-    font-style:normal;
+    margin-top:1em;
+    font-weight:bold;
 }
 
 /* ===================== TAG_SET ============================ */

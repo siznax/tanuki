@@ -1,13 +1,25 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,800,700);
 body {
-    font-family:"Open Sans", sans-serif; 
+    font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;
     background:lightgray url('/static/noise.png');
 }
 body.singleton {
     background:whitesmoke;
 }
-pre code { 
-    color:forestgreen;
+body.edit {
+    background:lightgray;
+}
+pre.code { 
+    margin:1em;
+    padding:1em;
+    border-radius:0.4em;
+    background:black;
+    color:lime;
+}
+tt {
+    padding:0.2em;
+    background:white;
+    border:1px solid silver;
+    border-radius:4px;
 }
 #header {
     text-shadow:0px 1px 0px snow;
@@ -30,30 +42,6 @@ pre code {
     color:darkgray; 
 }
 
-/* ===================== STREAM ============================= */
-
-.entry.stream:hover {
-    background:plum;
-}
-.entry.stream:hover .entry_body {
-    color:black;
-    background:white;
-}
-.entry.stream #entry_date a {
-    color:#999;
-}
-.entry.stream:hover #entry_date a,
-.entry.stream:hover #entry_tags, 
-.entry.stream:hover #entry_tags a,
-.entry.stream:hover .tag {
-    color:mediumblue;
-}
-.entry.stream .entry_body {
-    border:1px solid silver;
-    background-color:whitesmoke;
-    color:#999;
-}
-
 /* ===================== LIST =============================== */
 
 #entry_list { 
@@ -72,7 +60,7 @@ pre code {
     color:black; 
 }
 #tag_set span:hover {
-    background:-webkit-gradient(linear,left top,left bottom,from(thistle),to(indigo));
+    background:indigo;
 }
 #tag_set span:hover i { 
     color:whitesmoke; 
