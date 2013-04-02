@@ -89,6 +89,14 @@ div {
     font-style:normal; 
 }
 
+/* ===================== ENTRY SUB-CLASSES ================== */
+
+img.book {
+    float:right;
+    padding-left:1em;
+    padding-bottom:1em;
+}
+
 /* ===================== CONTROLS =========================== */
 
 #controls {
