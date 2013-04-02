@@ -86,7 +86,7 @@ class Tanuki:
         referrer = request.referrer
         if not referrer:
             referrer = "/entry/%s" % entry_id
-        controls = ['home','list','tags','search']
+        controls = ['home','list','tags','search','new']
         return render_template( 'edit.html', 
                                 entry = entry,
                                 referrer = referrer,
@@ -342,7 +342,7 @@ class Tanuki:
         return start
         
     def index( self, page=0 ):
-        tags = [] #configure
+        tags = ['readme','journal','history','mokuhanga','ukiyoe']
         entries = {}
         tag_set = self.tag_set()
         names = [ t['name'] for t in tag_set ]
