@@ -79,6 +79,16 @@ div {
 .entry_body img {
     max-width:100%;
 }
+.entry img.book {
+    float:right;
+    padding-left:1em;
+    padding-bottom:1em;
+}
+.entry div.embed {
+    border:1px solid silver;
+    background:white;
+    width:320px;
+}
 .entry_foot {
     margin:0;
     padding:0;
@@ -87,14 +97,6 @@ div {
 }
 #entry_tags i { 
     font-style:normal; 
-}
-
-/* ===================== ENTRY SUB-CLASSES ================== */
-
-img.book {
-    float:right;
-    padding-left:1em;
-    padding-bottom:1em;
 }
 
 /* ===================== CONTROLS =========================== */
