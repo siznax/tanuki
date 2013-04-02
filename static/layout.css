@@ -104,8 +104,8 @@ div {
 #controls {
     /* border:1px solid red; */
     position:fixed;
-    top:12px;
-    right:12px;
+    top:16px;
+    right:16px;
     width:24px;
     background:lightgray;
     border-radius:8px;
