@@ -9,6 +9,9 @@ a {
 a:hover {
     text-decoration:underline;
 }
+hl {
+    background-color:khaki;
+}
 div { 
     padding:1em;
 }
@@ -42,8 +45,7 @@ div {
 .feature lh a {
     font-weight:bold;
 }
-#tags.feature {
-    /* border:1px solid silver; */
+#tag_blob {
 }
 
 /* ===================== ENTRY ============================== */
@@ -92,18 +94,30 @@ div {
 #controls {
     /* border:1px solid red; */
     position:fixed;
-    top:0;
-    right:0;
+    top:12px;
+    right:12px;
     width:24px;
+    background:lightgray;
+    border-radius:8px;
 }
 #controls img {
     padding-top:8px;
     width:24px;
     height:24px;
 }
+#controls a:first-child img { /* special for tanuki icon */
+    /* border:1px solid green; */
+    margin:0;
+    padding:0;
+    margin-top:-8px;
+    margin-left:-8px;
+    width:40px;
+    height:40px;
+}
 #controls img {
     float:left;
 }
+
 #next_prev {
     margin:0;
     padding:0;

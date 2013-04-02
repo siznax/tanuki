@@ -10,10 +10,10 @@
 <!-- TAG SET -->
 
 <div id="tags" class="feature">
-<div style="margin:1em;">
+<div id="tag_blob">
 {{tag_set|length()}} tags 
 { 
-{% for tag in tag_set %}<a href="/tagged/{{tag.name}}">{{tag.name}}</a> {% endfor %}
+{% for tag in tag_set %}<a href="/tagged/{{tag.name}}">{{tag.name}}</a>, {% endfor %}
 } {{ notag|length() }} <a href="/notag">notag</a>
 </div>
 </div>
