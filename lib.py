@@ -44,6 +44,10 @@ class Tanuki:
         if self.DEBUG: print msg
         return result
 
+    def num_entries( self ):
+        sql = 'select count(*) from entries'
+        return self.dbquery( sql ).fetchone()[0]
+
     def tag_set( self ):
         sql = 'select count(*),name from tags group by name order by name'
         return [ {'count':r[0],'name':r[1]} for r in self.dbquery( sql ) ]
@@ -342,7 +346,7 @@ class Tanuki:
         return start
         
     def index( self, page=0 ):
-        tags = ['readme','journal','history','mokuhanga','ukiyoe']
+        tags = []
         entries = {}
         tag_set = self.tag_set()
         names = [ t['name'] for t in tag_set ]
@@ -357,6 +361,7 @@ class Tanuki:
                                 tags = tags,
                                 tag_set = tag_set,
                                 entries = entries,
+                                num_entries = self.num_entries(),
                                 notag = notag )
 
     def stream( self, page=0 ):

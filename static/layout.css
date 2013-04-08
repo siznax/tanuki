@@ -36,7 +36,7 @@ div {
     padding:0;
     float:left;
     width:400px;
-    height:200px;
+    height:220px;
     overflow:hidden;
 }
 .feature li {
@@ -46,6 +46,11 @@ div {
     font-weight:bold;
 }
 #tag_blob {
+    margin:16px;
+    font-size:smaller;
+    border:1px solid #ccc;
+    background:whitesmoke;
+    border-radius:8px;
 }
 
 /* ===================== ENTRY ============================== */
