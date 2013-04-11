@@ -265,9 +265,10 @@ class Tanuki:
                 lines = text.split("\n")
                 first_line = lines[0].strip()
                 first_word = lines[0].split()[0]
+                # convert URL to <img>
                 img_tag = self.href2img( first_line, x['title'] )
                 x['text'] = "%s\n%s" % ( img_tag, "\n".join( lines[1:] ) )
-                x['img'] = self.find_img( x['text'] )
+            x['img'] = self.find_img( x['text'] )
             if re.match( r'^<video|<iframe|<object',x['text'] ):
                 x['mediatype'] = 'video'
         return entries
@@ -467,19 +468,34 @@ class Tanuki:
                                 controls = controls,
                                 msg=msg )
 
-    def tagged( self, tag ):
+    def tagged_views( self, tag, view ):
+        if view:
+            a1 = '<a href="/tagged/%s">list</a>' % ( tag )
+        else:
+            a1 = '<b>list</b>'
+        if view == 'gallery': 
+            a2 = '<b>gallery</b>'
+        else:
+            a2 = '<a href="/tagged/%s/gallery">gallery</a>' % ( tag )
+        return ' | '.join ( [ a1, a2 ] )
+
+    def tagged( self, tag, view=None ):
         self.mode = None
         haztag = self.entries( None, tag )
         haztag = self.apply_tags( haztag )
         haztag = self.preprocess( haztag )
         haztag = self.markup( haztag )
         controls = ['home','list','tags','search','new']
-        msg = "%d tagged %s" % ( len(haztag), tag )
-        return render_template( 'list.html', 
-                                msg=msg,
-                                controls=self.controls( 0, controls ),
-                                title = msg,
-                                entries=haztag ) 
+        title = "%d tagged { %s } " % ( len(haztag), tag )
+        msg = "%s %s" % ( title, self.tagged_views( tag, view ) )
+        template = 'list.html'
+        if view == 'gallery':
+            template = 'gallery.html'
+        return render_template( template,
+                                msg = msg,
+                                controls = self.controls( 0, controls ),
+                                title = title,
+                                entries = haztag ) 
         
     def tags( self ):
         self.mode = None

@@ -39,6 +39,10 @@ def cloud():
 def tagged(tag):
     return tanuki.tagged( tag )
 
+@app.route('/tagged/<tag>/<view>')
+def tagged_view(tag, view):
+    return tanuki.tagged( tag, view )
+
 @app.route('/notag')
 def notag():
     return tanuki.notag()

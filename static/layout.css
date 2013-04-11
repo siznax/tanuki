@@ -104,6 +104,32 @@ div {
     font-style:normal; 
 }
 
+/* ===================== LIST =============================== */
+
+#entry_list ul {
+    list-style-type:none;
+}
+#entry_list li:before {
+    content:"» ";
+}
+#entry_list lh div {
+    margin:0;
+    padding:0;
+    margin-top:1em;
+    font-weight:bold;
+}
+
+/* ===================== GALLERY ============================ */
+
+#entry_gallery {
+    /* border:1px solid red; */
+    margin-right:72px;
+}
+img.gallery {
+    float:left;
+    height:120px;
+}
+
 /* ===================== CONTROLS =========================== */
 
 #controls {
@@ -202,21 +228,6 @@ form#edit #tags_box {
 #confirm input { font-size:larger; }
 #search input {
     font-size:16pt;
-}
-
-/* ===================== LIST =============================== */
-
-#entry_list ul {
-    list-style-type:none;
-}
-#entry_list li:before {
-    content:"» ";
-}
-#entry_list lh div {
-    margin:0;
-    padding:0;
-    margin-top:1em;
-    font-weight:bold;
 }
 
 /* ===================== TAG_SET ============================ */
