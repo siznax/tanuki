@@ -268,9 +268,17 @@ class Tanuki:
                 # convert URL to <img>
                 img_tag = self.href2img( first_line, x['title'] )
                 x['text'] = "%s\n%s" % ( img_tag, "\n".join( lines[1:] ) )
-            x['img'] = self.find_img( x['text'] )
             if re.match( r'^<video|<iframe|<object',x['text'] ):
                 x['mediatype'] = 'video'
+        return entries
+
+    def postprocess( self, entries ): # AFTER markdown
+        if self.editing:
+            return entries
+        for x in entries:
+            if self.DEBUG: 
+                print "+ TANUKI postprocess %d" % ( x['id'] )
+            x['img'] = self.find_img( x['text'] )
         return entries
 
     def entry( self, entry_id, markup=False, title=None, editing=False ):
@@ -413,13 +421,18 @@ class Tanuki:
             stub = '{ <a href="%s">%s</a> }' % ( src, url.netloc )
         return re.sub( r'<iframe.*iframe>', stub, text )
 
+    def strip_tags( self, html ):
+        return Markup( html ).striptags()
+
+    # DEPRECATED: things done here should set members of each 
+    # entry in postprocessing. then let the template use them.
     def grid_cells( self, entries ):
         for x in entries:
             if x['mediatype'] == 'text': 
                 # strip tags and extract img src 
                 html = self.markdown( x['id'], x['text'] )
                 x['img'] = self.find_img( html )
-                x['text'] = Markup( html ).striptags()
+                x['text'] = self.strip_tags( html )
             if x['mediatype'] == 'video':
                 x['text'] = self.iframe_stub( x['text'] )
         return entries
@@ -485,6 +498,7 @@ class Tanuki:
         haztag = self.apply_tags( haztag )
         haztag = self.preprocess( haztag )
         haztag = self.markup( haztag )
+        haztag = self.postprocess( haztag )
         controls = ['home','list','tags','search','new']
         title = "%d tagged { %s } " % ( len(haztag), tag )
         msg = "%s %s" % ( title, self.tagged_views( tag, view ) )
