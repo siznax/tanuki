@@ -22,7 +22,9 @@ div {
     margin:0 auto;
 }
 #content.tags {
-    width:80%;
+    margin-left:16px;
+    margin-right:96px;
+    text-align:justify;
 }
 #header, #footer {
     margin:0;
@@ -46,7 +48,9 @@ div {
     font-weight:bold;
 }
 #tag_blob {
-    margin:16px;
+    margin:0;
+    margin-top:8px;
+    margin-left:8px;
     font-size:smaller;
     border:1px solid #ccc;
     background:whitesmoke;
@@ -84,7 +88,12 @@ div {
 .entry_body img {
     max-width:100%;
 }
+.entry_foot {
+    margin:0;
+    padding:0;
+}
 .entry img.book {
+    width:320px;
     float:right;
     padding-left:1em;
     padding-bottom:1em;
@@ -94,10 +103,30 @@ div {
     background:white;
     width:320px;
 }
-.entry_foot {
+.entry div.clipping {
     margin:0;
     padding:0;
+    font-size:1.2em;
+    width:42em;
+    text-align:justify;
+    font-family:Georgia,Times,Serif;
 }
+.entry div.clipping img {
+    margin:0;
+    float:right;
+    margin-left:2em;
+    margin-bottom:1em;
+    max-width:240px;
+}
+.entry div.didactic { /* museum placard (object label) */
+    margin:0;
+    padding:0;
+    margin-top:-1em;
+    font-style:italic;
+    white-space:pre;
+}
+
+
 #entry_tags {
 }
 #entry_tags i { 
@@ -233,7 +262,6 @@ form#edit #tags_box {
 /* ===================== TAG_SET ============================ */
 
 #tag_set {
-    text-align:center;
     line-height:3em;
 }
 #tag_set span {
