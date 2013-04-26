@@ -7,19 +7,16 @@
 
 {% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
 
-<!-- TAG SET -->
-
-<div id="tags" class="feature">
-<div id="tag_blob">
+<div class="feature tag_blob">
+<div>
 <b>{{ num_entries }} <a href="/list">entries</a></b>:
+{{ notag|length() }} <i><a href="/notag">notag</a></i>
 {{tag_set|length()}} <a href="/tags">tags</a> 
 { 
 {% for tag in tag_set %}<a href="/tagged/{{tag.name}}">{{tag.name}}</a>, {% endfor %}
-} {{ notag|length() }} <i><a href="/notag">notag</a></i>
+}
 </div>
 </div>
-
-<!-- FEATURED TAGS -->
 
 {% for tag in tags %}
 
