@@ -20,7 +20,6 @@ class Tanuki:
     def __init__( self, config ):
         self.config = config
         self.stream_per_page = 12
-        self.max_hits = 10
         self.DEBUG = 1
         self.editing = False
         self.mode = None
@@ -309,12 +308,12 @@ class Tanuki:
             sql = 'select * from entries,tags where tags.name=? and tags.id=entries.id order by date desc'
             rows = self.dbquery( sql, [tag] )
         elif notag:
-            sql = 'select * from entries where id not in (select id from tags) order by id desc'
+            sql = 'select * from entries where id not in (select id from tags)'
             rows = self.dbquery( sql )
         elif terms:
-            terms = '%' + terms  + '%'
-            sql = 'select * from entries where (title like ? or text like ?)'
-            rows = self.dbquery( sql, [ terms, terms ] )
+            terms = '%' + terms.encode('ascii','ignore')  + '%'
+            sql = 'select * from entries where title like ? or text like ? order by id desc'
+            rows = self.dbquery( sql, [ terms,terms ] )
         else:
             sql = 'select * from entries order by date desc,id desc'
             rows = self.dbquery( sql )
@@ -545,13 +544,9 @@ class Tanuki:
     def matched( self, terms ):
         self.mode = None
         found = self.entries( None, None, False, terms )
-        try:
-            top = self.slice( found, 0, self.max_hits )
-        except ValueError:
-            top = { 'entries': [] }
         controls = ['home','list','tags','search','new']
         return render_template( 'list.html', 
                                 msg = "%d matched { %s }" % ( len(found), terms ),
                                 controls = self.controls( 0, controls ),
-                                entries = top['entries'] )
+                                entries = found )
 
