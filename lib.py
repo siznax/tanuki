@@ -370,7 +370,8 @@ class Tanuki:
                                 tag_set = tag_set,
                                 entries = entries,
                                 num_entries = self.num_entries(),
-                                notag = notag )
+                                notag = notag,
+                                body_class = 'index' )
 
     def stream( self, page=0 ):
         self.mode = 'stream'
