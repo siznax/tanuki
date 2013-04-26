@@ -93,7 +93,7 @@ div {
     padding:0;
 }
 .entry img.book {
-    width:320px;
+    width:240px;
     float:right;
     padding-left:1em;
     padding-bottom:1em;
@@ -107,7 +107,7 @@ div {
     margin:0;
     padding:0;
     font-size:1.2em;
-    width:42em;
+    width:38em;
     text-align:justify;
     font-family:Georgia,Times,Serif;
 }
@@ -135,16 +135,17 @@ div {
 
 /* ===================== LIST =============================== */
 
+#entry_list {
+    margin-left:2em;
+}
 #entry_list ul {
     list-style-type:none;
-}
-#entry_list li:before {
-    content:"» ";
 }
 #entry_list lh div {
     margin:0;
     padding:0;
     margin-top:1em;
+    margin-bottom:0.4em;
     font-weight:bold;
 }
 
