@@ -3,6 +3,9 @@ body {
     margin:0;
     padding:0;
 }
+body.index {
+    margin:16px;
+}
 a { 
     text-decoration:none;
 }
@@ -19,7 +22,9 @@ div {
 /* ===================== CONTENT ============================ */
 
 #content {
+    /* border:1px solid green; */
     margin:0 auto;
+    padding:0;
 }
 #content.tags {
     margin-left:16px;
@@ -29,16 +34,19 @@ div {
 #header, #footer {
     margin:0;
     padding:0;
+    margin-top:32px;
     text-align:center;
 }
 
 .feature {
-    /* border:1px solid red; */
-    margin:0;
+    border:1px solid #ccc;
+    border-radius:4px;
+    background:white;
+    margin:16px;
     padding:0;
     float:left;
     width:400px;
-    height:220px;
+    height:240px;
     overflow:hidden;
 }
 .feature li {
@@ -47,14 +55,8 @@ div {
 .feature lh a {
     font-weight:bold;
 }
-#tag_blob {
-    margin:0;
-    margin-top:8px;
-    margin-left:8px;
-    font-size:smaller;
-    border:1px solid #ccc;
-    background:whitesmoke;
-    border-radius:8px;
+.feature.tag_blob {
+    overflow:auto;
 }
 
 /* ===================== ENTRY ============================== */
