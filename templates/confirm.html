@@ -2,12 +2,10 @@
 {% block body %}
 <div id="confirm_outer">
 <form action="/delete" method="POST">
-<fieldset>
 <div id="confirm">{{ msg|safe }}</div>
 <input type="hidden" name="entry_id" value="{{ entry.id }}">
 <input type="submit" value="DELETE">
 <input type="button" onclick="history.back();" value="Cancel">
-</fieldset>
 </form>
 </div>
 {% endblock %}
