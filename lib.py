@@ -140,11 +140,12 @@ class Tanuki:
                 self.dbquery( sql, val )
                 entry_id = req.form['entry_id']
             else:
-                sql = 'insert into entries values(?,?,?,?)'
+                sql = 'insert into entries values(?,?,?,?,?)'
                 val = [ None,
                         req.form['title'], 
                         req.form['entry'],
-                        req.form['date'] ]
+                        req.form['date'],
+                        None ]
                 cur = self.dbquery( sql, val )
                 entry_id = cur.lastrowid
 
