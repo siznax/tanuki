@@ -27,7 +27,7 @@ a:hover {
     padding-right:2em;
     padding-left:2em;
 }
-#content.search {
+#content.search, #content.gallery {
     padding:2em;
 }
 #content.tags {
