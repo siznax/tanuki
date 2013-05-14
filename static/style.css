@@ -233,33 +233,35 @@ div.btn:hover {
 
 /* ===================== FORMS ============================== */
 
-fieldset { 
-  border:none; 
+form#edit {
+    margin-top:32px;
+    margin-left:32px;
+    margin-right:108px;
 }
-#edit_div {
-  text-align:center;
+form#edit table { 
+    width:100%;
 }
-form#edit { 
-  margin-top:2em;
-  padding:1em;
+form#edit input[type=text], form#edit textarea {
+    width:100%; 
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
 }
 form#edit input#title {
   padding:8px;
   font-size:x-large; 
-  width:80%;
 }
 form#edit textarea#entry_text { 
-  padding:8px;
-  width:80%;
-  height:400px;
+  height:320px;
   font-family:Monaco;
   font-size:12px;
 }
 form#edit #date_box {
   font-size:12pt;
-  text-align:center;
+  width:7em;
 }
 form#edit #tags_box {
+    width:100%;
     font-size:12pt;
 }
 #error_msg { 

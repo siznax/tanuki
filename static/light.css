@@ -6,7 +6,7 @@ body.singleton {
     background:whitesmoke;
 }
 body.edit {
-    background:lightgray;
+    background:whitesmoke;
 }
 pre.code { 
     margin:1em;

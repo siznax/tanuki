@@ -79,7 +79,8 @@ class Tanuki:
         return render_template( 'edit.html', 
                                 entry=n, 
                                 controls = self.controls( 0, controls ),
-                                title='new entry' )
+                                title='new entry',
+                                body_class='edit')
 
     def edit( self, entry_id ):
         self.mode = 'edit'
