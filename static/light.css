@@ -76,7 +76,7 @@ tt {
     border:1px solid #ccc;
     background:whitesmoke;
 }
-.feature.tag_blob {
+.feature.tag_blob, .feature.latest {
     background:white;
 }
 .entry div.embed {

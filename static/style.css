@@ -61,13 +61,12 @@ a:hover {
     padding-top:0.6em;
 }
 .feature.tag_blob {
-    border:none;
     border-radius:12px;
-    padding:16px;
     overflow:auto;
-    font-size:14px;
-    width:370px;
-    height:210px;
+    font-size:16px;
+    padding:16px;
+    width:368px;
+    height:208px;
 }
 
 /* ===================== ENTRY ============================== */

@@ -366,14 +366,17 @@ class Tanuki:
         return start
         
     def index( self, page=0 ):
-        tags = []
+        tags = ['foo','bar']
         entries = {}
         tag_set = self.tag_set()
         names = [ t['name'] for t in tag_set ]
         for tag in tags:
-            entries[ tag ] = { 
-                'count': tag_set[ names.index( tag ) ]['count'],
-                'entries': self.entries( None, tag )[0:10] }
+            if tag in names:
+                entries[ tag ] = { 
+                    'count': tag_set[names.index(tag)]['count'],
+                    'entries': self.entries( None, tag )[0:10] }
+        if not entries:
+            tags = []
         notag = self.entries( None, None, True )
         latest = self.entries( None, None, False, None, True )
         controls = ['home','list','tags','search','new']

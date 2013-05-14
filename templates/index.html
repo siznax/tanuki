@@ -13,14 +13,18 @@
 <b>{{ num_entries }} <a href="/list">entries</a></b>:
 {{ notag|length() }} <i><a href="/notag">notag</a></i>
 {{tag_set|length()}} <a href="/tags">tags</a> 
-{ 
-{% for tag in tag_set %}<a href="/tagged/{{tag.name}}">{{tag.name}}</a>, {% endfor %}
-}
+{ {% 
+    for tag in tag_set 
+%}<a href="/tagged/{{tag.name}}">{{tag.name}}</a>{%
+        if not loop.last %}, {% 
+        endif %}{% 
+    endfor 
+%} }
 </div>
 
 <!-- LATEST UPDATED -->
 
-<div class="feature">
+<div class="feature latest">
 <ul>
 <lh><b>latest updates</b></lh>
 {% for entry in latest %}
