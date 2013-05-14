@@ -21,7 +21,7 @@ Recommended:
 
 Screens:
 
-<div>
+<div id=tanuki_screens>
 <table border=0>
 <tr>
 <td><a target=blank href="http://archive.org/download/siznax-screens/tanuki006.png"><img src="http://archive.org/download/siznax-screens/tanuki006.png" width="240"></a></td>
@@ -36,6 +36,8 @@ Screens:
 <td><a target=blank href="http://archive.org/download/siznax-screens/tanuki013.png"><img src="http://archive.org/download/siznax-screens/tanuki013.png" width="240"></a></td>
 </table>
 </div>
+
+<style>#tanuki_screens table,#tanuki_screens tr,#tanuki_screens td { border:none;background:none; }</style>
 
 Tanuki (raccoon) icon used with permission of 
 [artrelatedblog.wordpress.com](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
