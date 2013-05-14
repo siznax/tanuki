@@ -21,15 +21,21 @@ Recommended:
 
 Screens:
 
-![](http://archive.org/download/siznax-screens/tanuki1.png)
-
-![](http://archive.org/download/siznax-screens/tanuki2.png)
-
-![](http://archive.org/download/siznax-screens/tanuki3.png)
-
-![](http://archive.org/download/siznax-screens/tanuki4.png)
-
-![](http://archive.org/download/siznax-screens/tanuki5.png)
+<div>
+<table border=0>
+<tr>
+<td><a target=blank href="http://archive.org/download/siznax-screens/tanuki006.png"><img src="http://archive.org/download/siznax-screens/tanuki006.png" width="240"></a></td>
+<td><a target=blank href="http://archive.org/download/siznax-screens/tanuki007.png"><img src="http://archive.org/download/siznax-screens/tanuki007.png" width="240"></a></td>
+<td><a target=blank href="http://archive.org/download/siznax-screens/tanuki008.png"><img src="http://archive.org/download/siznax-screens/tanuki008.png" width="240"></a></td>
+<tr>
+<td><a target=blank href="http://archive.org/download/siznax-screens/tanuki009.png"><img src="http://archive.org/download/siznax-screens/tanuki009.png" width="240"></a></td>
+<td><a target=blank href="http://archive.org/download/siznax-screens/tanuki010.png"><img src="http://archive.org/download/siznax-screens/tanuki010.png" width="240"></a></td>
+<td><a target=blank href="http://archive.org/download/siznax-screens/tanuki011.png"><img src="http://archive.org/download/siznax-screens/tanuki011.png" width="240"></a></td>
+<tr>
+<td><a target=blank href="http://archive.org/download/siznax-screens/tanuki012.png"><img src="http://archive.org/download/siznax-screens/tanuki012.png" width="240"></a></td>
+<td><a target=blank href="http://archive.org/download/siznax-screens/tanuki013.png"><img src="http://archive.org/download/siznax-screens/tanuki013.png" width="240"></a></td>
+</table>
+</div>
 
 Tanuki (raccoon) icon used with permission of 
 [artrelatedblog.wordpress.com](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
