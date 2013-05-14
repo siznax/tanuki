@@ -7,6 +7,8 @@
 
 {% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
 
+<!-- TAG BLOB -->
+
 <div class="feature tag_blob">
 <b>{{ num_entries }} <a href="/list">entries</a></b>:
 {{ notag|length() }} <i><a href="/notag">notag</a></i>
@@ -16,23 +18,34 @@
 }
 </div>
 
-{% for tag in tags %}
+<!-- LATEST UPDATED -->
 
+<div class="feature">
+<ul>
+<lh><b>latest updates</b></lh>
+{% for entry in latest %}
+<li><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>
+{% endfor %}
+</ul>
+</div>
+
+<!-- FEATURED TAGS -->
+
+{% for tag in tags %}
 <div id="{{tag}}" class="feature">
 <ul>
-<lh><a href="/tagged/{{tag}}">{{ tag }}</a> ({{ entries[ tag ]['count'] }})</lh>
+<lh><a href="/tagged/{{tag}}">{{ tag }}</a> ({{ entries[tag]['count'] }})</lh>
 {% for i in range(10) %}
-{% set tagged = entries[ tag ]['entries'] %}
+{% set tagged = entries[tag]['entries'] %}
 {% if i < tagged|length() %}
 {% set entry = tagged[i] %} 
-<li><a href="/entry/{{entry.id}}">{{ entry.title }}</a>
+<li><a href="/entry/{{entry.id}}">{{ entry.title }}</a></li>
 {% else %}
 <li style="list-style-type:none;">&nbsp;</li>
 {% endif %}
 {% endfor %}
 </ul>
 </div>
-
 {% endfor %}
 
 {% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}

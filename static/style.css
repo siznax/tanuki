@@ -51,11 +51,14 @@ a:hover {
     height:240px;
     overflow:hidden;
 }
+.feature lh a {
+    font-weight:bold;
+}
 .feature li {
     font-size:small;
 }
-.feature lh a {
-    font-weight:bold;
+.feature ul li:first-of-type {
+    padding-top:0.6em;
 }
 .feature.tag_blob {
     border:none;
@@ -274,7 +277,8 @@ form#edit #tags_box {
 #confirm b { font-size:xx-large; }
 #confirm #details { margin:1em 25%; text-align:left; }
 #confirm input { font-size:larger; }
-#search {
+#search img {
+    vertical-align:bottom;
 }
 #search input {
     font-size:16pt;

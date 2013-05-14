@@ -131,10 +131,11 @@ class Tanuki:
             if self.bad_str( req.form['title'] ): raise ValueError
             if self.bad_str( req.form['entry'] ): raise ValueError
             if 'entry_id' in req.form.keys():
-                sql = 'update entries set title=?, text=?, date=? where id=?'
+                sql = 'update entries set title=?, text=?, date=?, updated=? where id=?'
                 val = ( req.form['title'], 
                         req.form['entry'],
                         req.form['date'],
+                        self.utcnow(),
                         req.form['entry_id'] )
                 self.dbquery( sql, val )
                 entry_id = req.form['entry_id']
@@ -191,6 +192,12 @@ class Tanuki:
             x['tags'] = ', '.join(tags) if self.editing else tags
         return entries
 
+    def utcdate( self ):
+        return datetime.datetime.utcnow().strftime("%Y-%m-%d")
+
+    def utcnow( self ):
+        return datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    
     def date_str( self, date ):
         try:
             return datetime.datetime.strptime( date ,'%Y-%m-%d').strftime('%a %d %b %Y')
@@ -299,7 +306,7 @@ class Tanuki:
         self.editing = False
         return entries[0]
 
-    def entries( self, date=None, tag=None, notag=False, terms=None ):
+    def entries( self, date=None, tag=None, notag=False, terms=None, latest=None ):
         limit = False
         if date:
             sql = 'select * from entries where date=? order by id desc'
@@ -314,6 +321,9 @@ class Tanuki:
             terms = '%' + terms.encode('ascii','ignore')  + '%'
             sql = 'select * from entries where title like ? or text like ? order by id desc'
             rows = self.dbquery( sql, [ terms,terms ] )
+        elif latest:
+            sql = 'select * from entries order by updated desc limit 10'
+            rows = self.dbquery( sql )
         else:
             sql = 'select * from entries order by date desc,id desc'
             rows = self.dbquery( sql )
@@ -363,6 +373,7 @@ class Tanuki:
                 'count': tag_set[ names.index( tag ) ]['count'],
                 'entries': self.entries( None, tag )[0:10] }
         notag = self.entries( None, None, True )
+        latest = self.entries( None, None, False, None, True )
         controls = ['home','list','tags','search','new']
         return render_template( 'index.html',
                                 controls = self.controls( 0, controls ),
@@ -371,6 +382,7 @@ class Tanuki:
                                 entries = entries,
                                 num_entries = self.num_entries(),
                                 notag = notag,
+                                latest = latest,
                                 body_class = 'index' )
 
     def stream( self, page=0 ):
