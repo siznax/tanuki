@@ -145,7 +145,7 @@ class Tanuki:
                         req.form['title'], 
                         req.form['entry'],
                         req.form['date'],
-                        None ]
+                        self.utcnow() ]
                 cur = self.dbquery( sql, val )
                 entry_id = cur.lastrowid
 
