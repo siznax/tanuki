@@ -15,6 +15,9 @@ pre.code {
     background:black;
     color:lime;
 }
+hl {
+    background-color:khaki;
+}
 tt {
     padding:0.2em;
     background:white;
@@ -69,3 +72,18 @@ tt {
     color:white; 
 }
 
+.feature {
+    border:1px solid #ccc;
+    background:whitesmoke;
+}
+.feature.tag_blob {
+    background:white;
+}
+.entry div.embed {
+    border:1px solid silver;
+    background:white;
+}
+
+#controls {
+    background:lightgray;
+}

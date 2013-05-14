@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<div id="content">
-
 {% if msg %}<div id="header">{{ msg|safe }}</div>{% endif %}
+
+<div id="content" class="list">
 
 {% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
 

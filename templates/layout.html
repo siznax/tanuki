@@ -2,11 +2,13 @@
 <head>
 <meta charset="UTF-8">
 <title>{% if title %}{{ title }}{% else %}tanuki たぬき{% endif %}</title>
-<link id="layout" rel="stylesheet" href="/static/layout.css">
+<link id="layout" rel="stylesheet" href="/static/style.css">
 <link id="color" rel="stylesheet" href="{{ config['STYLESHEET'] }}">
 <script src="/static/jquery.js"></script> 
 <script src="/static/tanuki.js"></script> 
 </head>
-<body {% if body_class %}class="{{body_class}}"{% endif %}>
-{% block body %}{% endblock %}
+<body{% if body_class %} class="{{body_class}}"{% endif %}>
+{% block body %}
+{% endblock %}
 </body>
+

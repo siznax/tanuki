@@ -6,17 +6,14 @@ body {
 body.index {
     margin:16px;
 }
+body.singleton {
+    margin:2em;
+}
 a { 
     text-decoration:none;
 }
 a:hover {
     text-decoration:underline;
-}
-hl {
-    background-color:khaki;
-}
-div { 
-    padding:1em;
 }
 
 /* ===================== CONTENT ============================ */
@@ -25,6 +22,13 @@ div {
     /* border:1px solid green; */
     margin:0 auto;
     padding:0;
+}
+#content.list {
+    padding-right:2em;
+    padding-left:2em;
+}
+#content.search {
+    padding:2em;
 }
 #content.tags {
     margin-left:16px;
@@ -39,9 +43,7 @@ div {
 }
 
 .feature {
-    border:1px solid #ccc;
-    border-radius:4px;
-    background:white;
+    border-radius:8px;
     margin:16px;
     padding:0;
     float:left;
@@ -56,7 +58,13 @@ div {
     font-weight:bold;
 }
 .feature.tag_blob {
+    border:none;
+    border-radius:12px;
+    padding:16px;
     overflow:auto;
+    font-size:14px;
+    width:370px;
+    height:210px;
 }
 
 /* ===================== ENTRY ============================== */
@@ -67,6 +75,7 @@ div {
     overflow:hidden;
 }
 .entry_head {
+    margin-bottom:1em;
 }
 .entry_head #title {
     font-size:x-large;
@@ -101,8 +110,6 @@ div {
     padding-bottom:1em;
 }
 .entry div.embed {
-    border:1px solid silver;
-    background:white;
     width:320px;
 }
 .entry div.clipping {
@@ -127,9 +134,18 @@ div {
     font-style:italic;
     white-space:pre;
 }
+.entry .bottom_img {
+    float:left;
+    margin:1em;
+}
+.entry .bottom_img img {
+    height:180px;
+}
 
 
 #entry_tags {
+    margin-top:1em;
+    clear:both;
 }
 #entry_tags i { 
     font-style:normal; 
@@ -166,11 +182,11 @@ img.gallery {
 
 #controls {
     /* border:1px solid red; */
+    padding:1em;
     position:fixed;
     top:16px;
     right:16px;
     width:24px;
-    background:lightgray;
     border-radius:8px;
 }
 #controls img {
@@ -258,6 +274,8 @@ form#edit #tags_box {
 #confirm b { font-size:xx-large; }
 #confirm #details { margin:1em 25%; text-align:left; }
 #confirm input { font-size:larger; }
+#search {
+}
 #search input {
     font-size:16pt;
 }
@@ -265,6 +283,7 @@ form#edit #tags_box {
 /* ===================== TAG_SET ============================ */
 
 #tag_set {
+    margin:1em;
     line-height:3em;
 }
 #tag_set span {
