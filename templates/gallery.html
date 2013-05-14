@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block body %}
+
+{% if msg %}<div id="header">{{ msg|safe }}</div>{% endif %}
+
+<div id="content" class="gallery">
+
+{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
+
+<div id="entry_gallery">
+{% set count = 1 %}
+{% for entry in entries %}
+{% if entry.img %}
+<a href="/entry/{{ entry.id }}"><img class="gallery" src="{{ entry.img }}" 
+ alt="{{ entry.title }}" title="[{{ count }}] {{ entry.title }}"></a>
+{% endif %}
+{% set count = count + 1 %}
+{% endfor %}
+</div>
+
+
+{% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
+
+</div>
+
+{% endblock %}
