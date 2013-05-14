@@ -37,8 +37,6 @@ Screens:
 </table>
 </div>
 
-<style>#tanuki_screens table,#tanuki_screens tr,#tanuki_screens td { border:none;background:none; }</style>
-
 Tanuki (raccoon) icon used with permission of 
 [artrelatedblog.wordpress.com](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
 
