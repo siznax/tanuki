@@ -10,6 +10,10 @@
 %}<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
 <script  src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>{% 
     endif 
+%}{% 
+    if entry and "prettyprint" in entry.text 
+%}<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>{%
+    endif 
 %}</head>
 <body{% if body_class %} class="{{body_class}}"{% endif %}>
 {% block body %}
