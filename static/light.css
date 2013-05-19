@@ -87,3 +87,18 @@ tt {
 #controls {
     background:lightgray;
 }
+
+table#confirm_destroy {
+    border-collapse:collapse;
+}
+#confirm .input_row {
+    background:lightgray;
+}
+#confirm .input_row td:first-of-type {
+    border-top-left-radius:8px;
+    border-bottom-left-radius:8px;
+}
+#confirm .input_row td:last-of-type {
+    border-top-right-radius:8px;
+    border-bottom-right-radius:8px;
+}

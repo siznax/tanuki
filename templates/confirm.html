@@ -6,7 +6,7 @@
 {% if func=="destroy" %}
 <form action="/delete" method="POST">
 <input type="hidden" name="entry_id" value="{{ entry.id }}">
-<table border=1 cellpadding=8>
+<table id=confirm_destroy border=0 cellpadding=8>
 
 <tr>
 <td colspan=2><b style=font-size:xx-large>Really, Destroy?</b>
@@ -24,6 +24,10 @@
 <td>{{entry.updated}}
 
 <tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+
+<tr class=input_row>
 <td><input type="submit" value="DELETE">
 <td align=right><input type="button" onclick="history.back();" value="Cancel">
 

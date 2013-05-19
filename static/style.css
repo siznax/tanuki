@@ -283,7 +283,6 @@ form#edit #tags_box {
 }
 #confirm table {
     margin:0 auto;
-    background:lightyellow;
 }
 #confirm input { 
     font-size:larger; 
@@ -317,3 +316,10 @@ form#edit #tags_box {
     border-radius:16px;
 }
 
+.prettyprinted {
+    padding:1em;
+    border-radius:8px;
+}
+.prettyprinted:hover {
+    background:black;
+}
