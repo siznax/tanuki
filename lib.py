@@ -164,18 +164,11 @@ class Tanuki:
             msg = "Try again, title or text not unique."
             return render_template( 'error.html', msg=msg )
 
-    def confirm_msg( self, msg, entry ):
-        deets = "ID: %d<br />\nTitle: %s<br />\nDate: %s<br />\n"\
-            % ( entry['id'], entry['title'], entry['date'] )
-        return "<b>%s</b><br />\n<div id=\"details\">%s</div>\n"\
-            % ( msg, deets )
-
     def confirm( self, entry_id ):
         if not request.host == self.config['WRITE_HOST']:
             raise NotFound()
         entry = self.entry( entry_id )
-        msg = self.confirm_msg( 'Really, destroy?', entry )
-        return render_template( 'confirm.html', entry=entry, msg=msg )
+        return render_template( 'confirm.html', entry=entry, func='destroy')
 
     def delete( self, entry_id ):
         self.clear_tags( entry_id )
@@ -222,6 +215,7 @@ class Tanuki:
                   'title': row[1],
                   'text': row[2], 
                   'date': row[3],
+                  'updated': row[4],
                   'year': ymd[0],
                   'month': ymd[1],
                   'date_str': self.date_str( row[3] ),
@@ -366,7 +360,7 @@ class Tanuki:
         return start
         
     def index( self, page=0 ):
-        tags = ['foo','bar']
+        tags = []
         entries = {}
         tag_set = self.tag_set()
         names = [ t['name'] for t in tag_set ]
@@ -483,7 +477,8 @@ class Tanuki:
                                 next_prev=None,
                                 entry=entry,
                                 title=entry['title'],
-                                body_class=self.mode)
+                                body_class=self.mode,
+                                leaflet=True)
 
     def dated( self, date ):
         self.mode = None

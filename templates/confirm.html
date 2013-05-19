@@ -1,12 +1,40 @@
 {% extends "layout.html" %}
 {% block body %}
-<div id="confirm_outer">
+
+<div id="confirm">
+
+{% if func=="destroy" %}
 <form action="/delete" method="POST">
-<div id="confirm">{{ msg|safe }}</div>
 <input type="hidden" name="entry_id" value="{{ entry.id }}">
-<input type="submit" value="DELETE">
-<input type="button" onclick="history.back();" value="Cancel">
+<table border=1 cellpadding=8>
+
+<tr>
+<td colspan=2><b style=font-size:xx-large>Really, Destroy?</b>
+
+<tr>
+<td>ID:
+<td>{{entry.id}}
+
+<tr>
+<td>Title:
+<td><b>{{entry.title}}</b>
+
+<tr>
+<td>Updated:
+<td>{{entry.updated}}
+
+<tr>
+<td><input type="submit" value="DELETE">
+<td align=right><input type="button" onclick="history.back();" value="Cancel">
+
+</table>
 </form>
+{% else %}
+<p>Unsupported function.</p>
+{% endif %}
+
+
 </div>
+
 {% endblock %}
 

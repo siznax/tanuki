@@ -6,6 +6,10 @@
 <link id="color" rel="stylesheet" href="{{ config['STYLESHEET'] }}">
 <script src="/static/jquery.js"></script> 
 <script src="/static/tanuki.js"></script> 
+{% if leaflet %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+<script  src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+{% endif %}
 </head>
 <body{% if body_class %} class="{{body_class}}"{% endif %}>
 {% block body %}

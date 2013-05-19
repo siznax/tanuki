@@ -63,7 +63,7 @@ a:hover {
 .feature.tag_blob {
     border-radius:12px;
     overflow:auto;
-    font-size:16px;
+    font-size:14px;
     padding:16px;
     width:368px;
     height:208px;
@@ -169,10 +169,20 @@ a:hover {
     font-weight:bold;
 }
 
+div.entry_gallery {
+    border:1px solid silver;
+    height:180px;
+    border-radius:8px;
+    overflow:hidden;
+}
+.entry_gallery img {
+    float:left;
+    height:180px;
+}
+
 /* ===================== GALLERY ============================ */
 
-#entry_gallery {
-    /* border:1px solid red; */
+#list_gallery {
     margin-right:72px;
 }
 img.gallery {
@@ -267,17 +277,18 @@ form#edit #tags_box {
     margin:2em; 
     font-size:x-large; 
 }
-#confirm_outer {
-    text-align:center;
+
+#confirm {
+    padding:64px;
 }
-#confirm { 
-    margin:3em 5em; 
-    padding:2em;
-    border-radius:10px;
+#confirm table {
+    margin:0 auto;
+    background:lightyellow;
 }
-#confirm b { font-size:xx-large; }
-#confirm #details { margin:1em 25%; text-align:left; }
-#confirm input { font-size:larger; }
+#confirm input { 
+    font-size:larger; 
+}
+
 #search img {
     vertical-align:bottom;
 }
