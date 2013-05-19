@@ -477,8 +477,7 @@ class Tanuki:
                                 next_prev=None,
                                 entry=entry,
                                 title=entry['title'],
-                                body_class=self.mode,
-                                leaflet=True)
+                                body_class=self.mode )
 
     def dated( self, date ):
         self.mode = None
