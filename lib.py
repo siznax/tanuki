@@ -389,7 +389,8 @@ class Tanuki:
         controls = self.controls( 0, ['home','list','tags','search','new'] )
         return render_template( "help.html", 
                                 controls=controls,
-                                entry={"text":"prettyprint"},
+                                entry={"text":"prettyprint leafletjs"},
+                                title = "help",
                                 body_class="help" )
 
     def stream( self, page=0 ):

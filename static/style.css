@@ -325,6 +325,14 @@ form#edit #tags_box {
     background:black;
 }
 
+#playlist {
+    clear:both;
+}
+#viewtube {
+    float:right;
+}
+
+
 .help_eg {
     margin:1em;
     padding:1em;
@@ -334,5 +342,6 @@ form#edit #tags_box {
 }
 .help_display {
     margin:1em;
-    margin-bottom:3em;
+    margin-bottom:4em;
+    clear:both;
 }

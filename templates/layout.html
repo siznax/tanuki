@@ -6,8 +6,9 @@
 <link id="color" rel="stylesheet" href="{{ config['STYLESHEET'] }}">
 <script src="/static/jquery.js"></script> 
 <script src="/static/tanuki.js"></script>{% 
-    if entry and "leaflet" in entry.text 
-%}<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+    if entry and "leafletjs" in entry.text 
+%}<div id="leafletjs_api_key" key="{{ config['CLOUDMADE'] }}" />
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
 <script  src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>{% 
     endif 
 %}{% 
