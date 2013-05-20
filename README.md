@@ -1,17 +1,20 @@
+Config:
+
+    DATABASE   = $HOME"/code/tanuki/tanuki.db"
+    DEBUG      = True
+    SECRET_KEY = COMPLEX_RANDOM_STRING
+    USERNAME   = 'admin'
+    PASSWORD   = 'default'
+    WRITE_HOST = 'localhost:5001'
+    STYLESHEET = '/static/light.css'
+    CLOUDMADE  = CLOUDMADE_API_KEY
+
 Usage:
 
     cd ~/code
     fork or clone http://github.com/siznax/tanuki
     cd tanuki
     sqlite3 tanuki.db < schema.sql
-    emacs CONFIG
-        DATABASE = $HOME"/code/tanuki/tanuki.db"
-        DEBUG = True
-        SECRET_KEY = COMPLEX_RANDOM_STRING
-        USERNAME = 'admin'
-        PASSWORD = 'default'
-        WRITE_HOST = 'localhost:5001'
-        STYLESHEET = '/static/light.css'
     export TANUKI_CONFIG=`pwd`"/CONFIG"
     python views.py
 
