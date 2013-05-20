@@ -36,11 +36,15 @@ a:hover {
     margin-right:96px;
     text-align:justify;
 }
-#header, #footer {
+#header {
     margin:0;
     padding:0;
     margin-top:32px;
     text-align:center;
+}
+#footer {
+    margin:16px;
+    margin-bottom:32px;
 }
 
 .feature {

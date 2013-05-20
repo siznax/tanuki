@@ -2,7 +2,7 @@
 tanuki class
 """
 __author__ = "siznax"
-__version__ = 2012
+__version__ = 2013
 
 from flask import Flask,render_template,make_response,redirect,url_for,Markup,request
 from werkzeug.exceptions import NotFound
@@ -383,7 +383,8 @@ class Tanuki:
                                 num_entries = self.num_entries(),
                                 notag = notag,
                                 latest = latest,
-                                body_class = 'index' )
+                                body_class = 'index',
+                                footer = "%s %s" % (__author__,__version__) )
 
     def help( self ):
         controls = self.controls( 0, ['home','list','tags','search','new'] )
