@@ -4,10 +4,11 @@ body {
     padding:0;
 }
 body.index {
-    margin:16px;
+    margin:1em;
 }
-body.singleton {
+body.singleton, body.help {
     margin:2em;
+    margin-right:80px;
 }
 a { 
     text-decoration:none;
@@ -322,4 +323,16 @@ form#edit #tags_box {
 }
 .prettyprinted:hover {
     background:black;
+}
+
+.help_eg {
+    margin:1em;
+    padding:1em;
+    background:white;
+    border:1px solid silver;
+    white-space:pre;
+}
+.help_display {
+    margin:1em;
+    margin-bottom:3em;
 }

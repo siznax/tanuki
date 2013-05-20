@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block body %}
+
+{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
+
+<h1>tanuki Help</h1>
+
+<ol>
+<li><a href="#01">Include an image</a></li>
+<li><a href="#02">Embed video or audio</a></li>
+<li><a href="#03">Pretty-print code</a></li>
+<li><a href="#04">Embed a map</a></li>
+</ol>
+
+<a name="01"><h3>1. Include an image</h3></a>
+
+Start your post with an image URL or use the <tt>&lt;img&gt;</tt> tag.
+
+<div class=help_eg>http://localhost:5001/static/home.png
+
+Some **markdown** text __here__.
+</div>
+
+<div class=help_display>
+<img src="http://localhost:5001/static/home.png">
+
+<p>some <b>markdown</b> text <i>here</i>.</p>
+</div>
+
+<a name="02"><h3>2. Embed video or audio</h3></a>
+
+Copy the "embed code" from your favorite source.
+
+<div class=help_eg>&lt;iframe width="560" height="315" 
+ src="http://www.youtube.com/embed/9bZkp7q19f0" 
+ frameborder="0" allowfullscreen&gt;</iframe>
+</div>
+
+<div class=help_display>
+<iframe width="560" height="315" 
+ src="http://www.youtube.com/embed/9bZkp7q19f0" 
+ frameborder="0" allowfullscreen></iframe>
+</div>
+
+<a name="03"><h3>3. Pretty-print code</h3></a>
+
+<div class=help_eg>&lt;pre class=prettyprint&gt;
+#!/usr/bin/python
+if __name__=="__main__":
+    print "hello, world."
+&lt;/pre&gt;</div>
+
+<div class=help_display>
+<pre class=prettyprint>#!/usr/bin/python
+if __name__=="__main__":
+    print "hello, world."
+</pre>
+</div>
+
+<a name="04"><h3>4. Embed a map</h3></a>
+
+Add <a href="http://leafletjs.com/">Leaflet JS</a> map div (below) or embed a map from <a href="http://openstreetmap.org/">Open Street Map</a>, or Google.
+
+<div class=help_eg>&lt;div id="map" class="leafletjs" latlon="35.6625424,139.759645" zoom="13"&gt;</div>
+
+<div class=help_display>TBD</div>
+
+{% endblock %}
+

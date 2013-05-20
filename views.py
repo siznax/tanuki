@@ -21,6 +21,10 @@ def favicon():
 def index():
     return tanuki.index()
 
+@app.route('/help')
+def help():
+    return tanuki.help()
+
 @app.route('/page/<int:page>')
 def pager(page):
     if page==0:

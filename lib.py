@@ -244,7 +244,8 @@ class Tanuki:
             'delete': self.img('delete',"/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
             'list'  : self.img('list',  '/list' ),
             'tags'  : self.img('tags',  '/tags' ),
-            'search': self.img('search','/search' )
+            'search': self.img('search','/search' ),
+            'help'  : self.img('help',  '/help' )
             }
         s = "\n"
         for w in wanted:
@@ -373,7 +374,7 @@ class Tanuki:
             tags = []
         notag = self.entries( None, None, True )
         latest = self.entries( None, None, False, None, True )
-        controls = ['home','list','tags','search','new']
+        controls = ['home','list','tags','search','new','help']
         return render_template( 'index.html',
                                 controls = self.controls( 0, controls ),
                                 tags = tags,
@@ -383,6 +384,13 @@ class Tanuki:
                                 notag = notag,
                                 latest = latest,
                                 body_class = 'index' )
+
+    def help( self ):
+        controls = self.controls( 0, ['home','list','tags','search','new'] )
+        return render_template( "help.html", 
+                                controls=controls,
+                                entry={"text":"prettyprint"},
+                                body_class="help" )
 
     def stream( self, page=0 ):
         self.mode = 'stream'
