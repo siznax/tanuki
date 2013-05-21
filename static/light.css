@@ -2,7 +2,7 @@ body {
     font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;
     background:lightgray url('/static/noise.png');
 }
-body.singleton {
+body.entry {
     background:whitesmoke;
 }
 body.edit {

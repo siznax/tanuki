@@ -236,17 +236,17 @@ class Tanuki:
         return entries
 
     def controls( self, entry_id, wanted=None ):
-        c = { 
-            'home'  : self.img('home',  '/' ),
-            'new'   : self.img('new',   '/new' ) if request.host == self.config['WRITE_HOST'] else '',
-            'entry' : self.img('entry', "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
-            'edit'  : self.img('edit',  "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
-            'delete': self.img('delete',"/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
-            'list'  : self.img('list',  '/list' ),
-            'tags'  : self.img('tags',  '/tags' ),
-            'search': self.img('search','/search' ),
-            'help'  : self.img('help',  '/help' )
-            }
+        c = { 'home'   : self.img('home',  '/' ),
+              'new'    : self.img('new',   '/new' ) if request.host == self.config['WRITE_HOST'] else '',
+              'entry'  : self.img('entry', "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
+              'edit'   : self.img('edit',  "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+              'delete' : self.img('delete',"/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+              'list'   : self.img('list',  '/list' ),
+              'tags'   : self.img('tags',  '/tags' ),
+              'search' : self.img('search','/search' ),
+              'help'   : self.img('help',  '/help' ),
+              'public' : self.img('public'),
+              'private': self.img('private') }
         s = "\n"
         for w in wanted:
             s += "%s\n" % ( c[w] )
@@ -374,7 +374,7 @@ class Tanuki:
             tags = []
         notag = self.entries( None, None, True )
         latest = self.entries( None, None, False, None, True )
-        controls = ['home','list','tags','search','new','help']
+        controls = ['home','public','list','tags','search','new','help']
         return render_template( 'index.html',
                                 controls = self.controls( 0, controls ),
                                 tags = tags,
@@ -477,7 +477,7 @@ class Tanuki:
                                 entries=entries )
 
     def singleton( self, entry_id ):
-        self.mode = 'singleton'
+        self.mode = 'entry'
         entry = self.entry( entry_id, True )
         if not entry:
             return redirect( url_for('index') )
@@ -487,7 +487,7 @@ class Tanuki:
                                 next_prev=None,
                                 entry=entry,
                                 title=entry['title'],
-                                body_class=self.mode )
+                                body_class="entry" )
 
     def dated( self, date ):
         self.mode = None

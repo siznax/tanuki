@@ -6,8 +6,8 @@ body {
 body.index {
     margin:1em;
 }
-body.singleton {
-    margin:2em;
+body.entry {
+    margin:32px;
 }
 body.help {
     margin:2em;
@@ -18,6 +18,9 @@ a {
 }
 a:hover {
     text-decoration:underline;
+}
+pre {
+    overflow-y:hidden;
 }
 
 /* ===================== CONTENT ============================ */
@@ -80,9 +83,9 @@ a:hover {
 /* ===================== ENTRY ============================== */
 
 .entry {
-    margin-right:80px;
+    margin-right:96px;
     margin-bottom:64px;
-    overflow:hidden;
+    overflow-y:hidden;
 }
 .entry_head {
     margin-bottom:1em;
@@ -204,8 +207,8 @@ img.gallery {
     /* border:1px solid red; */
     padding:1em;
     position:fixed;
-    top:16px;
-    right:16px;
+    top:32px;
+    right:32px;
     width:24px;
     border-radius:8px;
 }
@@ -306,7 +309,7 @@ form#edit #tags_box {
 /* ===================== TAG_SET ============================ */
 
 #tag_set {
-    margin:1em;
+    margin:2em;
     line-height:3em;
 }
 #tag_set span {
@@ -352,4 +355,13 @@ form#edit #tags_box {
     margin:1em;
     margin-bottom:4em;
     clear:both;
+}
+
+#tanuki {
+    position:fixed;
+    top:320px;
+    right:48px;
+    font-size:24px;
+    color:#d3d3d3;
+        
 }
