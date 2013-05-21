@@ -114,7 +114,11 @@ If you want HTML tags to appear properly, you have to tell Markdown that it's a 
 
 <a name="05"><h3>5. Embed a map</h3></a>
 
-Add a <a href="http://leafletjs.com/">Leaflet JS</a> map div (below) or embed a map from <a href="http://openstreetmap.org/">Open Street Map</a>, or Google.
+Add a <a href="http://leafletjs.com/">Leaflet JS</a> map div
+(specify <tt>class="leafletjs"</tt>, <tt>lat="latitude"</tt>, <tt>lon="longitude"</tt>,
+and <tt>zoom="level"</tt>) or embed a map
+from <a href="http://openstreetmap.org/">Open Street Map</a>, or
+Google. 
 
 <div class=help_eg>&lt;div id="shiodome_station" class="leafletjs" 
  lat="35.6625424" lon="139.759645" zoom="13"
@@ -129,22 +133,27 @@ Add a <a href="http://leafletjs.com/">Leaflet JS</a> map div (below) or embed a 
 
 <a name="06"><h3>6. Youtube playlist</h3></a>
 
-<div class=help_eg>&lt;div id=playlist&gt;
+Make a div with <tt>class="playlist"</tt> and populate it with anchors
+having <tt>id="YOUTUBE"</tt>, where YOUTUBE is the video identifier
+from YouTube. A <tt>#viewport</tt> div will be created that will
+switch to the video last clicked.
 
-* &lt;a href="#" id="QTk688cXTsA"&gt;Capybara Onsen&lt;/a&gt;
-* &lt;a href="#" id="r-qhj3sJ5qs"&gt;WORLD ORDER: Machine Civilization&lt;/a&gt;
-* &lt;a href="#" id="itvJybdcYbI"&gt;He-Man, What's Going On?&lt;/a&gt;
+<div class=help_eg>&lt;div id=my_playlist class=playlist&gt;
+
+* &lt;a href=# id=QTk688cXTsA&gt;Capybara Onsen&lt;/a&gt;
+* &lt;a href=# id=r-qhj3sJ5qs&gt;WORLD ORDER: Machine Civilization&lt;/a&gt;
+* &lt;a href=# id=itvJybdcYbI&gt;He-Man, What's Going On?&lt;/a&gt;
 
 &lt;/div&gt;
 </div>
 
 <div class=help_display>
 
-<div id=playlist>
+<div id=my_playlist class=playlist>
 <ul>
-<li><a href="#" id="QTk688cXTsA">Capybara Onsen</a>
-<li><a href="#" id="r-qhj3sJ5qs">WORLD ORDER: Machine Civilization</a>
-<li><a href="#" id="itvJybdcYbI">He-Man, What's Going On?</a>
+<li><a href=# id=QTk688cXTsA>Capybara Onsen</a>
+<li><a href=# id=r-qhj3sJ5qs>WORLD ORDER: Machine Civilization</a>
+<li><a href=# id=itvJybdcYbI>He-Man, What's Going On?</a>
 </ul>
 </div>
 

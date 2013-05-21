@@ -6,7 +6,10 @@ body {
 body.index {
     margin:1em;
 }
-body.singleton, body.help {
+body.singleton {
+    margin:2em;
+}
+body.help {
     margin:2em;
     margin-right:80px;
 }
@@ -77,7 +80,7 @@ a:hover {
 /* ===================== ENTRY ============================== */
 
 .entry {
-    margin-right:64px;
+    margin-right:80px;
     margin-bottom:64px;
     overflow:hidden;
 }
@@ -334,6 +337,7 @@ form#edit #tags_box {
 }
 #viewtube {
     float:right;
+    margin-left:1em;
 }
 
 
