@@ -11,7 +11,7 @@ body.entry {
 }
 body.help {
     margin:2em;
-    margin-right:80px;
+    margin-right:108px;
 }
 a { 
     text-decoration:none;
@@ -354,7 +354,9 @@ form#edit #tags_box {
 .help_display {
     margin:1em;
     margin-bottom:4em;
+    padding-left:1em;
     clear:both;
+    border-left:4px solid #d3d3d3;
 }
 
 #tanuki {
