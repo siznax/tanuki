@@ -85,7 +85,7 @@ pre {
 .entry {
     margin-right:96px;
     margin-bottom:64px;
-    overflow-y:hidden;
+    overflow-x:hidden;
 }
 .entry_head {
     margin-bottom:1em;
