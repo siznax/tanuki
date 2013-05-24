@@ -3,16 +3,17 @@
 <meta charset="UTF-8">
 <title>{% if title %}{{ title }}{% else %}tanuki タヌキ{% endif %}</title>
 <link id="layout" rel="stylesheet" href="/static/style.css">
+<link id="layout" rel="stylesheet" href="/static/special.css">
 <link id="color" rel="stylesheet" href="{{ config['STYLESHEET'] }}">
 <script src="/static/jquery.js"></script> 
 <script src="/static/tanuki.js"></script>{% 
-    if entry and "leafletjs" in entry.text 
+    if request.path.startswith('/edit') and entry and "leafletjs" in entry.text 
 %}<div id="leafletjs_api_key" key="{{ config['CLOUDMADE'] }}" />
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
 <script  src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>{% 
     endif 
 %}{% 
-    if entry and "prettyprint" in entry.text 
+    if not request.path.startswith('/edit') and entry and "prettyprint" in entry.text 
 %}<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>{%
     endif 
 %}</head>
