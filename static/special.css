@@ -1,0 +1,68 @@
+.entry_body img {
+    max-width:100%;
+}
+.entry_body .cover, .entry_body .book {
+    float:right;
+    margin:0;
+    padding:0;
+    margin-left:2em;
+    margin-bottom:1em;
+    max-width:240px;
+}
+.entry .clipping {
+    margin:0;
+    padding:0;
+    font-size:1.2em;
+    width:38em;
+    text-align:justify;
+    font-family:Georgia,Times,Serif;
+}
+.entry .clipping img {
+    margin:0;
+    float:right;
+    margin-left:2em;
+    margin-bottom:1em;
+    max-width:240px;
+}
+.entry .didactic { /* museum placard (object label) */
+    margin:0;
+    padding:0;
+    margin-top:-1em;
+    font-style:italic;
+    white-space:pre;
+}
+.entry .embed {
+    width:320px;
+}
+.entry .gallery {
+    margin:0;
+    padding:0;
+    height:180px;
+}
+.entry .gallery img {
+    float:left;
+    height:180px;
+}
+.entry .inline_right {
+    float:right;
+    border:1px solid silver;
+    border-radius:0.6em;
+    background:white;
+    padding:1em;
+    margin-left:1em;
+    margin-bottom:1em;
+    width:240px;
+    font-size:12px;
+    text-align:center;
+}
+.entry .inline_right img {
+    width:240px;
+}
+.entry .inline_left {
+    float:left;
+    margin-right:1em;
+    margin-bottom:1em;
+    width:180px;
+    font-size:10px;
+    text-align:center;
+}
