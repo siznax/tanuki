@@ -29,6 +29,7 @@ $( function() {
     });
 
     $( ".playlist a" ).click( function( event ) {
+	highlightClicked( event.target.id );
 	changeChannel( event.target.id );
 	return false;
     });
@@ -40,5 +41,18 @@ $( function() {
 			      + video + '" frameborder="0" allowfullscreen>'
 			      + '</iframe>');
     }
+
+    function highlightClicked( id ) {
+	console.log( "highlightClicked " + id );
+	var last = $( "#viewtube" ).attr( "last" );
+	$( "#"+last ).css( "font-weight", "normal");
+	$( "#"+last ).closest( "li" )
+	    .css( "list-style-type", "disc" );
+	$( "#viewtube" ).attr( "last", id );
+	$( "#"+id ).css( "font-weight", "bold" );
+	$( "#"+id ).closest( "li" )
+	    .css( "list-style-type", "circle" );
+    }
+
 
 });
