@@ -245,8 +245,8 @@ class Tanuki:
               'tags'   : self.img('tags',  '/tags' ),
               'search' : self.img('search','/search' ),
               'help'   : self.img('help',  '/help' ),
-              'public' : self.img('public'),
-              'private': self.img('private') }
+              'public' : self.img('public', '/private'),
+              'private': self.img('private', '/public') }
         s = "\n"
         for w in wanted:
             s += "%s\n" % ( c[w] )
@@ -390,7 +390,7 @@ class Tanuki:
         controls = self.controls( 0, ['home','list','tags','search','new'] )
         return render_template( "help.html", 
                                 controls=controls,
-                                entry={"text":"prettyprint leafletjs"},
+                                entry={"text":"prettyprint leafletjs galleryjs"},
                                 title = "help",
                                 body_class="help" )
 
