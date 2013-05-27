@@ -5,19 +5,16 @@
 
 {% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
 
-<div id="content" class="gallery">
+<div id="content" class="match_gallery">
 
-<div id="list_gallery">
 {% set count = 1 %}
 {% for entry in entries %}
 {% if entry.img %}
-<a href="/entry/{{ entry.id }}"><img class="gallery" src="{{ entry.img }}" 
+<a href="/entry/{{ entry.id }}"><img src="{{ entry.img }}" 
  alt="{{ entry.title }}" title="[{{ count }}] {{ entry.title }}"></a>
 {% endif %}
 {% set count = count + 1 %}
 {% endfor %}
-</div>
-
 
 {% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
 

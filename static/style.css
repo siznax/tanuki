@@ -34,8 +34,15 @@ pre {
     padding-right:2em;
     padding-left:2em;
 }
-#content.search, #content.gallery {
+#content.search, #content.match_gallery {
     padding:2em;
+}
+#content.match_gallery {
+    margin-right:72px;
+}
+#content.match_gallery img {
+    float:left;
+    height:120px;
 }
 #content.tags {
     margin-left:16px;
@@ -135,16 +142,6 @@ pre {
     margin-top:1em;
     margin-bottom:0.4em;
     font-weight:bold;
-}
-
-/* ===================== GALLERY ============================ */
-
-#list_gallery {
-    margin-right:72px;
-}
-img.gallery {
-    float:left;
-    height:120px;
 }
 
 /* ===================== CONTROLS =========================== */
