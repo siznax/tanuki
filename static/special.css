@@ -37,10 +37,9 @@
 .entry .gallery {
     margin:0;
     padding:0;
-    height:180px;
+    clear:both;
 }
 .entry .gallery img {
-    float:left;
     height:180px;
 }
 .entry .inline_right {
@@ -65,4 +64,19 @@
     width:180px;
     font-size:10px;
     text-align:center;
+}
+.entry #slide {
+    z-index:2;
+    position:absolute;
+    top:0;
+    left:0;
+    display:none;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    text-align:center;
+    vertical-align:center;
+}
+.entry #slide img {
+    z-index:3;
 }

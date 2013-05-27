@@ -2,6 +2,8 @@
 
 $( function() {
 
+    var DEBUG = false;
+
     // Leaflet JS maps -----------------------------------------
 
     if ( $(".leafletjs").length ) {
@@ -56,20 +58,52 @@ $( function() {
 
     // IMAGE GALLERY -------------------------------------------
 
-    if ( $(".gallery").length ) {
+    if ( $(".gallery img").length ) {
 	var id = $( ".gallery" ).closest("div[id]").attr("id");
 	var num = $(".gallery img").length;
 	console.log( "TANUKI found gallery id=" + id + " (" + num + ")" );
     }
 
-    $( ".gallery" ).click( function() {
+    $( ".gallery img" ).click( function() {
 	if ( $("#slide").length == 0 ) {
-	    console.log( "+ append #slide");
-	    $("body").append("<div id=slide />");
+	    if ( DEBUG ) { 
+		console.log( "+ append #slide");
+	    }
+	    $("body").append("<div id=slide><img></div>");
+	    $("#slide img").bind( "load", sizeSlide );
 	    $("#slide").attr( "num", $(".gallery img").length );
 	    putSlide( event.target.src );
 	}
     });
+
+    function sizeSlide() {
+	var wide = "tall";
+	$("#slide img").css("width","auto");
+	$("#slide img").css("height","100%");
+	var width = $("#slide img").width();
+	var height = $("#slide img").height();
+	if ( DEBUG ) {
+	    console.log( "> slide loaded " + width + "x" + height );
+	}
+	if ( width > height ) {
+	    wide = "wide";
+	}
+	if ( width > $("body").width() ) {
+	    if ( DEBUG ) {
+		console.log("> wide view");
+	    }
+	    $( "#slide img" ).css("width","100%");
+	    $( "#slide img" ).css("height","auto");
+	    $( "#slide img" ).css("margin-top",Math.floor(($("#slide").height() - $("#slide img").height())/2));
+	} else {
+	    $( "#slide img" ).css("width","auto");
+	    $( "#slide img" ).css("height","100%");
+	    $( "#slide img" ).css("margin-top",0);
+	}
+	if ( DEBUG ) {
+	    console.log( "+ slide loaded " + width + "x" + height + " " + wide );
+	}
+    }
 
     $( "body" ).on( "click", "#slide img", function() {
 	nextSlide( event.target.src );
@@ -77,38 +111,49 @@ $( function() {
 
     $("body").on( "click", "#slide", function() {
 	if ( event.target.id=="slide" ) {
+	    $("#slide img").off();
 	    removeSlide();
 	}
     });
 
     function putSlide( src ) {
-	console.log("+ put slide " + src);
-	$("#slide").html( '<img src='+src+'>' );
+	if ( DEBUG ) {
+	    console.log("+ put slide " + src);
+	}
+	var width = $("body").width();
+	var height = $("body").height();
+	$("#slide img").attr("src",src);
 	$("#slide").css( "top",$("body").scrollTop() );
 	$("#slide").css("display","block");
 	$("body").css("overflow","hidden");
     }
 
     function nextSlide( src ) {
-	var last_index = $("#slide").attr("num") - 1;
+	var next = 0;
+	var last = $("#slide").attr("num") - 1;
 	$(".gallery img").each( function(i) {
 	    if (this.src==event.target.src) {
-		console.log("+ clicked slide " + i);
-		var next_index = i;
-		if ( next_index >= last_index ) {
-		    removeSlide();
-		} else {
-		    console.log( "+ next slide " + (i+1) );
-		    putSlide( $(".gallery img")[i+1].src );
-		}
+		clicked = i;
+		next = i + 1;
 	    }
 	});
+	if ( next > last ) {
+	    removeSlide();
+	    return false;
+	} 
+	var next_image = $(".gallery img")[next].src;
+	if ( DEBUG ) {
+	    console.log( "+ next " + clicked + ":" + next + " " + next_image );
+	}
+	putSlide( next_image );
     }
 
     function removeSlide() {
 	$( "#slide" ).remove();
 	$( "body" ).css( "overflow","auto" );
-	console.log( "+ #slide removed" );
+	if ( DEBUG ) {
+	    console.log( "+ #slide removed" );
+	}
     }
 
 });
