@@ -1,8 +1,8 @@
-// siznax 2013
+// tanuki.js siznax 2013
 
 $( function() {
 
-    var DEBUG = false;
+    var DEBUG = true;
 
     // Leaflet JS maps -----------------------------------------
 
@@ -54,106 +54,6 @@ $( function() {
 	$( "#"+id ).css( "font-weight", "bold" );
 	$( "#"+id ).closest( "li" )
 	    .css( "list-style-type", "circle" );
-    }
-
-    // IMAGE GALLERY -------------------------------------------
-
-    if ( $(".gallery img").length ) {
-	var id = $( ".gallery" ).closest("div[id]").attr("id");
-	var num = $(".gallery img").length;
-	console.log( "TANUKI found gallery id=" + id + " (" + num + ")" );
-    }
-
-    $( ".gallery img" ).click( function() {
-	if ( $("#slide").length == 0 ) {
-	    if ( DEBUG ) { 
-		console.log( "+ append #slide");
-	    }
-	    $("body").append("<div id=slide><img></div>");
-	    $("#slide img").bind( "load", sizeSlide );
-	    $("#slide").attr( "num", $(".gallery img").length );
-	    putSlide( event.target.src );
-	}
-    });
-
-    function sizeSlide() {
-	var wide = "tall";
-	$("#slide img").css("width","auto");
-	$("#slide img").css("height","100%");
-	var width = $("#slide img").width();
-	var height = $("#slide img").height();
-	if ( DEBUG ) {
-	    console.log( "> slide loaded " + width + "x" + height );
-	}
-	if ( width > height ) {
-	    wide = "wide";
-	}
-	if ( width > $("body").width() ) {
-	    if ( DEBUG ) {
-		console.log("> wide view");
-	    }
-	    $( "#slide img" ).css("width","100%");
-	    $( "#slide img" ).css("height","auto");
-	    $( "#slide img" ).css("margin-top",Math.floor(($("#slide").height() - $("#slide img").height())/2));
-	} else {
-	    $( "#slide img" ).css("width","auto");
-	    $( "#slide img" ).css("height","100%");
-	    $( "#slide img" ).css("margin-top",0);
-	}
-	if ( DEBUG ) {
-	    console.log( "+ slide loaded " + width + "x" + height + " " + wide );
-	}
-    }
-
-    $( "body" ).on( "click", "#slide img", function() {
-	nextSlide( event.target.src );
-    });
-
-    $("body").on( "click", "#slide", function() {
-	if ( event.target.id=="slide" ) {
-	    $("#slide img").off();
-	    removeSlide();
-	}
-    });
-
-    function putSlide( src ) {
-	if ( DEBUG ) {
-	    console.log("+ put slide " + src);
-	}
-	var width = $("body").width();
-	var height = $("body").height();
-	$("#slide img").attr("src",src);
-	$("#slide").css( "top",$("body").scrollTop() );
-	$("#slide").css("display","block");
-	$("body").css("overflow","hidden");
-    }
-
-    function nextSlide( src ) {
-	var next = 0;
-	var last = $("#slide").attr("num") - 1;
-	$(".gallery img").each( function(i) {
-	    if (this.src==event.target.src) {
-		clicked = i;
-		next = i + 1;
-	    }
-	});
-	if ( next > last ) {
-	    removeSlide();
-	    return false;
-	} 
-	var next_image = $(".gallery img")[next].src;
-	if ( DEBUG ) {
-	    console.log( "+ next " + clicked + ":" + next + " " + next_image );
-	}
-	putSlide( next_image );
-    }
-
-    function removeSlide() {
-	$( "#slide" ).remove();
-	$( "body" ).css( "overflow","auto" );
-	if ( DEBUG ) {
-	    console.log( "+ #slide removed" );
-	}
     }
 
 });
