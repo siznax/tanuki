@@ -1,3 +1,17 @@
+pre code {
+    display:block;
+    padding:1em;
+    background:#333;
+    color:white;
+}
+.quote {
+    padding:1em;
+    font-family:Georgia;
+    font-size:x-large;
+    font-weight:100;
+    background:#d3d3d3;
+    border-radius:0.4em;
+}
 .entry_body img {
     max-width:100%;
 }
@@ -40,11 +54,10 @@
     border-radius:0.6em;
     background:white;
     padding:1em;
-    margin-left:1em;
-    margin-bottom:1em;
+    margin-left:1.4em;
+    margin-bottom:1.4em;
     width:240px;
     font-size:12px;
-    text-align:center;
 }
 .entry .inline_right img {
     width:240px;
