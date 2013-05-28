@@ -1,11 +1,9 @@
 .galleryjs, #help_gallery {
-    margin:0;
-    padding:0;
-    clear:both;
+    overflow:auto;
+    width:100%;
 }
 .galleryjs img, #help_gallery img {
-    margin:0;
-    padding:0;
+    float:left;
     height:180px;
 }
 #slide, .help #slide {
