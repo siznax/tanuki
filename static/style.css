@@ -308,5 +308,5 @@ form#edit #tags_box {
     right:48px;
     font-size:24px;
     color:#d3d3d3;
-        
+    display:none;        
 }
