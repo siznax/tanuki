@@ -23,6 +23,7 @@ class Tanuki:
         self.DEBUG = 1
         self.editing = False
         self.mode = None
+        self.mask = 'umask'
         if self.DEBUG:
             print self.config
 
@@ -45,11 +46,29 @@ class Tanuki:
 
     def num_entries( self ):
         sql = 'select count(*) from entries'
-        return self.dbquery( sql ).fetchone()[0]
+        val = ''
+        if self.mask=='public':
+            sql = 'select count(*) from entries where public=?'
+            val = [ 1 ]
+        if self.mask=='private':
+            sql = 'select count(*) from entries where public=?'
+            val = [ 0 ]
+        return self.dbquery( sql,val ).fetchone()[0]
 
     def tag_set( self ):
         sql = 'select count(*),name from tags group by name order by name'
-        return [ {'count':r[0],'name':r[1]} for r in self.dbquery( sql ) ]
+        val = ''
+        if self.mask=='public':
+            sql = 'select count(*),name from tags '\
+                'where id in (select id from entries where public=?) '\
+                'group by name order by name'
+            val = [ 1 ]
+        if self.mask=='private':
+            sql = 'select count(*),name from tags '\
+                'where id in (select id from entries where public=?) '\
+                'group by name order by name'
+            val = [ 0 ]
+        return [ {'count':r[0],'name':r[1]} for r in self.dbquery( sql,val ) ]
 
     def tag_hrefs( self, tag_set, br=False ):
         hrefs = []
@@ -210,12 +229,16 @@ class Tanuki:
     def demux( self, row ):
         # overevaluated, don't try to do much here
         ymd = self.ymd( row[3] ) 
-        text = row[2]
-        if request.path=='/list' or request.path=='/tags':
-            text = None # unless we need it
+        text = None # unless we need it
+        if request.path.startswith('/entry')\
+                or request.path.startswith('/edit')\
+                or request.path.startswith('/store')\
+                or request.path.startswith('/confirm')\
+                or request.path.startswith('/tagged'):
+            text = row[2]
         return  { 'id': row[0],
                   'title': row[1],
-                  'text': row[2], 
+                  'text': text,
                   'date': row[3],
                   'updated': row[4],
                   'public': row[5],
@@ -238,18 +261,43 @@ class Tanuki:
             x['text'] = markdown.markdown( x['text'] )
         return entries
 
+    def mask_control_href( self, mask=None ):
+        if request.path.startswith('/entry/'):
+            return None
+        if not mask:
+            if request.path=='/':
+                return "/public"
+            if '/v:' in request.path:
+                return request.path.replace('/v:','/p:public/v:')
+            if request.path.startswith('/tagged'):
+                return "%s/p:public" % request.path
+            return "%s/public" % request.path
+        if mask=='public':
+            if '/public' in request.path:
+                return request.path.replace('/public','/private')
+            if '/p:public' in request.path:
+                return request.path.replace('/p:public','/p:private')
+        if mask=='private':
+            if request.path=='/private':
+                return '/'
+            if '/private' in request.path:
+                return request.path.replace('/private','')
+            if '/p:private' in request.path:
+                return request.path.replace('/p:private','')
+
     def controls( self, entry_id, wanted=None ):
-        c = { 'home'   : self.img('home',  '/' ),
-              'new'    : self.img('new',   '/new' ) if request.host == self.config['WRITE_HOST'] else '',
-              'entry'  : self.img('entry', "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
-              'edit'   : self.img('edit',  "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
-              'delete' : self.img('delete',"/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
-              'list'   : self.img('list',  '/list' ),
-              'tags'   : self.img('tags',  '/tags' ),
-              'search' : self.img('search','/search' ),
-              'help'   : self.img('help',  '/help' ),
-              'public' : self.img('public', '/private'),
-              'private': self.img('private', '/public') }
+        c = { 'home'   : self.img('home',   '/' ),
+              'new'    : self.img('new',    '/new' ) if request.host == self.config['WRITE_HOST'] else '',
+              'entry'  : self.img('entry',  "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
+              'edit'   : self.img('edit',   "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+              'delete' : self.img('delete', "/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+              'list'   : self.img('list',   '/list' ),
+              'tags'   : self.img('tags',   '/tags' ),
+              'search' : self.img('search', '/search' ),
+              'help'   : self.img('help',   '/help' ),
+              'umask'  : self.img('umask',  self.mask_control_href() ), 
+              'public' : self.img('public', self.mask_control_href('public') ),
+              'private': self.img('private',self.mask_control_href('private') ) }
         s = "\n"
         for w in wanted:
             s += "%s\n" % ( c[w] )
@@ -306,29 +354,84 @@ class Tanuki:
         self.editing = False
         return entries[0]
 
-    def entries( self, date=None, tag=None, notag=False, terms=None, latest=None ):
-        limit = False
-        if date:
-            sql = 'select * from entries where date=? order by id desc'
-            rows = self.dbquery( sql, [date] )
-        elif tag:
-            sql = 'select * from entries,tags where tags.name=? and tags.id=entries.id order by date desc'
-            rows = self.dbquery( sql, [tag] )
+    def entries_tagged( self, tag ):
+        sql = 'select * from entries,tags '\
+            'where tags.name=? and tags.id=entries.id '\
+            'order by date desc'
+        val = [ tag ]
+        if self.mask=='public':
+            sql = 'select * from entries,tags where '\
+                '(tags.name=? and tags.id=entries.id and public=?) '\
+                'order by date desc'
+            val = [ tag, 1 ]
+        if self.mask=='private':
+            sql = 'select * from entries,tags '\
+                'where (tags.name=? and tags.id=entries.id and public=?) '\
+                'order by date desc'
+            val = [ tag, 0 ]
+        return [ self.demux( x ) for x in self.dbquery( sql,val ) ] 
+
+    def entries_notag( self ):
+        sql = 'select * from entries where id not in (select id from tags)'
+        val = ''
+        if self.mask=='public':
+            sql = 'select * from entries '\
+                'where ( (id not in (select id from tags)) and public=? )'
+            val = [ 1 ]
+        if self.mask=='private':
+            sql = 'select * from entries '\
+                'where ( (id not in (select id from tags)) and public=? )'
+            val = [ 0 ]
+        return [ self.demux( x ) for x in self.dbquery( sql,val ) ] 
+
+    def entries_matching( self, terms ):
+        sql = 'select * from entries '\
+            'where title like ? or text like ? '\
+            'order by id desc'
+        val = [ terms,terms ]
+        if self.mask=='public':
+            sql = 'select * from entries '\
+                'where ( (title like ? or text like ?) and public=? ) '\
+                'order by id desc'
+            val = [ terms,terms,1 ]
+        if self.mask=='private':
+            sql = 'select * from entries '\
+                'where ( (title like ? or text like ?) and public=? ) '\
+                'order by id desc'
+            val = [ terms,terms,0 ]
+        return [ self.demux( x ) for x in self.dbquery( sql,val ) ]
+
+    def entries_latest( self ):
+        sql = 'select * from entries order by updated desc limit 10'
+        val = ''
+        if self.mask=='public':
+            sql = 'select * from entries where public=? order by updated desc limit 10'
+            val = [ 1 ]
+        if self.mask=='private':
+            sql = 'select * from entries where public=? order by updated desc limit 10'
+            val = [ 0 ]
+        return [ self.demux( x ) for x in self.dbquery( sql,val ) ]
+
+    def entries( self, tag=None, notag=False, terms=None, latest=None ):
+        if tag:
+            entries = self.entries_tagged( tag )
         elif notag:
-            sql = 'select * from entries where id not in (select id from tags)'
-            rows = self.dbquery( sql )
+            entries = self.entries_notag()
         elif terms:
             terms = '%' + terms.encode('ascii','ignore')  + '%'
-            sql = 'select * from entries where title like ? or text like ? order by id desc'
-            rows = self.dbquery( sql, [ terms,terms ] )
+            entries = self.entries_matching( terms )
         elif latest:
-            sql = 'select * from entries order by updated desc limit 10'
-            rows = self.dbquery( sql )
+            entries = self.entries_latest()
         else:
             sql = 'select * from entries order by date desc,id desc'
-            rows = self.dbquery( sql )
-            limit = True
-        entries = [ self.demux( x ) for x in rows ]
+            val = ''
+            if self.mask=='public':
+                sql = 'select * from entries where public=? order by date desc,id desc'
+                val = [ 1 ]
+            if self.mask=='private':
+                sql = 'select * from entries where public=? order by date desc,id desc'
+                val = [ 0 ]
+            entries = [ self.demux( x ) for x in self.dbquery( sql,val ) ]
         if self.DEBUG: 
             print "+ TANUKI entries %d bytes" % ( sys.getsizeof(entries) )
         return entries
@@ -364,30 +467,29 @@ class Tanuki:
         return start
         
     def index( self, page=0 ):
-        tags = []
+        feature = []
         entries = {}
         tag_set = self.tag_set()
         names = [ t['name'] for t in tag_set ]
-        for tag in tags:
-            if tag in names:
-                entries[ tag ] = { 
-                    'count': tag_set[names.index(tag)]['count'],
-                    'entries': self.entries( None, tag )[0:10] }
-        if not entries:
-            tags = []
-        notag = self.entries( None, None, True )
-        latest = self.entries( None, None, False, None, True )
-        controls = ['home','public','list','tags','search','new','help']
+        for tag in names:
+            entries[ tag ] = { 
+                'count': tag_set[names.index(tag)]['count'],
+                'entries': self.entries( tag )[0:10] }
+        feature = [ x for x in feature if x in entries.keys() ]
+        notag = self.entries( None, True )
+        latest = self.entries( None, False, None, True )
+        controls = ['home',self.mask,'list','tags','search','new','help']
         return render_template( 'index.html',
+                                mask = self.mask if not self.mask=='umask' else None,
                                 controls = self.controls( 0, controls ),
-                                tags = tags,
+                                feature = feature,
                                 tag_set = tag_set,
                                 entries = entries,
                                 num_entries = self.num_entries(),
                                 notag = notag,
                                 latest = latest,
                                 body_class = 'index',
-                                footer = "%s %s" % (__author__,__version__) )
+                                footer = __version__ )
 
     def help( self ):
         controls = self.controls( 0, ['home','list','tags','search','new'] )
@@ -484,10 +586,8 @@ class Tanuki:
         entry = self.entry( entry_id, True )
         if not entry:
             return redirect( url_for('index') )
-        visibility = 'private'
-        if entry['public']:
-            visibility = 'public'
-        controls = ['home',visibility,'list','tags','search','new','edit','delete']
+        self.mask = 'public' if entry['public'] else 'private'
+        controls = ['home',self.mask,'list','tags','search','new','edit','delete']
         return render_template( 'entry.html', 
                                 controls=self.controls( entry_id, controls ),
                                 next_prev=None,
@@ -495,20 +595,7 @@ class Tanuki:
                                 title=entry['title'],
                                 body_class="entry" )
 
-    def dated( self, date ):
-        self.mode = None
-        stamped = self.entries( date )
-        stamped = self.apply_tags( stamped )
-        stamped = self.preprocess( stamped )
-        stamped = self.markup( stamped )
-        msg = "%d dated %s" % ( len(stamped), self.date_str( date ) )
-        controls = self.controls( 0, ['home','list','tags','search','new'] )
-        return render_template( 'index.html', 
-                                entries=stamped, 
-                                controls = controls,
-                                msg=msg )
-
-    def tagged_views( self, tag, view ):
+    def tagged_view_msg( self, tag, view ):
         if view:
             a1 = '<a href="/tagged/%s">list</a>' % ( tag )
         else:
@@ -516,54 +603,58 @@ class Tanuki:
         if view == 'gallery': 
             a2 = '<b>gallery</b>'
         else:
-            a2 = '<a href="/tagged/%s/gallery">gallery</a>' % ( tag )
+            a2 = '<a href="/tagged/%s/v:gallery">gallery</a>' % ( tag )
         return ' | '.join ( [ a1, a2 ] )
 
     def tagged( self, tag, view=None ):
         self.mode = None
-        haztag = self.entries( None, tag )
+        haztag = self.entries( tag )
         haztag = self.apply_tags( haztag )
         haztag = self.preprocess( haztag )
         haztag = self.markup( haztag )
         haztag = self.postprocess( haztag )
-        controls = ['home','list','tags','search','new']
-        title = "%d tagged { %s } " % ( len(haztag), tag )
-        msg = "%s %s" % ( title, self.tagged_views( tag, view ) )
-        template = 'list.html'
-        if view == 'gallery':
-            template = 'gallery.html'
-        return render_template( template,
+        controls = ['home',self.mask,'list','tags','search','new']
+        mask = "(%s)" % self.mask if not self.mask=='umask' else ""
+        title = "%d %s #%s" % ( len(haztag),mask,tag )
+        msg = "%s %s" % ( title, self.tagged_view_msg( tag,view ) )
+        return render_template( 'list.html' if not view else 'gallery.html',
                                 msg = msg,
-                                controls = self.controls( 0, controls ),
+                                controls = self.controls( 0,controls ),
                                 title = title,
                                 entries = haztag ) 
         
     def tags( self ):
         self.mode = None
-        entries = self.entries()
         tag_set = self.tag_set()
-        notag = self.entries( None, None, True )
-        if not entries:
+        notag = self.entries( None, True )
+        if not tag_set:
             msg = "<h1>Unbelievable. No tags yet.</h1>"
         else:
-            msg = '%d tags | %d entries | <i>%d <a href="/notag">notag</a></i>'\
-                % ( len(tag_set), len(entries), len(notag) )
-        controls = self.controls( 0, ['home','list','search','new'] )
+            mask = "(%s)" % self.mask if not self.mask=='umask' else ""
+            tags_msg = "%d %s tags" % ( len(tag_set),mask )
+            entries_msg = "%d entries" % self.num_entries()
+            notag_msg = '<i>%d <a href="/notag">notag</a></i>' % len(notag)
+            msg = "%s | %s | %s"  % ( tags_msg,entries_msg,notag_msg )
+        controls = self.controls( 0, ['home',self.mask,'list','search','new'] )
         return render_template( 'tags.html', 
+                                title = tags_msg,
                                 msg=msg, 
                                 controls=controls, 
                                 tag_set=tag_set )
 
     def notag( self ):
         self.mode = None
-        untagged = self.entries( None, None, True )
-        untagged = self.apply_tags( untagged )
-        untagged = self.preprocess( untagged )
-        untagged = self.markup( untagged )
-        controls = ['home','list','tags','search','new']
+        untagged = self.entries( None, True )
+        controls = ['home',self.mask,'list','tags','search','new']
+        title = "%d notag" % len(untagged)
+        msg = "%d not tagged" % len(untagged)
+        if not self.mask=='umask':
+            title = "%d (%s) notag" % ( len(untagged),self.mask )
+            msg = "%d (%s) not tagged" % ( len(untagged),self.mask )
         return render_template( 'list.html', 
-                                msg = "%d not tagged" % len(untagged),
-                                controls = self.controls( 0, controls), 
+                                title=title,
+                                msg=msg,
+                                controls=self.controls( 0, controls), 
                                 entries=untagged )
     def search( self ):
         controls = self.controls( 0, ['home','list','tags','new'] )
@@ -571,7 +662,7 @@ class Tanuki:
         
     def matched( self, terms ):
         self.mode = None
-        found = self.entries( None, None, False, terms )
+        found = self.entries( None, False, terms )
         controls = ['home','list','tags','search','new']
         return render_template( 'list.html', 
                                 msg = "%d matched { %s }" % ( len(found), terms ),
