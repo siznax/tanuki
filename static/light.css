@@ -39,14 +39,24 @@ tt {
     color:#999;
     text-shadow:0px 1px 0px white; 
 }
-.tag, #entry_tags A { 
+.entry_foot {
+    border:1px solid inherit;
+}
+#entry_tags span { 
+    margin:0;
+    padding:0.2em 0.6em;
+    border-radius:1em;
     color:#999;
 }
-.tag:hover, #entry_tags A:hover {
-    color:purple;
+#entry_tags a {
+    color:#999;
 }
-.entry_foot, #entry_tag { 
-    color:darkgray; 
+#entry_tags span:hover a, #entry_tags span:hover i {
+    color:white;
+    text-decoration:none;
+}
+#entry_tags span:hover {
+    background:indigo;
 }
 
 /* ===================== LIST =============================== */
@@ -61,7 +71,7 @@ tt {
 /* ===================== TAG_SET ============================ */
 
 #tag_set span { 
-    color:silver; 
+    color:silver;
 }
 #tag_set span a { 
     color:black; 
