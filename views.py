@@ -17,8 +17,10 @@ tanuki = Tanuki( app.config )
 def favicon():
     return app.send_static_file("favicon.ico")
 
-@app.route('/')
-def index():
+@app.route('/',defaults={'mask':'umask'})
+@app.route('/<mask>')
+def index( mask ):
+    tanuki.mask = mask
     return tanuki.index()
 
 @app.route('/help')
@@ -36,19 +38,48 @@ def list():
     return tanuki.list()
 
 @app.route('/tags')
-def cloud():
+def tags():
+    tanuki.mask = 'umask'
+    return tanuki.tags()
+
+@app.route('/tags/')
+def tags_redirect():
+    return redirect( url_for( 'tags' ) )
+
+@app.route('/tags/<mask>')
+def tags_mask( mask ):
+    tanuki.mask = mask
     return tanuki.tags()
 
 @app.route('/tagged/<tag>')
-def tagged(tag):
-    return tanuki.tagged( tag )
+def tagged_tag( tag ):
+    tanuki.mask = 'umask'
+    return tanuki.tagged( tag,None )
 
-@app.route('/tagged/<tag>/<view>')
-def tagged_view(tag, view):
+# this seems lame
+@app.route('/tagged/<tag>/')
+def tagged_tag_redirect( tag ):
+    return redirect( url_for( 'tagged_tag', tag=tag ) )
+
+@app.route('/tagged/<tag>/p:<mask>')
+def tagged_mask( tag, mask ):
+    tanuki.mask = mask
+    return tanuki.tagged( tag,None )
+
+@app.route('/tagged/<tag>/v:<view>')
+def tagged_view( tag, view ):
+    tanuki.mask = 'umask'
     return tanuki.tagged( tag, view )
 
-@app.route('/notag')
-def notag():
+@app.route('/tagged/<tag>/p:<mask>/v:<view>')
+def tagged_mask_view( tag, mask, view ):
+    tanuki.mask = mask
+    return tanuki.tagged( tag, view )
+
+@app.route('/notag',defaults={'mask':'umask'})
+@app.route('/notag/<mask>')
+def notag( mask ):
+    tanuki.mask = mask
     return tanuki.notag()
 
 @app.route('/entry/<int:_id>')
