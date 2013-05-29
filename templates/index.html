@@ -10,7 +10,7 @@
 <!-- TAG BLOB -->
 
 <div class="feature tag_blob">
-<b>{{ num_entries }} <a href="/list">entries</a></b>:
+<b>{{ num_entries }} {% if mask %}({{mask}}){% endif %} <a href="/list">entries</a></b>:
 {{ notag|length() }} <i><a href="/notag">notag</a></i>
 {{tag_set|length()}} <a href="/tags">tags</a> 
 { {% 
@@ -35,7 +35,7 @@
 
 <!-- FEATURED TAGS -->
 
-{% for tag in tags %}
+{% for tag in feature %}
 <div id="{{tag}}" class="feature">
 <ul>
 <lh><a href="/tagged/{{tag}}">{{ tag }}</a> ({{ entries[tag]['count'] }})</lh>
@@ -54,7 +54,7 @@
 
 <br clear="both" />
 
-{% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
+{% if footer %}<div id="footer"><a href="http://github.com/siznax/tanuki">タヌキ</a> {{ footer|safe }}</div>{% endif %}
 
 </div><!-- /content -->
 
