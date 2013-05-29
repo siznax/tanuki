@@ -5,6 +5,7 @@ create table entries (
        text string unique not null,
        date text not null,
        updated text,
+       public int
 );
 create table tags (
        id integer not null,

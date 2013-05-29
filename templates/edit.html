@@ -12,17 +12,17 @@
 <input type="hidden" name="referrer" value="{{ referrer }}">
 {% endif %}
 
-<table id="edit" border=0>
+<table id="edit">
 
 <tr>
-<td colspan=3><input type=text id="title" name="title" type="text" size="32"{% 
+<td colspan=4><input type=text id="title" name="title" type="text" size="32"{% 
     if entry.title=='title' 
 %} onfocus="this.value==this.defaultValue?this.value='':null"{% 
     endif 
 %} value="{{ entry.title }}" required>
 
 <tr>
-<td colspan=3><textarea name="entry" id="entry_text"{% 
+<td colspan=4><textarea name="entry" id="entry_text"{% 
     if entry.text == 'text' 
 %} onfocus="this.value==this.defaultValue?this.value='':null"
 {% endif %} required>{{ entry.text|safe }}</textarea>
@@ -34,6 +34,9 @@
 %} onfocus="this.value==this.defaultValue?this.value='':null"{% 
     endif 
 %} value="{{ entry.tags }}">
+<td style="white-space:nowrap">
+<input type=checkbox name=public id=public {% if entry.public==1 %}checked{% endif %}>
+<label for=public style="margin-right:0.4em;">public</label>
 <td><input id="save_btn" type="submit" value="Save" onclick="return validate();">
 
 </table>

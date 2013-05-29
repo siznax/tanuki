@@ -132,21 +132,23 @@ class Tanuki:
             if self.bad_str( req.form['title'] ): raise ValueError
             if self.bad_str( req.form['entry'] ): raise ValueError
             if 'entry_id' in req.form.keys():
-                sql = 'update entries set title=?, text=?, date=?, updated=? where id=?'
+                sql = 'update entries set title=?,text=?,date=?,updated=?,public=? where id=?'
                 val = ( req.form['title'], 
                         req.form['entry'],
                         req.form['date'],
                         self.utcnow(),
+                        1 if 'public' in req.form.keys() else 0,
                         req.form['entry_id'] )
                 self.dbquery( sql, val )
                 entry_id = req.form['entry_id']
             else:
-                sql = 'insert into entries values(?,?,?,?,?)'
+                sql = 'insert into entries values(?,?,?,?,?,?)'
                 val = [ None,
                         req.form['title'], 
                         req.form['entry'],
                         req.form['date'],
-                        self.utcnow() ]
+                        self.utcnow(),
+                        1 if 'public' in req.form.keys() else 0 ]
                 cur = self.dbquery( sql, val )
                 entry_id = cur.lastrowid
 
@@ -216,6 +218,7 @@ class Tanuki:
                   'text': row[2], 
                   'date': row[3],
                   'updated': row[4],
+                  'public': row[5],
                   'year': ymd[0],
                   'month': ymd[1],
                   'date_str': self.date_str( row[3] ),
@@ -481,7 +484,10 @@ class Tanuki:
         entry = self.entry( entry_id, True )
         if not entry:
             return redirect( url_for('index') )
-        controls = ['home','list','tags','search','new','edit','delete']
+        visibility = 'private'
+        if entry['public']:
+            visibility = 'public'
+        controls = ['home',visibility,'list','tags','search','new','edit','delete']
         return render_template( 'entry.html', 
                                 controls=self.controls( entry_id, controls ),
                                 next_prev=None,
