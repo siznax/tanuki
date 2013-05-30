@@ -1,12 +1,12 @@
 Config:
 
+    TITLE      = "tanuki タヌキ"
     DATABASE   = $HOME"/code/tanuki/tanuki.db"
     DEBUG      = True
     SECRET_KEY = COMPLEX_RANDOM_STRING
-    USERNAME   = 'admin'
-    PASSWORD   = 'default'
-    WRITE_HOST = 'localhost:5001'
-    STYLESHEET = '/static/light.css'
+    USERNAME   = REAL_USERNAME
+    PASSWORD   = REAL_PASSWORD
+    STYLESHEET = ANYTHING_YOU_WANT
     CLOUDMADE  = CLOUDMADE_API_KEY
 
 Usage:
