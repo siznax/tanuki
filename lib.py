@@ -158,6 +158,7 @@ class Tanuki:
                 self.dbquery( sql, val )
                 entry_id = req.form['entry_id']
             else:
+                datetime.datetime.strptime( req.form['date'],'%Y-%m-%d' )
                 sql = 'insert into entries values(?,?,?,?,?,?)'
                 val = [ None,
                         req.form['title'], 
