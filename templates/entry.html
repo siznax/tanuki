@@ -7,15 +7,15 @@
 
 {% if next_prev %}<div id="next_prev">{{ next_prev|safe }}</div>{% endif %}
 
+<a name="{{ entry.id }}"></a>
 <div id="{{ entry.id }}" class="entry {{ entry.mediatype }} {{ path_class }}">
- <a name="entry{{ entry.id }}"></a>
- <div class="entry_head">
-  <span id="title">{{ entry.title }}</span>
-  <span id="date">{{ entry.date_str }}</span>
- </div>
- <div class="entry_body">{{ entry.text|safe }}</div>
- <div class="entry_foot">
-  <div id="entry_tags">{% 
+<div class="entry_head">
+<div id="date">{{ entry.date_str }}</div>
+<div id="title">{{ entry.title }}</div>
+</div>
+<div class="entry_body">{{ entry.text|safe }}</div>
+<div class="entry_foot">
+<div id="entry_tags">{% 
     for tag in entry.tags
 %}<span class="tag"><i>#</i><a href="/tagged/{{ tag }}">{{tag}}</a></span>{% 
     endfor 

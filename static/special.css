@@ -23,11 +23,10 @@ pre code {
     margin-bottom:1em;
     max-width:240px;
 }
-.entry .clipping {
+.entry_body .clipping {
     margin:0;
     padding:0;
     font-size:1.2em;
-    width:38em;
     text-align:justify;
     font-family:Georgia,Times,Serif;
 }

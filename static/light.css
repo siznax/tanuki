@@ -8,13 +8,6 @@ body.entry {
 body.edit {
     background:whitesmoke;
 }
-pre.code { 
-    margin:1em;
-    padding:1em;
-    border-radius:0.4em;
-    background:black;
-    color:lime;
-}
 hl {
     background-color:khaki;
 }

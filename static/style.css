@@ -92,10 +92,10 @@ pre {
 .entry {
     margin-right:96px;
     margin-bottom:64px;
-    overflow-x:hidden;
 }
 .entry_head {
     margin-bottom:1em;
+    overflow:auto;
 }
 .entry_head #title {
     font-size:x-large;
@@ -103,6 +103,7 @@ pre {
 }
 .entry_head #date {
     float:right;
+    margin-left:1em;
 }
 .entry_body {
     padding-top:0;
