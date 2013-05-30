@@ -143,6 +143,8 @@ class Tanuki:
     def upsert( self, req ):
         self.environ = req.environ
         try:
+            if 'locked' in req.form:
+                raise ValueError
             if self.bad_str( req.form['title'] ): raise ValueError
             if self.bad_str( req.form['entry'] ): raise ValueError
             if 'entry_id' in req.form.keys():
