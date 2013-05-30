@@ -6,9 +6,9 @@ __version__ = 2012
 
 from flask import Flask,render_template,request,redirect,url_for
 
-app = Flask(__name__)
+# app = Flask(__name__)
+from tanuki import app
 app.config.from_envvar('TANUKI_CONFIG', silent=False)
-# print app.config
 
 from lib import Tanuki
 tanuki = Tanuki( app.config )
