@@ -35,9 +35,6 @@ class Tanuki:
         self.db = self.con.cursor()
 
     def dbquery( self, sql, val='' ):
-        if not request.host == self.config['WRITE_HOST']:
-            if not sql.startswith('select'):
-                raise RuntimeError
         msg = "+ TANUKI SQL: %s" % ( sql )
         if val: msg += " VAL: %s" % ( ''.join( str(val) ) )
         result = self.db.execute( sql, val )
@@ -103,8 +100,6 @@ class Tanuki:
 
     def edit( self, entry_id ):
         self.mode = 'edit'
-        if not request.host == self.config['WRITE_HOST']:
-            raise NotFound()
         entry = self.entry( entry_id, False, None, True )
         referrer = request.referrer
         if not referrer:
@@ -186,8 +181,6 @@ class Tanuki:
             return render_template( 'error.html', msg=msg )
 
     def confirm( self, entry_id ):
-        if not request.host == self.config['WRITE_HOST']:
-            raise NotFound()
         entry = self.entry( entry_id )
         return render_template( 'confirm.html', entry=entry, func='destroy')
 
@@ -287,10 +280,10 @@ class Tanuki:
 
     def controls( self, entry_id, wanted=None ):
         c = { 'home'   : self.img('home',   '/' ),
-              'new'    : self.img('new',    '/new' ) if request.host == self.config['WRITE_HOST'] else '',
+              'new'    : self.img('new',    '/new' ),
               'entry'  : self.img('entry',  "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
-              'edit'   : self.img('edit',   "/edit/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
-              'delete' : self.img('delete', "/confirm/%d" % ( entry_id )) if request.host == self.config['WRITE_HOST'] else '',
+              'edit'   : self.img('edit',   "/edit/%d" % ( entry_id )),
+              'delete' : self.img('delete', "/confirm/%d" % ( entry_id )),
               'list'   : self.img('list',   '/list' ),
               'tags'   : self.img('tags',   '/tags' ),
               'search' : self.img('search', '/search' ),
