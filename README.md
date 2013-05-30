@@ -1,6 +1,4 @@
-Demo:
-
-    [tanuki.siznax.net](http://tanuki.siznax.net/)
+Demo at [**tanuki.siznax.net**](http://tanuki.siznax.net/)
 
 Config:
 
