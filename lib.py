@@ -575,7 +575,6 @@ class Tanuki:
                                 entries=entries )
 
     def singleton( self, entry_id ):
-        raise ValueError
         self.mode = 'entry'
         entry = self.entry( entry_id, True )
         if not entry:
