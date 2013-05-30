@@ -4,8 +4,8 @@ create table entries (
        title string unique not null, 
        text string unique not null,
        date text not null,
-       public int not null,
-       updated text
+       updated text,
+       public int not null
 );
 create table tags (
        id integer not null,
