@@ -33,7 +33,7 @@ tt {
     text-shadow:0px 1px 0px white; 
 }
 .entry_foot {
-    border:1px solid inherit;
+    overflow:auto;
 }
 #entry_tags span { 
     margin:0;
@@ -50,6 +50,9 @@ tt {
 }
 #entry_tags span:hover {
     background:indigo;
+}
+#entry_tags {
+    line-height:1.6em;
 }
 
 /* ===================== LIST =============================== */
