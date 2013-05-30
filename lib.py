@@ -564,11 +564,11 @@ class Tanuki:
 
     def list( self ):
         entries = self.entries() # consider removing text
+        controls = self.controls( 0, ['home','tags','search','new'] )
         if not entries:
-            msg = "<h1>Unbelievable. No entries yet.</h1>"
+            msg = "<h3>Unbelievable. No entries yet.</h3>"
         else:
             msg = self.result_words( len(entries) )
-            controls = self.controls( 0, ['home','tags','search','new'] )
         return render_template( 'list.html', 
                                 msg=msg, 
                                 controls=controls, 
@@ -620,17 +620,18 @@ class Tanuki:
         self.mode = None
         tag_set = self.tag_set()
         notag = self.entries( None, True )
-        if not tag_set:
-            msg = "<h1>Unbelievable. No tags yet.</h1>"
-        else:
+        title = "%d tags" % len(notag)
+        msg = "<h3>Unbelievable. No tags yet.</h3>"
+        if tag_set:
             mask = "(%s)" % self.mask if not self.mask=='umask' else ""
             tags_msg = "%d %s tags" % ( len(tag_set),mask )
             entries_msg = "%d entries" % self.num_entries()
             notag_msg = '<i>%d <a href="/notag">notag</a></i>' % len(notag)
+            title = tags_msg
             msg = "%s | %s | %s"  % ( tags_msg,entries_msg,notag_msg )
         controls = self.controls( 0, ['home',self.mask,'list','search','new'] )
         return render_template( 'tags.html', 
-                                title = tags_msg,
+                                title=title,
                                 msg=msg, 
                                 controls=controls, 
                                 tag_set=tag_set )
