@@ -620,7 +620,7 @@ class Tanuki:
         self.mode = None
         tag_set = self.tag_set()
         notag = self.entries( None, True )
-        title = "%d tags" % len(notag)
+        title = "%d tags" % len(tag_set)
         msg = "<h3>Unbelievable. No tags yet.</h3>"
         if tag_set:
             mask = "(%s)" % self.mask if not self.mask=='umask' else ""
