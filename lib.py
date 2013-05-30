@@ -20,7 +20,7 @@ class Tanuki:
     def __init__( self, config ):
         self.config = config
         self.stream_per_page = 12
-        self.DEBUG = 1
+        self.DEBUG = config["STDOUT"]
         self.editing = False
         self.mode = None
         self.mask = 'umask'
@@ -575,6 +575,7 @@ class Tanuki:
                                 entries=entries )
 
     def singleton( self, entry_id ):
+        raise ValueError
         self.mode = 'entry'
         entry = self.entry( entry_id, True )
         if not entry:
