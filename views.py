@@ -121,6 +121,7 @@ def delete():
 
 @app.before_request
 def before_request():
+    tanuki.mask = 'umask'
     if '/static' not in request.path:
         tanuki.connect()
 
