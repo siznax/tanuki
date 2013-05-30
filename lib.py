@@ -128,10 +128,14 @@ class Tanuki:
         self.clear_tags( entry_id )
         if not tags or tags == 'tags':
             return 
+        count = 0
         for tag in self.norm_tags( tags ):
+            if count > 5:
+                return
             sql = 'insert into tags values(?,?,?)'
             date = datetime.date.today().isoformat()
-            self.dbquery( sql, [ entry_id, tag, date ] )
+            self.dbquery( sql, [ entry_id, tag[:32], date ] )
+            count += 1
 
     def bad_str( self, instr ):
         try:
@@ -143,14 +147,15 @@ class Tanuki:
     def upsert( self, req ):
         self.environ = req.environ
         try:
+            datetime.datetime.strptime( req.form['date'],'%Y-%m-%d' )
             if 'locked' in req.form:
                 raise ValueError
             if self.bad_str( req.form['title'] ): raise ValueError
             if self.bad_str( req.form['entry'] ): raise ValueError
             if 'entry_id' in req.form.keys():
                 sql = 'update entries set title=?,text=?,date=?,updated=?,public=? where id=?'
-                val = ( req.form['title'], 
-                        req.form['entry'],
+                val = ( req.form['title'][:80], 
+                        req.form['entry'][:10240],
                         req.form['date'],
                         self.utcnow(),
                         1 if 'public' in req.form.keys() else 0,
@@ -158,11 +163,10 @@ class Tanuki:
                 self.dbquery( sql, val )
                 entry_id = req.form['entry_id']
             else:
-                datetime.datetime.strptime( req.form['date'],'%Y-%m-%d' )
                 sql = 'insert into entries values(?,?,?,?,?,?)'
                 val = [ None,
-                        req.form['title'], 
-                        req.form['entry'],
+                        req.form['title'][:80], 
+                        req.form['entry'][:10240],
                         req.form['date'],
                         self.utcnow(),
                         1 if 'public' in req.form.keys() else 0 ]
@@ -172,8 +176,7 @@ class Tanuki:
             self.store_tags( entry_id, req.form['tags'] )
             self.con.commit()
 
-            entry = self.entry( None, None, req.form['title'] )
-            url = "%s/entry/%s" % ( self.environ['HTTP_ORIGIN'], entry['id'] )
+            url = "%s/entry/%s" % ( self.environ['HTTP_ORIGIN'], entry_id )
             ref = req.form['referrer'] if 'referrer' in req.form else url
             return redirect( ref )
         except ValueError:
