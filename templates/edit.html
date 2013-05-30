@@ -35,9 +35,14 @@
     endif 
 %} value="{{ entry.tags }}">
 <td style="white-space:nowrap">
-<input type=checkbox name=public id=public {% if entry.public==1 %}checked{% endif %}>
+<input type=checkbox name=public id=public {% if entry.public>0 %}checked{% endif %}>
 <label for=public style="margin-right:0.4em;">public</label>
-<td><input id="save_btn" type="submit" value="Save" onclick="return validate();">
+<td>
+{% if entry.public==2 %}
+<input type="submit" value="locked" disabled>
+{% else %}
+<input id="save_btn" type="submit" value="Save" onclick="return validate();">
+{% endif %}
 
 </table>
 

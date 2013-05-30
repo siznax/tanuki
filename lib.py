@@ -45,7 +45,7 @@ class Tanuki:
         sql = 'select count(*) from entries'
         val = ''
         if self.mask=='public':
-            sql = 'select count(*) from entries where public=?'
+            sql = 'select count(*) from entries where public >= ?'
             val = [ 1 ]
         if self.mask=='private':
             sql = 'select count(*) from entries where public=?'
@@ -57,7 +57,7 @@ class Tanuki:
         val = ''
         if self.mask=='public':
             sql = 'select count(*),name from tags '\
-                'where id in (select id from entries where public=?) '\
+                'where id in (select id from entries where public >= ?) '\
                 'group by name order by name'
             val = [ 1 ]
         if self.mask=='private':
@@ -90,7 +90,7 @@ class Tanuki:
 
     def new( self ):
         date = datetime.date.today().isoformat()
-        n={ 'date':date,'text':'text','title':'title','tags':'tags' }
+        n={ 'date':date,'text':'text','title':'title','tags':'tags','public':0 }
         controls = ['home','list','tags','search']
         return render_template( 'edit.html', 
                                 entry=n, 
@@ -354,14 +354,14 @@ class Tanuki:
         val = [ tag ]
         if self.mask=='public':
             sql = 'select * from entries,tags where '\
-                '(tags.name=? and tags.id=entries.id and public=?) '\
+                '(tags.name=? and tags.id=entries.id and public >= ?) '\
                 'order by date desc'
-            val = [ tag, 1 ]
+            val = [ tag,1 ]
         if self.mask=='private':
             sql = 'select * from entries,tags '\
                 'where (tags.name=? and tags.id=entries.id and public=?) '\
                 'order by date desc'
-            val = [ tag, 0 ]
+            val = [ tag,0 ]
         return [ self.demux( x ) for x in self.dbquery( sql,val ) ] 
 
     def entries_notag( self ):
@@ -369,7 +369,7 @@ class Tanuki:
         val = ''
         if self.mask=='public':
             sql = 'select * from entries '\
-                'where ( (id not in (select id from tags)) and public=? )'
+                'where ( (id not in (select id from tags)) and public >= ? )'
             val = [ 1 ]
         if self.mask=='private':
             sql = 'select * from entries '\
@@ -384,7 +384,7 @@ class Tanuki:
         val = [ terms,terms ]
         if self.mask=='public':
             sql = 'select * from entries '\
-                'where ( (title like ? or text like ?) and public=? ) '\
+                'where ( (title like ? or text like ?) and public >= ? ) '\
                 'order by id desc'
             val = [ terms,terms,1 ]
         if self.mask=='private':
@@ -398,7 +398,7 @@ class Tanuki:
         sql = 'select * from entries order by updated desc limit 10'
         val = ''
         if self.mask=='public':
-            sql = 'select * from entries where public=? order by updated desc limit 10'
+            sql = 'select * from entries where public >= ? order by updated desc limit 10'
             val = [ 1 ]
         if self.mask=='private':
             sql = 'select * from entries where public=? order by updated desc limit 10'
@@ -419,7 +419,7 @@ class Tanuki:
             sql = 'select * from entries order by date desc,id desc'
             val = ''
             if self.mask=='public':
-                sql = 'select * from entries where public=? order by date desc,id desc'
+                sql = 'select * from entries where public >= ? order by date desc,id desc'
                 val = [ 1 ]
             if self.mask=='private':
                 sql = 'select * from entries where public=? order by date desc,id desc'
