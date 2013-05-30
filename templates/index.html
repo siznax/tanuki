@@ -26,7 +26,7 @@
 
 <div class="feature latest">
 <ul>
-<lh><b>latest updates</b></lh>
+<lh><b>latest {% if mask %}{{mask}}{% endif %} updates</b></lh>
 {% if not latest %}<li>None</li>{% endif %}
 {% for entry in latest %}
 <li><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>
