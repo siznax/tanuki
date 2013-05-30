@@ -188,6 +188,8 @@ class Tanuki:
 
     def confirm( self, entry_id ):
         entry = self.entry( entry_id )
+        if entry['public'] > 1:
+            return render_template( 'error.html', msg="Entry locked." )
         return render_template( 'confirm.html', entry=entry, func='destroy')
 
     def delete( self, entry_id ):
