@@ -18,6 +18,7 @@ import urlparse
 class Tanuki:
 
     def __init__( self, config ):
+        self.featured_tags = []
         self.config = config
         self.stream_per_page = 12
         self.DEBUG = config["STDOUT"]
@@ -468,7 +469,6 @@ class Tanuki:
         return start
         
     def index( self, page=0 ):
-        feature = []
         entries = {}
         tag_set = self.tag_set()
         names = [ t['name'] for t in tag_set ]
@@ -476,7 +476,7 @@ class Tanuki:
             entries[ tag ] = { 
                 'count': tag_set[names.index(tag)]['count'],
                 'entries': self.entries( tag )[0:10] }
-        feature = [ x for x in feature if x in entries.keys() ]
+        feature = [ x for x in self.featured_tags if x in entries.keys() ]
         notag = self.entries( None, True )
         latest = self.entries( None, False, None, True )
         controls = ['home',self.mask,'list','tags','search','new','help']
