@@ -2,7 +2,7 @@
 
 $( function() {
 
-    var DEBUG = true;
+    var DEBUG = false;
 
     // Leaflet JS maps -----------------------------------------
 
