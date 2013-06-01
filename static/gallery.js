@@ -9,22 +9,27 @@ $( function() {
 	    var gid = $( this ).closest("div[id]").attr("id");
 	    var num = $( "#" + gid + " img").length;
 	    console.log( "TANUKI found gallery #" + gid + " num=" + num );
+	    initSlide( gid,num );
 	});
     }
 
-    $( ".galleryjs img" ).click( function() {
+    function initSlide( gid, num ) {
 	if ( $("#slide").length == 0 ) {
-	    var gid = $( event.target ).closest("div[id]").attr("id");
-	    var num = $("#" + gid + " img").length;
-	    if ( DEBUG ) { 
-		console.log( "+ append #slide gid=" + gid + " num=" + num );
-	    }
-	    $("body").append("<div id=slide><img></div>");
-	    $("#slide").attr( "gid",gid );
-	    $("#slide").attr( "num",num );
-	    $("#slide img").bind( "load", sizeSlide );
-	    putSlide( event.target.src );
+    	    if ( DEBUG ) { 
+    		console.log( "+ append #slide gid=" + gid + " num=" + num );
+    	    }
+    	    $("body").append("<div id=slide><img></div>");
+    	    $("#slide img").bind( "load", sizeSlide );
 	}
+    }
+
+    $( ".galleryjs img" ).click( function() {
+	var gid = $( event.target ).closest("div[id]").attr("id");
+	var num = $("#" + gid + " img").length;
+	initSlide( gid, num );
+    	$("#slide").attr( "gid",gid );
+    	$("#slide").attr( "num",num );
+	putSlide( event.target.src );
     });
 
     function sizeSlide() {
