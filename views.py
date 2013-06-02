@@ -27,6 +27,10 @@ def index( mask ):
 def help():
     return tanuki.help()
 
+@app.route('/help/<int:_id>')
+def help_entry( _id ):
+    return tanuki.singleton( _id )
+
 @app.route('/page/<int:page>')
 def pager(page):
     if page==0:
