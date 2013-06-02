@@ -235,10 +235,11 @@ class Tanuki:
         # overevaluated, don't try to do much here
         ymd = self.ymd( row[3] ) 
         text = None # unless we need it
-        if request.path.startswith('/entry')\
+        if request.path.startswith('/confirm')\
                 or request.path.startswith('/edit')\
+                or request.path.startswith('/entry')\
+                or request.path.startswith('/help')\
                 or request.path.startswith('/store')\
-                or request.path.startswith('/confirm')\
                 or request.path.startswith('/tagged'):
             text = row[2]
         return  { 'id': row[0],
