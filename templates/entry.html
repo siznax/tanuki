@@ -11,7 +11,11 @@
 <div id="{{ entry.id }}" class="entry {{ entry.mediatype }} {{ path_class }}">
 <div class="entry_head">
 <div id="date">{{ entry.date_str }}</div>
-<div id="title">{{ entry.title }}</div>
+<div id="title">{% 
+    if request.path.startswith("/help") 
+%}♨ {% 
+    endif 
+%}{{ entry.title }}</div>
 </div>
 <div class="entry_body">{{ entry.text|safe }}</div>
 <div class="entry_foot">
