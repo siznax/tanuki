@@ -296,11 +296,11 @@ form#edit #tags_box {
     white-space:pre;
 }
 .help_display {
-    margin:1em;
     margin-bottom:4em;
     padding-left:1em;
     clear:both;
     border-left:4px solid #d3d3d3;
+    overflow:auto;
 }
 
 #tanuki {
