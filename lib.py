@@ -9,6 +9,7 @@ from werkzeug.exceptions import NotFound
 
 import markdown
 import datetime
+import os
 import re
 import sqlite3
 import string
@@ -18,10 +19,9 @@ import urlparse
 class Tanuki:
 
     def __init__( self, config ):
-        self.featured_tags = []
         self.config = config
         self.stream_per_page = 12
-        self.DEBUG = config["STDOUT"]
+        self.DEBUG = config['DEBUG']
         self.editing = False
         self.mode = None
         self.mask = 'umask'
@@ -29,11 +29,14 @@ class Tanuki:
             print self.config
 
     def connect( self ):
-        dbfile = self.config['DATABASE']
+        dbfile = os.path.join( os.path.dirname(__file__),"tanuki.db" )
+        if request.path.startswith('/help'):
+            dbfile = os.path.join( os.path.dirname(__file__),"help.db" )
         if self.DEBUG: print "+ TANUKI connecting to %s" % ( dbfile )
         self.con = sqlite3.connect( dbfile )
         self.con.execute('pragma foreign_keys = on') # !important
         self.db = self.con.cursor()
+        self.dbfile = dbfile
 
     def dbquery( self, sql, val='' ):
         msg = "+ TANUKI SQL: %s" % ( sql )
@@ -415,6 +418,9 @@ class Tanuki:
         return [ self.demux( x ) for x in self.dbquery( sql,val ) ]
 
     def entries( self, tag=None, notag=False, terms=None, latest=None ):
+        if "help.db" in self.dbfile:
+            sql = 'select * from entries'
+            return [ self.demux( x ) for x in self.dbquery( sql ) ]
         if tag:
             entries = self.entries_tagged( tag )
         elif notag:
@@ -471,12 +477,11 @@ class Tanuki:
     def index( self, page=0 ):
         entries = {}
         tag_set = self.tag_set()
-        names = [ t['name'] for t in tag_set ]
-        for tag in names:
+        feature = [ t['name'] for t in tag_set ]
+        for tag in feature:
             entries[ tag ] = { 
-                'count': tag_set[names.index(tag)]['count'],
+                'count': tag_set[feature.index(tag)]['count'],
                 'entries': self.entries( tag )[0:10] }
-        feature = [ x for x in self.featured_tags if x in entries.keys() ]
         notag = self.entries( None, True )
         latest = self.entries( None, False, None, True )
         controls = ['home',self.mask,'list','tags','search','new','help']
@@ -496,7 +501,7 @@ class Tanuki:
         controls = self.controls( 0, ['home','list','tags','search','new'] )
         return render_template( "help.html", 
                                 controls=controls,
-                                entry={"text":"prettyprint leafletjs galleryjs"},
+                                entries = self.entries(), # connected to help.db
                                 title = "help",
                                 body_class="help" )
 
