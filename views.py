@@ -31,6 +31,10 @@ def help():
 def help_entry( _id ):
     return tanuki.singleton( _id )
 
+@app.route('/help/edit/<int:_id>')
+def help_edit( _id ):
+    return tanuki.edit( _id )
+
 @app.route('/page/<int:page>')
 def pager(page):
     if page==0:

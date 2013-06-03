@@ -292,10 +292,13 @@ class Tanuki:
                 return request.path.replace('/p:private','')
 
     def controls( self, entry_id, wanted=None ):
+        edit_href = "/edit/%d" % ( entry_id )
+        if request.path.startswith('/help'):
+            edit_href = "/help/edit/%d" % ( entry_id )
         c = { 'home'   : self.img('home',   '/' ),
               'new'    : self.img('new',    '/new' ),
               'entry'  : self.img('entry',  "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
-              'edit'   : self.img('edit',   "/edit/%d" % ( entry_id )),
+              'edit'   : self.img('edit',   edit_href),
               'delete' : self.img('delete', "/confirm/%d" % ( entry_id )),
               'list'   : self.img('list',   '/list' ),
               'tags'   : self.img('tags',   '/tags' ),
