@@ -292,21 +292,26 @@ class Tanuki:
                 return request.path.replace('/p:private','')
 
     def controls( self, entry_id, wanted=None ):
+        delete = self.img('delete', "/confirm/%d" % ( entry_id ) )
         edit_href = "/edit/%d" % ( entry_id )
+        entry_href = "/entry/%d" % ( entry_id ) 
         if request.path.startswith('/help'):
+            delete = ''
             edit_href = "/help/edit/%d" % ( entry_id )
-        c = { 'home'   : self.img('home',   '/' ),
-              'new'    : self.img('new',    '/new' ),
-              'entry'  : self.img('entry',  "/entry/%d" % ( entry_id ) ) if not '/entry' in request.path else '',
-              'edit'   : self.img('edit',   edit_href),
-              'delete' : self.img('delete', "/confirm/%d" % ( entry_id )),
-              'list'   : self.img('list',   '/list' ),
-              'tags'   : self.img('tags',   '/tags' ),
-              'search' : self.img('search', '/search' ),
-              'help'   : self.img('help',   '/help' ),
-              'umask'  : self.img('umask',  self.mask_control_href() ), 
-              'public' : self.img('public', self.mask_control_href('public') ),
-              'private': self.img('private',self.mask_control_href('private') ) }
+        if '/entry' in request.path:
+            entry_href = ''
+        c = { 'home'   : self.img( 'home','/' ),
+              'new'    : self.img( 'new','/new' ),
+              'entry'  : self.img( 'entry',entry_href ),
+              'edit'   : self.img( 'edit',edit_href),
+              'delete' : delete,
+              'list'   : self.img( 'list','/list' ),
+              'tags'   : self.img( 'tags','/tags' ),
+              'search' : self.img( 'search','/search' ),
+              'help'   : self.img( 'help','/help' ),
+              'umask'  : self.img( 'umask',self.mask_control_href() ), 
+              'public' : self.img( 'public',self.mask_control_href('public') ),
+              'private': self.img( 'private',self.mask_control_href('private') ) }
         s = "\n"
         for w in wanted:
             s += "%s\n" % ( c[w] )
