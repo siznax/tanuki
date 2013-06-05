@@ -2,7 +2,7 @@
 
 $( function() {
 
-    var DEBUG = true;
+    var DEBUG = false;
     var g = new Object();
 
     // find galleries
