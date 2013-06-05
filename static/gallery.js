@@ -153,6 +153,7 @@ $( function() {
 	    console.log( "  setMarginTop sh=" + slide_height + " ih=" + image_height );
 	}
 	$( "#slide img" ).css( "margin-top",top );
+	$( "#slide img" ).fadeIn();
     }
 
     function putSlide( src ) {
@@ -160,6 +161,7 @@ $( function() {
 	    console.log( "+ putSlide #" + g['id'] + "[" + getIndex( src ) + "] " + src );
 	}
 	initSlide();
+	$("#slide img").css("display","none");
 	$("#slide img").attr("src",src);
 	$("#slide img").css("width","auto");
 	$("#slide img").css("height","auto");
