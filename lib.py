@@ -159,7 +159,7 @@ class Tanuki:
             if 'entry_id' in req.form.keys():
                 sql = 'update entries set title=?,text=?,date=?,updated=?,public=? where id=?'
                 val = ( req.form['title'][:80], 
-                        req.form['entry'][:10240],
+                        req.form['entry'][:131072],
                         req.form['date'],
                         self.utcnow(),
                         1 if 'public' in req.form.keys() else 0,
@@ -170,7 +170,7 @@ class Tanuki:
                 sql = 'insert into entries values(?,?,?,?,?,?)'
                 val = [ None,
                         req.form['title'][:80], 
-                        req.form['entry'][:10240],
+                        req.form['entry'][:131072],
                         req.form['date'],
                         self.utcnow(),
                         1 if 'public' in req.form.keys() else 0 ]
