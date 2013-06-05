@@ -1,3 +1,6 @@
+.galleryjs.photos img {
+    height:96px;
+}
 .galleryjs, #help_gallery {
     overflow:auto;
     width:100%;
