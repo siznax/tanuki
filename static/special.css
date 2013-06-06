@@ -6,6 +6,9 @@
     float:left;
     margin-right:1em;
 }
+.art.wide img {
+    width:640px;
+}
 pre code {
     display:block;
     padding:1em;
