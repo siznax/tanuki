@@ -1,3 +1,11 @@
+.art {
+    overflow:auto;
+}
+.art img {
+    width:320px;
+    float:left;
+    margin-right:1em;
+}
 pre code {
     display:block;
     padding:1em;
