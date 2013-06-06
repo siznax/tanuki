@@ -17,7 +17,6 @@ $( function() {
 	    }
 	    console.log( "TANUKI found gallery #" + gid + " num=" + num );
 	});
-	console.log( g );
     }
 
     // click gallery img
@@ -53,6 +52,15 @@ $( function() {
 	if (e.keyCode==27) { // pressed ESC
 	    removeSlide(); 
 	}
+	if (e.keyCode==73) { // pressed i (INFO)
+	    if ( $("#slide #caption").length ) {
+		if ( $("#slide #caption").css("display")=="none" ) {
+		    $("#slide #caption").css("display","block");
+		} else {
+		    $("#slide #caption").css("display","none");
+		}
+	    } 
+	}
 	if (e.keyCode==74) { // pressed j (NEXT)
 	    if ( $("#slide").length ) {
 		nextSlide( g['id'],getIndex($("#slide img")[0].src) ); 
@@ -78,6 +86,7 @@ $( function() {
     function initSlide() {
 	if ( $("#slide").length == 0 ) {
     	    $("body").append("<div id=slide><img></div>");
+	    $("#slide").append("<div id=caption></div>");
     	    $("#slide img").bind( "load", slowSizeImg ); // may fire X times
     	    if ( DEBUG ) { 
     		console.log( "+ append/bind #slide img");
@@ -157,8 +166,10 @@ $( function() {
     }
 
     function putSlide( src ) {
+	var gid = g['id'];
+	var i = getIndex( src );
 	if ( DEBUG ) {
-	    console.log( "+ putSlide #" + g['id'] + "[" + getIndex( src ) + "] " + src );
+	    console.log( "+ putSlide #" + gid + "[" + i + "] " + src );
 	}
 	initSlide();
 	$("#slide img").css("display","none");
@@ -168,6 +179,16 @@ $( function() {
 	$("#slide").css( "top",$("body").scrollTop() );
 	$("#slide").css("display","block");
 	$("body").css("overflow","hidden");
+	putCaption( gid,i );
+    }
+
+    function putCaption( gid,i ) {
+	var title = $("#"+gid+" img")[i].title;
+	if ( title ) {
+	    $("#slide #caption").text(title);
+	} else {
+	    $("#slide #caption").text("[no caption]");
+	}
     }
 
     function getIndex( src ) {
