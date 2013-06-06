@@ -24,7 +24,7 @@
 #slide img, .help #slide img {
     z-index:3;
 }
-#slide #caption {
+#caption {
     z-index:4;
     position:absolute;
     bottom:0;
@@ -34,4 +34,9 @@
     background-color:rgba(0,0,0,0.8);
     color:white;
     text-align:center;
+}
+#caption img {
+    float:right;
+    margin-left:1em;
+    height:24px;
 }

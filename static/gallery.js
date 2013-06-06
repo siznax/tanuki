@@ -25,7 +25,9 @@ $( function() {
 	g['id'] = gid;
 	var src = event.target.src;
 	var i = getIndex( src );
-	console.log("+ clicked gallery #"+gid+" img["+i+"] "+src);
+	if (DEBUG) {
+	    console.log("+ clicked gallery #"+gid+" img["+i+"] "+src);
+	}
 	putSlide( src );
     });
 
@@ -53,11 +55,11 @@ $( function() {
 	    removeSlide(); 
 	}
 	if (e.keyCode==73) { // pressed i (INFO)
-	    if ( $("#slide #caption").length ) {
-		if ( $("#slide #caption").css("display")=="none" ) {
-		    $("#slide #caption").css("display","block");
+	    if ( $("#caption").length ) {
+		if ( $("#caption").css("display")=="none" ) {
+		    $("#caption").css("display","block");
 		} else {
-		    $("#slide #caption").css("display","none");
+		    $("#caption").css("display","none");
 		}
 	    } 
 	}
@@ -86,7 +88,7 @@ $( function() {
     function initSlide() {
 	if ( $("#slide").length == 0 ) {
     	    $("body").append("<div id=slide><img></div>");
-	    $("#slide").append("<div id=caption></div>");
+	    $("body").append("<div id=caption></div>");
     	    $("#slide img").bind( "load", slowSizeImg ); // may fire X times
     	    if ( DEBUG ) { 
     		console.log( "+ append/bind #slide img");
@@ -114,7 +116,9 @@ $( function() {
 	var sh = $("#slide").height();
 	var iw = $("#slide img")[0].naturalWidth;
 	var ih = $("#slide img")[0].naturalHeight;
-	console.log( "+ sizeImg slide " + sw+"x"+sh + " img " + iw+"x"+ih );
+	if (DEBUG) {
+	    console.log( "+ sizeImg slide " + sw+"x"+sh + " img " + iw+"x"+ih );
+	}
 	setAspect( iw,ih );
 	if ( (iw>sw) && (ih>sh) ) { tallView(); }
 	else if ( iw > sw ) { wideView(sh); }
@@ -158,7 +162,7 @@ $( function() {
 	var slide_height = $("#slide").height();
 	var image_height = $("#slide img").height();
 	var top = Math.floor( (slide_height - image_height)/2 );
-	if (DEBUG) {
+	if ( DEBUG ) {
 	    console.log( "  setMarginTop sh=" + slide_height + " ih=" + image_height );
 	}
 	$( "#slide img" ).css( "margin-top",top );
@@ -184,10 +188,19 @@ $( function() {
 
     function putCaption( gid,i ) {
 	var title = $("#"+gid+" img")[i].title;
+	var href = $( $("#"+gid+" img")[i] ).attr("href");
 	if ( title ) {
-	    $("#slide #caption").text(title);
+	    $("#caption").text(title);
 	} else {
-	    $("#slide #caption").text("[no caption]");
+	    $("#caption").text("[no caption]");
+	}
+	if ( href ) {
+	    $("#caption").append(
+		"<a target=\"_blank\" href=\"" 
+		    + href + "\"><img src=/static/leave.png></a>"
+	    );
+	} else {
+	    $("#caption img").remove();
 	}
     }
 
@@ -231,6 +244,7 @@ $( function() {
     function removeSlide() {
 	$("#slide img").off();
 	$( "#slide" ).remove();
+	$( "#caption" ).remove();
 	$( "body" ).css( "overflow","auto" );
 	if ( DEBUG ) {
 	    console.log( "+ removed #slide" );
