@@ -50,7 +50,9 @@ $( function() {
     });
 
     $( document ).keyup( function(e) {
+
 	// console.log( "pressed key "+ e.keyCode );
+
 	if (e.keyCode==27) { // pressed ESC
 	    removeSlide(); 
 	}
@@ -63,11 +65,16 @@ $( function() {
 		}
 	    } 
 	}
-	if (e.keyCode==74) { // pressed j (NEXT)
+	if ( e.keyCode==74 ) { // pressed j (NEXT)
 	    if ( $("#slide").length ) {
 		nextSlide( g['id'],getIndex($("#slide img")[0].src) ); 
 	    } else {
 		nextSlide( g['id'],-1 );
+	    }
+	}
+	if ( e.keyCode==32 ) { // pressed SPACE (NEXT)
+	    if ( $("#slide").length ) {
+		nextSlide( g['id'],getIndex($("#slide img")[0].src) ); 
 	    }
 	}
 	if (e.keyCode==75) { // pressed k (PREV)
