@@ -15,7 +15,12 @@ $( function() {
 	    if ( ! g.hasOwnProperty('id') ) { // set id to first found
 		g['id'] = gid;
 	    }
-	    console.log( "TANUKI found gallery #" + gid + " num=" + num );
+	    var img_height = $("#"+gid+".galleryjs").attr("height");
+	    if ( img_height ) {
+		$("#"+gid+" img").css("height",img_height);
+	    }
+	    console.log( "TANUKI found gallery #" + gid 
+			 + " num=" + num + " height=" + img_height );
 	});
     }
 
