@@ -56,7 +56,7 @@ $( function() {
 
     $( document ).keyup( function(e) {
 
-	console.log( "pressed key "+ e.keyCode );
+	// console.log( "pressed key "+ e.keyCode );
 
 	if (e.keyCode==27) { // pressed ESC
 	    removeSlide(); 
