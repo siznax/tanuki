@@ -56,7 +56,7 @@ $( function() {
 
     $( document ).keyup( function(e) {
 
-	// console.log( "pressed key "+ e.keyCode );
+	console.log( "pressed key "+ e.keyCode );
 
 	if (e.keyCode==27) { // pressed ESC
 	    removeSlide(); 
@@ -70,7 +70,7 @@ $( function() {
 		}
 	    } 
 	}
-	if ( e.keyCode==74 ) { // pressed j (NEXT)
+	if ( e.keyCode==39 ) { // pressed right arrow (NEXT)
 	    if ( $("#slide").length ) {
 		nextSlide( g['id'],getIndex($("#slide img")[0].src) ); 
 	    } else {
@@ -82,7 +82,7 @@ $( function() {
 		nextSlide( g['id'],getIndex($("#slide img")[0].src) ); 
 	    }
 	}
-	if (e.keyCode==75) { // pressed k (PREV)
+	if (e.keyCode==37) { // pressed left arrow (PREV)
 	    if ( $("#slide").length ) {
 		prevSlide( g['id'],getIndex($("#slide img")[0].src) ); 
 	    } else {
