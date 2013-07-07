@@ -34,6 +34,18 @@
 </ul>
 </div>
 
+<!-- SPECIAL:README -->
+
+<div class="feature special">
+<ul>
+<lh><b>README</b> (<a href="/tagged/readme">{{readme|length()}}</a>)</lh>
+{% if not readme %}<li>None</li>{% endif %}
+{% for entry in readme %}
+<li><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>
+{% endfor %}
+</ul>
+</div>
+
 <!-- FEATURED TAGS -->
 
 {% for tag in feature %}

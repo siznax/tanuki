@@ -493,6 +493,7 @@ class Tanuki:
                 'entries': self.entries( tag )[0:10] }
         notag = self.entries( None, True )
         latest = self.entries( None, False, None, True )
+        readme = self.entries_tagged( "readme" )
         controls = ['home',self.mask,'list','tags','search','new','help']
         return render_template( 'index.html',
                                 mask = self.mask if not self.mask=='umask' else None,
@@ -503,6 +504,7 @@ class Tanuki:
                                 num_entries = self.num_entries(),
                                 notag = notag,
                                 latest = latest,
+                                readme = readme,
                                 body_class = 'index',
                                 footer = __version__ )
 
