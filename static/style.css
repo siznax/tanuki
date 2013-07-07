@@ -1,4 +1,6 @@
 /* div { border:1px solid magenta; } */
+@media screen {
+
 body { 
     margin:0;
     padding:0;
@@ -310,4 +312,21 @@ form#edit #tags_box {
     font-size:24px;
     color:#d3d3d3;
     display:none;        
+}
+
+}
+
+@media print {
+
+body {
+    font-size:10pt;
+}
+#tanuki, #controls {
+    display:none;
+}
+entry.text {
+    margin:0;
+    padding:0;
+}
+
 }
