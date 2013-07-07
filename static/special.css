@@ -9,6 +9,10 @@
 .art.wide img {
     width:640px;
 }
+.blockflow {
+    overflow:auto;
+    margin-bottom:1em;
+}
 pre code {
     display:block;
     padding:1em;
@@ -79,4 +83,11 @@ pre code {
     width:180px;
     font-size:10px;
     text-align:center;
+}
+img.thumb {
+    float:right;
+    margin:0;
+    margin-left:1em;
+    margin-bottom:1em;
+    max-width:120px;
 }
