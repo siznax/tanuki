@@ -20,6 +20,7 @@ pre code {
     color:white;
 }
 .quote {
+    overflow:auto;
     padding:1em;
     font-family:Georgia;
     font-size:x-large;
@@ -90,4 +91,10 @@ img.thumb {
     margin-left:1em;
     margin-bottom:1em;
     max-width:120px;
+}
+img.portrait {
+    float:right;
+    width:240px;
+    margin-left:1em;
+    margin-bottom:1em;
 }
