@@ -2,7 +2,7 @@
 tanuki class
 """
 __author__ = "siznax"
-__version__ = 2013
+__version__ = 2014
 
 from flask import Flask,render_template,make_response,redirect,url_for,Markup,request
 from werkzeug.exceptions import NotFound
@@ -17,6 +17,8 @@ import sys
 import urlparse
 
 class Tanuki:
+
+    masks = ['umask','public','private']
 
     def __init__( self, config ):
         self.config = config
@@ -70,6 +72,17 @@ class Tanuki:
                 'group by name order by name'
             val = [ 0 ]
         return [ {'count':r[0],'name':r[1]} for r in self.dbquery( sql,val ) ]
+
+    def tag_set_msg(self):
+        mask = "(%s)" % self.mask if not self.mask=='umask' else ""
+        entries_msg = "%d %s entries" % (self.num_entries(), mask)
+        tags_msg = "%d tags" % len(self.tag_set())
+        notag = len(self.entries(None, True))
+        notag_msg = ""
+        if notag:
+            notag_msg = '<i>%d <a href="/notag">notag</a></i>' % notag 
+            return "%s: %s & %s" % (entries_msg, tags_msg, notag_msg)
+        return "%s: %s" % (entries_msg, tags_msg)
 
     def tag_hrefs( self, tag_set, br=False ):
         hrefs = []
@@ -266,6 +279,12 @@ class Tanuki:
                     % ( x['id'], sys.getsizeof(x['text'] ) )
             x['text'] = markdown.markdown( x['text'] )
         return entries
+
+    def umask( self, mask ):
+        if mask=='private' or mask=='public':
+            self.mask = mask
+        else:
+            self.mask = 'umask'
 
     def mask_control_href( self, mask=None ):
         if request.path.startswith('/entry/'):
@@ -485,27 +504,18 @@ class Tanuki:
         
     def index( self, page=0 ):
         entries = {}
-        tag_set = self.tag_set()
-        feature = [ t['name'] for t in tag_set ]
-        for tag in feature:
-            entries[ tag ] = { 
-                'count': tag_set[feature.index(tag)]['count'],
-                'entries': self.entries( tag )[0:10] }
-        notag = self.entries( None, True )
         latest = self.entries( None, False, None, True )
         readme = self.entries_tagged( "readme" )
         controls = ['home',self.mask,'list','tags','search','new','help']
+        mask = self.mask if not self.mask=='umask' else None
         return render_template( 'index.html',
-                                mask = self.mask if not self.mask=='umask' else None,
+                                mask = mask,
                                 controls = self.controls( 0, controls ),
-                                feature = feature,
-                                tag_set = tag_set,
-                                entries = entries,
-                                num_entries = self.num_entries(),
-                                notag = notag,
                                 latest = latest,
                                 readme = readme,
+                                tag_set = self.tag_set(),
                                 body_class = 'index',
+                                msg = self.tag_set_msg(),
                                 footer = __version__ )
 
     def help( self ):
@@ -541,6 +551,8 @@ class Tanuki:
                                 start=chunk['start'] )
 
     def find_img( self, html ):
+        if not html:
+            return None
         import lxml.html
         doc = lxml.html.document_fromstring( html )
         for src in doc.xpath("//img/@src"):
@@ -565,6 +577,8 @@ class Tanuki:
         return re.sub( r'<iframe.*iframe>', stub, text )
 
     def strip_tags( self, html ):
+        if not html:
+            return None
         return Markup( html ).striptags()
 
     # DEPRECATED: things done here should set members of each 
@@ -648,11 +662,7 @@ class Tanuki:
         title = "%d %s tags" % ( len(tag_set),mask )
         msg = "<h3>Unbelievable. No %s tags yet.</h3>" % mask
         if tag_set:
-            tags_msg = "%d %s tags" % ( len(tag_set),mask )
-            entries_msg = "%d entries" % self.num_entries()
-            notag_msg = '<i>%d <a href="/notag">notag</a></i>' % len(notag)
-            title = tags_msg
-            msg = "%s | %s | %s"  % ( tags_msg,entries_msg,notag_msg )
+            msg = self.tag_set_msg()
         controls = self.controls( 0, ['home',self.mask,'list','search','new'] )
         return render_template( 'tags.html', 
                                 title=title,

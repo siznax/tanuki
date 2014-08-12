@@ -7,21 +7,6 @@
 
 <div id="content">
 
-<!-- TAG BLOB -->
-
-<div class="feature tag_blob">
-<b>{{ num_entries }} {% if mask %}({{mask}}){% endif %} <a href="/list">entries</a></b>:
-{{ notag|length() }} <i><a href="/notag">notag</a></i>
-{{tag_set|length()}} <a href="/tags">tags</a> 
-{ {% 
-    for tag in tag_set 
-%}<a href="/tagged/{{tag.name}}">{{tag.name}}</a>{%
-        if not loop.last %}, {% 
-        endif %}{% 
-    endfor 
-%} }
-</div>
-
 <!-- LATEST UPDATED -->
 
 <div class="feature latest">
@@ -40,32 +25,26 @@
 <ul>
 <lh><b>README</b> (<a href="/tagged/readme">{{readme|length()}}</a>)</lh>
 {% if not readme %}<li>None</li>{% endif %}
-{% for entry in readme %}
+{% for entry in readme[:10] %}
 <li><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>
 {% endfor %}
 </ul>
 </div>
 
-<!-- FEATURED TAGS -->
+<br clear="all" />
 
-{% for tag in feature %}
-<div id="{{tag}}" class="feature">
-<ul>
-<lh><a href="/tagged/{{tag}}">{{ tag }}</a> ({{ entries[tag]['count'] }})</lh>
-{% for i in range(10) %}
-{% set tagged = entries[tag]['entries'] %}
-{% if i < tagged|length() %}
-{% set entry = tagged[i] %} 
-<li><a href="/entry/{{entry.id}}">{{ entry.title }}</a></li>
-{% else %}
-<li style="list-style-type:none;">&nbsp;</li>
-{% endif %}
+<!-- TAG CLOUD -->
+
+<div id="content" class="tags">
+
+{% if tag_set %}
+<div id="tag_set">
+{% for tag in tag_set %}
+<span><i>{{ tag['count'] }}</i><a 
+ href="/tagged/{{ tag['name'] }}">{{ tag['name'] }}</a></span>
 {% endfor %}
-</ul>
 </div>
-{% endfor %}
-
-<br clear="both" />
+{% endif %}
 
 {% if footer %}<div id="footer"><a href="http://github.com/siznax/tanuki" title="Fork tanuki.">タヌキ</a> {{ footer|safe }}</div>{% endif %}
 

@@ -20,7 +20,7 @@ def favicon():
 @app.route('/',defaults={'mask':'umask'})
 @app.route('/<mask>')
 def index( mask ):
-    tanuki.mask = mask
+    tanuki.umask( mask )
     return tanuki.index()
 
 @app.route('/help')
@@ -43,11 +43,12 @@ def pager(page):
 
 @app.route('/list')
 def list():
+    tanuki.umask( 'umask' )
     return tanuki.list()
 
 @app.route('/tags')
 def tags():
-    tanuki.mask = 'umask'
+    tanuki.umask( 'umask' )
     return tanuki.tags()
 
 @app.route('/tags/')
@@ -56,12 +57,11 @@ def tags_redirect():
 
 @app.route('/tags/<mask>')
 def tags_mask( mask ):
-    tanuki.mask = mask
+    tanuki.umask( mask )
     return tanuki.tags()
 
 @app.route('/tagged/<tag>')
 def tagged_tag( tag ):
-    tanuki.mask = 'umask'
     return tanuki.tagged( tag,None )
 
 # this seems lame
@@ -71,23 +71,22 @@ def tagged_tag_redirect( tag ):
 
 @app.route('/tagged/<tag>/p:<mask>')
 def tagged_mask( tag, mask ):
-    tanuki.mask = mask
+    tanuki.umask( mask )
     return tanuki.tagged( tag,None )
 
 @app.route('/tagged/<tag>/v:<view>')
 def tagged_view( tag, view ):
-    tanuki.mask = 'umask'
     return tanuki.tagged( tag, view )
 
 @app.route('/tagged/<tag>/p:<mask>/v:<view>')
 def tagged_mask_view( tag, mask, view ):
-    tanuki.mask = mask
+    tanuki.umask( mask )
     return tanuki.tagged( tag, view )
 
 @app.route('/notag',defaults={'mask':'umask'})
 @app.route('/notag/<mask>')
 def notag( mask ):
-    tanuki.mask = mask
+    tanuki.umask( mask )
     return tanuki.notag()
 
 @app.route('/entry/<int:_id>')
@@ -129,7 +128,6 @@ def delete():
 
 @app.before_request
 def before_request():
-    tanuki.mask = 'umask'
     if '/static' not in request.path:
         tanuki.connect()
 
