@@ -11,43 +11,59 @@ like.
 
 1. install tanuki
 
+```shell
     $ cd ~/sw   
     $ git clone https://github.com/siznax/tanuki.git
+```
 
-1. install dependencies
+2. install dependencies
 
+```shell
     $ mkvirtualenv flask    
     (flask)$ pip install flask    
     (flask)$ pip install markdown    
     (flask)$ pip install lxml
+```
 
-2. create a config file (e.g. {{~/sw/tanuki/CONFIG}}) and add:
+3. create a config file (e.g. <tt>~/sw/tanuki/CONFIG</tt>) and add:
 
-    TITLE = "tanuki"    
+```shell
+TITLE = "tanuki"    
+```
 
-3. add the following to your bashrc:
+4. add the following to your bashrc:
 
-    TANUKI_CONFIG=$HOME/sw/tanuki/CONFIG
+```shell
+TANUKI_CONFIG=$HOME/sw/tanuki/CONFIG
+```
 
-4. create a database from the schema provided:
+5. create a database from the schema provided:
 
+```shell
     $ sqlite3 tanuki.db < schema.sql
+```
 
-5. (optional) put database in cloud to share on all your devices:
+6. (optional) put database in cloud to share on all your devices:
 
+```shell
     $ mv tanuki.db ~/Dropbox/tanuki.db    
     $ ln -s ~/Dropbox/tanuki.db .
+```
 
-6. create a flask app script outside of tanuki module (e.g. ~/sw/tanuki.py):
+7. create a flask app script outside of tanuki module (e.g. ~/sw/tanuki.py):
 
+```python
     from tanuki import app
     app.config.from_envvar('TANUKI_CONFIG', silent=False)
     app.run(debug=True, port=5005)
+```
 
-6. startup tanuki
+8. startup tanuki
 
+```shell
     $ workon flask
     (flask)$ python ~/sw/tanuki.py
+```
 
 
 Tanuki (raccoon) icon courtesy of
