@@ -43,7 +43,7 @@ Create a database from the schema provided:
 $ sqlite3 tanuki.db < schema.sql
 ```
 
-This is optiona, but you can put your database in the "cloud" ;) to share on all your computers and to have a durable backup. Keep in mind, there is nothing in tanuki protecting your database.
+This is _optional_, but you can put your database in the "cloud" &#x2601; to share on all your computers and to have a durable backup. Keep in mind, there is nothing in tanuki protecting your database.
 
 ```shell
 $ mv tanuki.db ~/Dropbox/tanuki.db    
@@ -58,17 +58,21 @@ app.config.from_envvar('TANUKI_CONFIG', silent=False)
 app.run(debug=True, port=5005)
 ```
 
-Startup tanuki!
+Startup tanuki in the shell:
 
 ```shell
 $ workon flask
 (flask)$ python ~/sw/tanuki.py
 ```
 
-P.S. If you want to run tanuki as a WSGI module on your web server, see the tips at [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
+Visit your tanuki in a web browser at: <http://localhost:5001>
+
+If you want to run tanuki as a WSGI module on your web server, see the tips at [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 
 
-P.P.S. Tanuki (raccoon) icon courtesy of
+### Thanks!
+
+Tanuki (raccoon) icon courtesy of
 [artrelatedblog](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
 
 
