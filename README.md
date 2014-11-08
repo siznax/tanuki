@@ -6,6 +6,16 @@ like.
 * Demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
 * Help: [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 
+Dependencies:
+[python](https://python.org),
+[flask](http://flask.pocoo.org/),
+[sqlite](http://www.sqlite.org/),
+[markdown](http://daringfireball.net/projects/markdown/),
+[lxml](http://lxml.de/)
+
+Recommended:
+[virtualenvwrapper](http://virtualenvwrapper.readthedocs.org/), 
+[dropbox](https://www.dropbox.com/)
 
 ## Installation
 
