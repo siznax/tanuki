@@ -7,62 +7,62 @@ like.
 * Help: [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 
 
-## Configuration
+## Installation
 
-1. install tanuki
-
-```shell
-    $ cd ~/sw   
-    $ git clone https://github.com/siznax/tanuki.git
-```
-
-2. install dependencies
+Install tanuki
 
 ```shell
-    $ mkvirtualenv flask    
-    (flask)$ pip install flask    
-    (flask)$ pip install markdown    
-    (flask)$ pip install lxml
+$ cd ~/sw   
+$ git clone https://github.com/siznax/tanuki.git
 ```
 
-3. create a config file (e.g. <tt>~/sw/tanuki/CONFIG</tt>) and add:
+Install dependencies:
+
+```shell
+$ mkvirtualenv flask    
+(flask)$ pip install flask    
+(flask)$ pip install markdown    
+(flask)$ pip install lxml
+```
+
+Create a config file (e.g. <tt>~/sw/tanuki/CONFIG</tt>) and add (you could do more here):
 
 ```shell
 TITLE = "tanuki"    
 ```
 
-4. add the following to your bashrc:
+Add the following to your bashrc:
 
 ```shell
 TANUKI_CONFIG=$HOME/sw/tanuki/CONFIG
 ```
 
-5. create a database from the schema provided:
+Create a database from the schema provided:
 
 ```shell
-    $ sqlite3 tanuki.db < schema.sql
+$ sqlite3 tanuki.db < schema.sql
 ```
 
-6. (optional) put database in cloud to share on all your devices:
+(optional) Put database in cloud to share on all your devices:
 
 ```shell
-    $ mv tanuki.db ~/Dropbox/tanuki.db    
-    $ ln -s ~/Dropbox/tanuki.db .
+$ mv tanuki.db ~/Dropbox/tanuki.db    
+$ ln -s ~/Dropbox/tanuki.db .
 ```
 
-7. create a flask app script outside of tanuki module (e.g. ~/sw/tanuki.py):
+Create a flask app script outside of tanuki module (e.g. ~/sw/tanuki.py):
 
 ```python
-    from tanuki import app
-    app.config.from_envvar('TANUKI_CONFIG', silent=False)
-    app.run(debug=True, port=5005)
+from tanuki import app
+app.config.from_envvar('TANUKI_CONFIG', silent=False)
+app.run(debug=True, port=5005)
 ```
 
-8. startup tanuki
+Startup tanuki
 
 ```shell
-    $ workon flask
-    (flask)$ python ~/sw/tanuki.py
+$ workon flask
+(flask)$ python ~/sw/tanuki.py
 ```
 
 
