@@ -25,16 +25,16 @@ $ mkvirtualenv flask
 (flask)$ pip install lxml
 ```
 
-Create a config file (e.g. <tt>~/sw/tanuki/CONFIG</tt>) and add (you could do more here):
+Create a config file (e.g. <tt>~/sw/tanuki/CONFIG</tt>) and – you could do more here, but – add:
 
 ```shell
 TITLE = "tanuki"    
 ```
 
-Add the following to your bashrc:
+Point to your new config file by adding this to your <tt>.bashrc</tt, for instance:
 
 ```shell
-TANUKI_CONFIG=$HOME/sw/tanuki/CONFIG
+export TANUKI_CONFIG=$HOME/sw/tanuki/CONFIG
 ```
 
 Create a database from the schema provided:
@@ -43,14 +43,14 @@ Create a database from the schema provided:
 $ sqlite3 tanuki.db < schema.sql
 ```
 
-(optional) Put database in cloud to share on all your devices:
+This is optiona, but you can put your database in the "cloud" ;) to share on all your computers and to have a durable backup. Keep in mind, there is nothing in tanuki protecting your database.
 
 ```shell
 $ mv tanuki.db ~/Dropbox/tanuki.db    
 $ ln -s ~/Dropbox/tanuki.db .
 ```
 
-Create a flask app script outside of tanuki module (e.g. ~/sw/tanuki.py):
+Create a flask app script outside of tanuki module (e.g. <tt>~/sw/tanuki.py</tt>):
 
 ```python
 from tanuki import app
@@ -58,15 +58,17 @@ app.config.from_envvar('TANUKI_CONFIG', silent=False)
 app.run(debug=True, port=5005)
 ```
 
-Startup tanuki
+Startup tanuki!
 
 ```shell
 $ workon flask
 (flask)$ python ~/sw/tanuki.py
 ```
 
+P.S. If you want to run tanuki as a WSGI module on your web server, see the tips at [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 
-Tanuki (raccoon) icon courtesy of
+
+P.P.S. Tanuki (raccoon) icon courtesy of
 [artrelatedblog](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
 
 
