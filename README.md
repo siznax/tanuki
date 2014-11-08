@@ -58,7 +58,9 @@ app.config.from_envvar('TANUKI_CONFIG', silent=False)
 app.run(debug=True, port=5005)
 ```
 
-Startup tanuki in the shell:
+### Startup
+
+Start tanuki app in the shell:
 
 ```shell
 $ workon flask
@@ -67,8 +69,9 @@ $ workon flask
 
 Visit your tanuki in a web browser at: <http://localhost:5001>
 
-If you want to run tanuki as a WSGI module on your web server, see the tips at [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
+Try the demo to see what it's like to take notes in tanuki: [tanuki.siznax.net](http://tanuki.siznax.net/)
 
+If you want to run tanuki as a WSGI module on your web server, see the tips at [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 
 ### Thanks!
 
