@@ -1,8 +1,11 @@
-Tanuki was built for taking personal notes kept offline, but you could
-easily deploy it online as a blog. Try the demo to see what it's like.
+Tanuki allows you to take private, media rich notes inside your web
+browser. It was built for taking personal notes kept offline, but you
+could easily deploy it online as a blog. Try the demo to see what it's
+like. 
 
 * Demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
 * Help: [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
+
 
 ## Configuration
 
@@ -18,27 +21,24 @@ easily deploy it online as a blog. Try the demo to see what it's like.
     (flask)$ pip install markdown    
     (flask)$ pip install lxml
 
-2. create and specify config file
+2. create a config file (e.g. {{~/sw/tanuki/CONFIG}}) and add:
 
-    $HOME/sw/tanuki/CONFIG:    
-    TITLE = "tanuki"
+    TITLE = "tanuki"    
 
-    $BASHRC:    
+3. add the following to your bashrc:
+
     TANUKI_CONFIG=$HOME/sw/tanuki/CONFIG
 
-3. create and specify database
+4. create a database from the schema provided:
 
     $ sqlite3 tanuki.db < schema.sql
 
-4. (optional) put database in cloud
+5. (optional) put database in cloud to share on all your devices:
 
     $ mv tanuki.db ~/Dropbox/tanuki.db    
     $ ln -s ~/Dropbox/tanuki.db .
 
-5. create run file
-
-    $ cd ~/sw    
-    $ emacs tanuki.py:    
+6. create a flask app script outside of tanuki module (e.g. ~/sw/tanuki.py):
 
     from tanuki import app
     app.config.from_envvar('TANUKI_CONFIG', silent=False)
@@ -46,11 +46,12 @@ easily deploy it online as a blog. Try the demo to see what it's like.
 
 6. startup tanuki
 
-    $ python tanuki.py
+    $ workon flask
+    (flask)$ python ~/sw/tanuki.py
 
 
 Tanuki (raccoon) icon courtesy of
 [artrelatedblog](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
 
-----
+
 @siznax
