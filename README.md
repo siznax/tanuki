@@ -19,13 +19,6 @@ Recommended:
 
 ## Installation
 
-Install tanuki
-
-```shell
-$ cd ~/sw   
-$ git clone https://github.com/siznax/tanuki.git
-```
-
 Install dependencies:
 
 ```shell
@@ -35,13 +28,20 @@ $ mkvirtualenv flask
 (flask)$ pip install lxml
 ```
 
-Create a config file (e.g. <tt>~/sw/tanuki/CONFIG</tt>) and – you could do more here, but – add:
+Clone tanuki:
+
+```shell
+$ cd ~/sw   
+$ git clone https://github.com/siznax/tanuki.git
+```
+
+Create a config file (e.g. <tt>~/sw/tanuki/CONFIG</tt>) and – you could do more here, but add:
 
 ```shell
 TITLE = "tanuki"    
 ```
 
-Point to your new config file by adding this to your <tt>.bashrc</tt, for instance:
+Point to your new config file by adding this to your <tt>.bashrc</tt>, for instance:
 
 ```shell
 export TANUKI_CONFIG=$HOME/sw/tanuki/CONFIG
@@ -60,7 +60,7 @@ $ mv tanuki.db ~/Dropbox/tanuki.db
 $ ln -s ~/Dropbox/tanuki.db .
 ```
 
-Create a flask app script outside of tanuki module (e.g. <tt>~/sw/tanuki.py</tt>):
+Create a flask app script outside of the tanuki module (e.g. <tt>~/sw/tanuki.py</tt>):
 
 ```python
 from tanuki import app
@@ -70,7 +70,7 @@ app.run(debug=True, port=5005)
 
 ### Startup
 
-Start tanuki app in the shell:
+Start the tanuki app in the shell:
 
 ```shell
 $ workon flask
@@ -79,7 +79,7 @@ $ workon flask
 
 Visit your tanuki in a web browser at: <http://localhost:5001>
 
-Try the demo to see what it's like to take notes in tanuki: [tanuki.siznax.net](http://tanuki.siznax.net/)
+You can try the demo to see what it's like to take notes in [tanuki.siznax.net](http://tanuki.siznax.net/)
 
 If you want to run tanuki as a WSGI module on your web server, see the tips at [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 
