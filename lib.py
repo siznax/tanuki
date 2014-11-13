@@ -508,15 +508,14 @@ class Tanuki:
         readme = self.entries_tagged( "readme" )
         controls = ['home',self.mask,'list','tags','search','new','help']
         mask = self.mask if not self.mask=='umask' else None
-        return render_template( 'index.html',
-                                mask = mask,
-                                controls = self.controls( 0, controls ),
-                                latest = latest,
-                                readme = readme,
-                                tag_set = self.tag_set(),
-                                body_class = 'index',
-                                msg = self.tag_set_msg(),
-                                footer = __version__ )
+        return render_template('index.html',
+                               mask = mask,
+                               controls = self.controls( 0, controls ),
+                               latest = latest,
+                               readme = readme,
+                               tag_set = self.tag_set(),
+                               body_class = 'index',
+                               msg = self.tag_set_msg())
 
     def help( self ):
         controls = self.controls( 0, ['home','list','tags','search','new'] )
