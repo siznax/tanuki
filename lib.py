@@ -80,8 +80,8 @@ class Tanuki:
         notag = len(self.entries(None, True))
         notag_msg = ""
         if notag:
-            notag_msg = '<i>%d <a href="/notag">notag</a></i>' % notag 
-            return "%s: %s & %s" % (entries_msg, tags_msg, notag_msg)
+            notag_msg = '(%d <a href="/notag">notag</a>)' % notag 
+            return "%s %s %s" % (entries_msg, tags_msg, notag_msg)
         return "%s: %s" % (entries_msg, tags_msg)
 
     def tag_hrefs( self, tag_set, br=False ):
