@@ -46,6 +46,9 @@ pre code {
     text-align:justify;
     font-family:Georgia,Times,Serif;
 }
+.entry div.clear {
+  clear:both;
+}
 .entry .clipping img {
     margin:0;
     float:right;
@@ -70,6 +73,7 @@ pre code {
     background:white;
     padding:1em;
     margin:1.4em;
+    margin-top:0.4em;
     width:240px;
     font-size:12px;
 }
