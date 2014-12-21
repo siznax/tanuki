@@ -10,9 +10,6 @@
 {% if entry.id %}
 <input type="hidden" name="entry_id" value="{{ entry.id }}">
 <input type="hidden" name="referrer" value="{{ referrer }}">
-{% if entry.public>1 %}
-<input type="hidden" name="locked" value="locked">
-{% endif %}
 {% endif %}
 
 <table id="edit">
@@ -37,15 +34,8 @@
 %} onfocus="this.value==this.defaultValue?this.value='':null"{% 
     endif 
 %} value="{{ entry.tags }}">
-<td style="white-space:nowrap">
-<input type=checkbox name=public id=public {% if entry.public>0 %}checked{% endif %}>
-<label for=public style="margin-right:0.4em;">public</label>
 <td>
-{% if entry.public>1 %}
-<input type="submit" value="locked" disabled>
-{% else %}
 <input id="save_btn" type="submit" value="Save" onclick="return validate();">
-{% endif %}
 
 </table>
 

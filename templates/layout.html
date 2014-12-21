@@ -18,12 +18,6 @@
 {%
     endif 
 %}{% 
-    if not request.path.startswith('/edit') and entry and "leafletjs" in entry.text 
-%}<div id="leafletjs_api_key" key="{{ config['CLOUDMADE'] }}" />
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
-<script  src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>{% 
-    endif 
-%}{% 
     if not request.path.startswith('/edit') and entry and "prettyprint" in entry.text 
 %}<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>{%
     endif 
@@ -33,4 +27,3 @@
 {% block body %}
 {% endblock %}
 </body>
-
