@@ -13,14 +13,94 @@ app.config.from_envvar('TANUKI_CONFIG', silent=False)
 tanuki = Tanuki(app.config)
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return app.send_static_file("favicon.ico")
+@app.before_request
+def before_request():
+    if '/static' not in request.path:
+        tanuki.connect()
+
+
+@app.teardown_request
+def teardown_request(exception):
+    if '/static' not in request.path:
+        if tanuki.DEBUG:
+            print "+ TANUKI closing DB %s" % tanuki.con.total_changes
+        tanuki.con.close()
 
 
 @app.route('/')
 def index():
     return tanuki.index()
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return app.send_static_file("favicon.ico")
+
+
+@app.route('/list')
+def list():
+    return tanuki.list()
+
+
+@app.route('/new')
+def new():
+    return tanuki.new()
+
+
+@app.route('/store', methods=['POST'])
+def store():
+    return tanuki.upsert(request)
+
+
+@app.route('/entry/<int:_id>')
+def entry(_id):
+    return tanuki.singleton(_id)
+
+
+@app.route('/edit/<int:_id>')
+def edit(_id):
+    return tanuki.edit(_id)
+
+
+@app.route('/confirm/<int:_id>')
+def confirm(_id):
+    return tanuki.confirm(_id)
+
+
+@app.route('/delete', methods=['POST'])
+def delete():
+    tanuki.delete(request.form['entry_id'])
+    return redirect(url_for('index'))
+
+
+@app.route('/tags')
+def tags():
+    return tanuki.tags()
+
+
+@app.route('/tagged/<tag>')
+def tagged(tag):
+    return tanuki.tagged(tag, None)
+
+
+@app.route('/tagged/<tag>/v:<view>')
+def tagged_view(tag, view):
+    return tanuki.tagged(tag, view)
+
+
+@app.route('/notag')
+def notag():
+    return tanuki.notag()
+
+
+@app.route('/search')
+def search():
+    return tanuki.search()
+
+
+@app.route('/found', methods=['GET'])
+def found():
+    return tanuki.found(request.args['terms'])
 
 
 @app.route('/help')
@@ -36,108 +116,6 @@ def help_entry(_id):
 @app.route('/help/edit/<int:_id>')
 def help_edit_id(_id):
     return tanuki.edit(_id)
-
-
-@app.route('/page/<int:page>')
-def pager(page):
-    if page == 0:
-        return redirect(url_for('index'))
-    return tanuki.stream(page)
-
-
-@app.route('/list')
-def list():
-    return tanuki.list()
-
-
-@app.route('/tags')
-def tags():
-    return tanuki.tags()
-
-
-@app.route('/tags/')
-def tags_redirect():
-    return redirect(url_for('tags'))
-
-
-@app.route('/tagged/<tag>')
-def tagged_tag(tag):
-    return tanuki.tagged(tag, None)
-
-
-@app.route('/tagged/<tag>/')  # this seems lame
-def tagged_tag_redirect(tag):
-    return redirect(url_for('tagged_tag', tag=tag))
-
-
-@app.route('/tagged/<tag>/v:<view>')
-def tagged_view(tag, view):
-    return tanuki.tagged(tag, view)
-
-
-@app.route('/notag')
-def notag():
-    return tanuki.notag()
-
-
-@app.route('/entry/<int:_id>')
-def entry(_id):
-    return tanuki.singleton(_id)
-
-
-@app.route('/dated/<date>')
-def dated(date):
-    return tanuki.dated(date)
-
-
-@app.route('/search')
-def search():
-    return tanuki.search()
-
-
-@app.route('/matched', methods=['GET'])
-def matched():
-    return tanuki.matched(request.args['terms'])
-
-
-@app.route('/new')
-def new():
-    return tanuki.new()
-
-
-@app.route('/store', methods=['POST'])
-def store():
-    return tanuki.upsert(request)
-
-
-@app.route('/edit/<_id>')
-def edit(_id):
-    return tanuki.edit(_id)
-
-
-@app.route('/confirm/<_id>')
-def confirm(_id):
-    return tanuki.confirm(_id)
-
-
-@app.route('/delete', methods=['POST'])
-def delete():
-    tanuki.delete(request.form['entry_id'])
-    return redirect(url_for('index'))
-
-
-@app.before_request
-def before_request():
-    if '/static' not in request.path:
-        tanuki.connect()
-
-
-@app.teardown_request
-def teardown_request(exception):
-    if '/static' not in request.path:
-        if tanuki.DEBUG:
-            print "+ TANUKI closing DB %s" % tanuki.con.total_changes
-        tanuki.con.close()
 
 
 if __name__ == '__main__':

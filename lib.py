@@ -20,7 +20,6 @@ class Tanuki:
 
     def __init__(self, config):
         self.config = config
-        self.stream_per_page = 12
         self.DEBUG = config['DEBUG']
         self.editing = False
         self.mode = None
@@ -390,37 +389,6 @@ class Tanuki:
             print "+ TANUKI entries %d bytes" % (sys.getsizeof(entries))
         return entries
 
-    def slice(self, entries, page, num, noop=False):
-        total = len(entries)
-        first = page * num
-        last = first + num if (first + num) < total else total
-        if first >= last:
-            raise ValueError
-        if noop:
-            chunk = entries[first:last]
-        else:
-            chunk = self.apply_tags(entries[first:last])
-            chunk = self.preprocess(chunk)
-            chunk = self.markup(chunk)
-        return {'num': num,
-                'total': total,
-                'start': first + 1,
-                'last': last,
-                'entries': chunk,
-                'num_pages': total / num}
-
-    def next_prev(self, chunk, page, url='page'):
-        np = page + 1 if (page + 1) <= chunk['num_pages'] else 0
-        pp = page - 1
-        n = self.div('next', 'btn', "/%s/%d" % (url, np)) if np > 0 else ''
-        p = self.div('prev', 'btn', "/%s/%d" % (url, pp)) if pp >= 0 else ''
-        return "%s%s\n" % (p, n)
-
-    def from_to(self, start, last):
-        if not start == last:
-            return "%s&ndash;%s" % (start, last)
-        return start
-
     def index(self, page=0):
         latest = self.entries(None, False, None, True)
         readme = self.entries_tagged("readme")
@@ -440,30 +408,6 @@ class Tanuki:
                                entries=self.entries(),  # connected to help.db
                                title="help",
                                body_class="help")
-
-    def stream(self, page=0):
-        self.mode = 'stream'
-        try:
-            chunk = self.slice(self.entries(), page, self.stream_per_page)
-        except ValueError:
-            return redirect(url_for('index'))
-        controls = None
-        if not page and not chunk['entries']:
-            msg = "<div id=\"no_entries\">%s %s %s</div>"\
-                % (self.img('tanuki', None),
-                    "<b>Unbelievable. No entries yet.</b><br />",
-                    "<input type=\"button\" value=\"new\" id=\"new_btn\ "
-                    " onclick=\"window.location='/new'\">")
-        else:
-            controls = ['home', 'list', 'tags', 'search', 'new']
-            from_to = self.from_to(chunk['start'], chunk['last'])
-            msg = "%s of %d entries" % (from_to, chunk['total'])
-        return render_template('index.html',
-                               controls=self.controls(0, controls),
-                               next_prev=self.next_prev(chunk, page),
-                               entries=chunk['entries'],
-                               msg=msg,
-                               start=chunk['start'])
 
     def find_img(self, html):
         if not html:
@@ -597,11 +541,12 @@ class Tanuki:
         return render_template('search.html',
                                controls=controls)
 
-    def matched(self, terms):
+    def found(self, terms):
         self.mode = None
         found = self.entries(None, False, terms)
         controls = ['home', 'list', 'tags', 'search', 'new']
+        msg='found (%d) matching "%s"' % (len(found), terms)
         return render_template('list.html',
-                               msg="%d matched { %s }" % (len(found), terms),
+                               msg = msg,
                                controls=self.controls(0, controls),
                                entries=found)
