@@ -122,23 +122,15 @@ class Tanuki:
             self.dbquery(sql, [entry_id, tag[:32], date])
             count += 1
 
-    def bad_str(self, instr):
-        # disallow INT only
-        try:
-            type(int(instr))
-            return True
-        except ValueError:
-            return False
-
     def upsert(self, req):
         self.environ = req.environ
         try:
             datetime.datetime.strptime(req.form['date'], '%Y-%m-%d')
             if 'locked' in req.form:
                 raise ValueError
-            if self.bad_str(req.form['title']):
+            if str_is_int(req.form['title']):
                 raise ValueError
-            if self.bad_str(req.form['entry']):
+            if str_is_int(req.form['entry']):
                 raise ValueError
             if 'entry_id' in req.form.keys():
                 sql = 'update entries set '\
@@ -477,6 +469,15 @@ class Tanuki:
                                entries=self.get_help_entries(),
                                title="help",
                                body_class="help")
+
+
+def str_is_int(_str):
+    """returns True if string is merely an integer."""
+    try:
+        type(int(_str))
+        return True
+    except ValueError:
+        return False
 
 
 def utcnow():
