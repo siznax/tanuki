@@ -93,21 +93,12 @@ class Tanuki:
     def clear_tags(self, entry_id):
         self.dbquery("delete from tags where id=?", [entry_id])
 
-    def normalize_tags(self, blob):
-        norm = []
-        # lower, strip, split, unique
-        for tag in set(''.join(blob.lower().split()).split(',')):
-            # remove punctuation
-            exclude = set(string.punctuation)
-            norm.append(''.join(ch for ch in tag if ch not in exclude))
-        return norm
-
     def store_tags(self, entry_id, tags):
         self.clear_tags(entry_id)
         if not tags or tags == 'tags':
             return
         count = 0
-        for tag in self.normalize_tags(tags):
+        for tag in normalize_tags(tags):
             if count > 5:
                 return
             sql = 'insert into tags values(?,?,?)'
@@ -180,7 +171,10 @@ class Tanuki:
     def apply_tags(self, entries):
         for x in entries:
             tags = self.get_tags(x['id'])
-            x['tags'] = ', '.join(tags) if self.editing else tags
+            if self.editing:
+                x['tags'] = ', '.join(str(x) for x in tags)
+            else:
+                x['tags'] = tags
         return entries
 
     def demux(self, row):
@@ -453,6 +447,16 @@ def date_str(date):
         return date.strftime('%a %d %b %Y')
     except:
         return 'MALFORMED'
+
+
+def normalize_tags(blob):
+    norm = []
+    # lower, strip, split, unique
+    for tag in set(''.join(blob.lower().split()).split(',')):
+        # remove punctuation
+        exclude = set(string.punctuation)
+        norm.append(''.join(ch for ch in tag if ch not in exclude))
+    return norm
 
 
 def parse_ymd(date):
