@@ -63,13 +63,6 @@ class Tanuki:
                          str(self.num_tags), "tags",
                          str(self.num_notag), '<a href="/notag">notag</a>'])
 
-    def img(self, alt, href=None):
-        img = '<img id="%s" alt="%s" src="/static/%s.png">' % (alt, alt, alt)
-        if href:
-            return '<a href="%s">%s</a>' % (href, img)
-        else:
-            return img
-
     def render_new_form(self):
         entry = {'date': datetime.date.today().isoformat(),
                  'text': 'text',
@@ -240,7 +233,8 @@ class Tanuki:
         return entries
 
     def controls(self, entry_id, wanted=None):
-        delete = self.img('delete', "/confirm/%d" % (entry_id))
+        """compute UI "buttons" string."""
+        delete = ui_img('delete', "/confirm/%d" % (entry_id))
         edit_href = "/edit/%d" % (entry_id)
         entry_href = "/entry/%d" % (entry_id)
         if request.path.startswith('/help'):
@@ -248,19 +242,19 @@ class Tanuki:
             edit_href = "/help/edit/%d" % (entry_id)
         if '/entry' in request.path:
             entry_href = ''
-        c = {'home': self.img('home', '/'),
-             'new': self.img('new', '/new'),
-             'entry': self.img('entry', entry_href),
-             'edit': self.img('edit', edit_href),
-             'delete': delete,
-             'list': self.img('list', '/list'),
-             'tags': self.img('tags', '/tags'),
-             'search': self.img('search', '/search'),
-             'help': self.img('help', '/help')}
-        s = "\n"
-        for w in wanted:
-            s += "%s\n" % (c[w])
-        return s
+        btns = {'home': ui_img('home', '/'),
+                'new': ui_img('new', '/new'),
+                'entry': ui_img('entry', entry_href),
+                'edit': ui_img('edit', edit_href),
+                'delete': delete,
+                'list': ui_img('list', '/list'),
+                'tags': ui_img('tags', '/tags'),
+                'search': ui_img('search', '/search'),
+                'help': ui_img('help', '/help')}
+        _str = "\n"
+        for wtd in wanted:
+            _str += "%s\n" % (btns[wtd])
+        return _str
 
     def href2img(self, href, alt):
         img = '<img alt="%s" title="%s" src="%s">' % (alt, alt, href)
@@ -466,7 +460,7 @@ class Tanuki:
 
 
 def str_is_int(_str):
-    """returns True if string is merely an integer."""
+    """return True if string is merely an integer."""
     try:
         type(int(_str))
         return True
@@ -474,5 +468,14 @@ def str_is_int(_str):
         return False
 
 
+def ui_img(alt, href=None):
+    """return img tag given UI key (by convention).""" 
+    img = '<img id="%s" alt="%s" src="/static/%s.png">' % (alt, alt, alt)
+    if href:
+        return '<a href="%s">%s</a>' % (href, img)
+    else:
+        return img
+
 def utcnow():
+    """return simpler ISO 8601 date string."""
     return datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
