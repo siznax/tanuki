@@ -8,9 +8,8 @@ import re
 import sqlite3
 import string
 import sys
-import urlparse
 
-from flask import render_template, request, redirect, url_for, Markup
+from flask import render_template, request, redirect, url_for
 
 
 class Tanuki:
@@ -148,7 +147,7 @@ class Tanuki:
                 val = (req.form['title'][:Tanuki.MAX_TITLE_LEN],
                        req.form['entry'][:Tanuki.MAX_ENTRY_LEN],
                        req.form['date'],
-                       self.utcnow(),
+                       utcnow(),
                        0,
                        req.form['entry_id'])
                 self.dbquery(sql, val)
@@ -159,7 +158,7 @@ class Tanuki:
                        req.form['title'][:Tanuki.MAX_TITLE_LEN],
                        req.form['entry'][:Tanuki.MAX_ENTRY_LEN],
                        req.form['date'],
-                       self.utcnow(),
+                       utcnow(),
                        0]
                 cur = self.dbquery(sql, val)
                 entry_id = cur.lastrowid
@@ -198,12 +197,6 @@ class Tanuki:
             tags = self.get_tags(x['id'])
             x['tags'] = ', '.join(tags) if self.editing else tags
         return entries
-
-    def utcdate(self):
-        return datetime.datetime.utcnow().strftime("%Y-%m-%d")
-
-    def utcnow(self):
-        return datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 
     def date_str(self, date):
         try:
@@ -299,6 +292,14 @@ class Tanuki:
                 x['mediatype'] = 'video'
         return entries
 
+    def find_img(self, html):
+        if not html:
+            return None
+        import lxml.html
+        doc = lxml.html.document_fromstring(html)
+        for src in doc.xpath("//img/@src"):
+            return src
+
     def postprocess(self, entries):  # AFTER markdown
         if self.editing:
             return entries
@@ -326,49 +327,6 @@ class Tanuki:
                                readme=readme,
                                tag_set=self.get_tag_set(),
                                body_class='index')
-
-    def find_img(self, html):
-        if not html:
-            return None
-        import lxml.html
-        doc = lxml.html.document_fromstring(html)
-        for src in doc.xpath("//img/@src"):
-            return src
-
-    def iframe_src(self, text):
-        src = re.search(r'src="([^"]*)"', text)
-        if src:
-            return src.groups()[0]
-        src = re.search(r"src='([^']*)'", text)
-        if src:
-            return src.groups()[0]
-        return None
-
-    def iframe_stub(self, text):
-        stub = 'IFRAME STUB'
-        src = self.iframe_src(text)
-        if src:
-            url = urlparse.urlparse(src)
-            stub = '{ <a href="%s">%s</a> }' % (src, url.netloc)
-        return re.sub(r'<iframe.*iframe>', stub, text)
-
-    def strip_tags(self, html):
-        if not html:
-            return None
-        return Markup(html).striptags()
-
-    # DEPRECATED: things done here should set members of each
-    # entry in postprocessing. then let the template use them.
-    def grid_cells(self, entries):
-        for x in entries:
-            if x['mediatype'] == 'text':
-                # strip tags and extract img src
-                html = self.markdown(x['id'], x['text'])
-                x['img'] = self.find_img(html)
-                x['text'] = self.strip_tags(html)
-            if x['mediatype'] == 'video':
-                x['text'] = self.iframe_stub(x['text'])
-        return entries
 
     def get_entries(self):
         """return fully hydrated entries ordered by date."""
@@ -412,10 +370,10 @@ class Tanuki:
         entry = self.get_entry(entry_id, True)
         if not entry:
             return redirect(url_for('index'))
-        controls = ['home', 'list', 'tags', 'search', 'new', 'edit', 'delete']
+        controls = ['home', 'list', 'tags', 'search', 'new', 'edit',
+                    'delete', 'help']
         return render_template('entry.html',
                                controls=self.controls(entry_id, controls),
-                               next_prev=None,
                                entry=entry,
                                title=entry['title'],
                                body_class="entry")
@@ -519,3 +477,7 @@ class Tanuki:
                                entries=self.get_help_entries(),
                                title="help",
                                body_class="help")
+
+
+def utcnow():
+    return datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
