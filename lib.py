@@ -19,10 +19,9 @@ class Tanuki:
     MAX_ENTRY_LEN = 131072
 
     def __init__(self, config):
-        self.config = config
         self.DEBUG = config['DEBUG']
+        self.config = config
         self.editing = False
-        self.mode = None
         if self.DEBUG:
             print self.config
 
@@ -46,7 +45,7 @@ class Tanuki:
             print msg
         return result
 
-    def num_entries(self):
+    def get_num_entries(self):
         sql = 'select count(*) from entries'
         val = ''
         return self.dbquery(sql, val).fetchone()[0]
@@ -56,33 +55,19 @@ class Tanuki:
         val = ''
         return [{'count': r[0], 'name': r[1]} for r in self.dbquery(sql, val)]
 
-    def tag_set_msg(self):
-        entries_msg = "%d entries" % self.num_entries()
-        tags_msg = "%d tags" % len(self.tag_set())
-        notag = len(self.entries(None, True))
-        notag_msg = ""
-        if notag:
-            notag_msg = '(%d <a href="/notag">notag</a>)' % notag
-            return "%s %s %s" % (entries_msg, tags_msg, notag_msg)
-        return "%s: %s" % (entries_msg, tags_msg)
+    def get_status(self):
+        self.num_entries = self.get_num_entries()
+        self.num_tags = len(self.tag_set())
+        self.num_notag = len(self.entries(None, True))
 
-    def tag_hrefs(self, tag_set, br=False):
-        hrefs = []
-        for t in tag_set:
-            href = "<a href=\"/tagged/%s\"># %s</a>" % (t, t)
-            hrefs.append(href)
-        if br:
-            return "<br />".join(hrefs)
-        return " ".join(hrefs)
-
-    def div(self, _id, _class, href=None):
-        onclick = 'onclick="window.location=\'%s\';"' % href if href else ''
-        return '<div id="%s" class="%s" %s></div>' % (
-            _id, _class or '', onclick)
+    def get_status_msg(self):
+        self.get_status()
+        return " ".join([str(self.num_entries), "entries",
+                         str(self.num_tags), "tags",
+                         str(self.num_notag), '<a href="/notag">notag</a>'])
 
     def img(self, alt, href=None):
-        img = '<img id="%s" alt="%s" src="/static/%s.png">'\
-            % (alt, alt,  alt)
+        img = '<img id="%s" alt="%s" src="/static/%s.png">' % (alt, alt, alt)
         if href:
             return '<a href="%s">%s</a>' % (href, img)
         else:
@@ -103,8 +88,7 @@ class Tanuki:
                                body_class='edit')
 
     def edit(self, entry_id):
-        self.mode = 'edit'
-        entry = self.entry(entry_id, False, None, True)
+        entry = self.get_entry(entry_id, False, None, True)
         referrer = request.referrer
         if not referrer:
             referrer = "/entry/%s" % entry_id
@@ -115,7 +99,7 @@ class Tanuki:
                                referrer=referrer,
                                title=title,
                                controls=self.controls(0, controls),
-                               body_class=self.mode)
+                               body_class='edit')
 
     def clear_tags(self, entry_id):
         self.dbquery("delete from tags where id=?", [entry_id])
@@ -197,7 +181,7 @@ class Tanuki:
             return render_template('error.html', msg=msg)
 
     def confirm(self, entry_id):
-        entry = self.entry(entry_id)
+        entry = self.get_entry(entry_id)
         return render_template('confirm.html', entry=entry, func='destroy')
 
     def delete(self, entry_id):
@@ -326,7 +310,8 @@ class Tanuki:
             x['img'] = self.find_img(x['text'])
         return entries
 
-    def entry(self, entry_id, markup=False, title=None, editing=False):
+    def get_entry(self, entry_id, markup=False, title=None, editing=False):
+        """ returns single entry as HTML """
         if editing:
             self.editing = True
         if title:
@@ -399,7 +384,7 @@ class Tanuki:
                                readme=readme,
                                tag_set=self.tag_set(),
                                body_class='index',
-                               msg=self.tag_set_msg())
+                               msg=self.get_status_msg())
 
     def help(self):
         controls = self.controls(0, ['home', 'list', 'tags', 'search', 'new'])
@@ -471,8 +456,7 @@ class Tanuki:
                                entries=entries)
 
     def singleton(self, entry_id):
-        self.mode = 'entry'
-        entry = self.entry(entry_id, True)
+        entry = self.get_entry(entry_id, True)
         if not entry:
             return redirect(url_for('index'))
         controls = ['home', 'list', 'tags', 'search', 'new', 'edit', 'delete']
@@ -483,27 +467,24 @@ class Tanuki:
                                title=entry['title'],
                                body_class="entry")
 
-    def tagged_view_msg(self, tag, view):
-        if view:
-            a1 = '<a href="/tagged/%s">list</a>' % (tag)
-        else:
-            a1 = '<b>list</b>'
+    def tagged_msg(self, tag, view='list'):
+        part1 = '<b>list</b>'
+        part2 = '<a href="/tagged/%s/v:gallery">gallery</a>' % (tag)
         if view == 'gallery':
-            a2 = '<b>gallery</b>'
-        else:
-            a2 = '<a href="/tagged/%s/v:gallery">gallery</a>' % (tag)
-        return ' | '.join([a1, a2])
+            part1 = '<a href="/tagged/%s">list</a>' % (tag)
+            part2 = '<b>gallery</b>'
+        return " &mdash; " + ' | '.join([part1, part2])
 
     def tagged(self, tag, view=None):
-        self.mode = None
         haztag = self.entries(tag)
         haztag = self.apply_tags(haztag)
         haztag = self.preprocess(haztag)
         haztag = self.markup(haztag)
         haztag = self.postprocess(haztag)
+        num = len(haztag)
         controls = ['home', 'list', 'tags', 'search', 'new']
-        title = "%d #%s" % (len(haztag), tag)
-        msg = "%s %s" % (title, self.tagged_view_msg(tag, view))
+        title = "#%s (%d)" % (tag, num)
+        msg = '%d tagged "%s" %s' % (num, tag, self.tagged_msg(tag, view))
         return render_template('list.html' if not view else 'gallery.html',
                                msg=msg,
                                controls=self.controls(0, controls),
@@ -511,21 +492,16 @@ class Tanuki:
                                entries=haztag)
 
     def tags(self):
-        self.mode = None
         tag_set = self.tag_set()
         title = "%d tags" % len(tag_set)
-        msg = "<h3>Unbelievable. No tags yet.</h3>"
-        if tag_set:
-            msg = self.tag_set_msg()
         controls = self.controls(0, ['home', 'list', 'search', 'new'])
         return render_template('tags.html',
                                title=title,
-                               msg=msg,
+                               msg=self.get_status_msg(),
                                controls=controls,
                                tag_set=tag_set)
 
     def notag(self):
-        self.mode = None
         untagged = self.entries(None, True)
         controls = ['home', 'list', 'tags', 'search', 'new']
         title = "%d notag" % len(untagged)
@@ -542,7 +518,6 @@ class Tanuki:
                                controls=controls)
 
     def found(self, terms):
-        self.mode = None
         found = self.entries(None, False, terms)
         controls = ['home', 'list', 'tags', 'search', 'new']
         msg='found (%d) matching "%s"' % (len(found), terms)
