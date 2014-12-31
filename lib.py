@@ -386,13 +386,13 @@ class Tanuki:
                                controls=self.controls(0, controls),
                                tag_set=tag_set)
 
-    def tagged_msg(self, tag, view='list'):
-        part1 = '<b>list</b>'
-        part2 = '<a href="/tagged/%s/v:gallery">gallery</a>' % (tag)
+    def msg_options(self, tag, view='list'):  # TODO: poor implementation
+        opt1 = '<b>list</b>'
+        opt2 = '<a href="/tagged/%s/v:gallery">gallery</a>' % (tag)
         if view == 'gallery':
-            part1 = '<a href="/tagged/%s">list</a>' % (tag)
-            part2 = '<b>gallery</b>'
-        return " &mdash; " + ' | '.join([part1, part2])
+            opt1 = '<a href="/tagged/%s">list</a>' % (tag)
+            opt2 = '<b>gallery</b>'
+        return " &mdash; " + ' | '.join([opt1, opt2])
 
     def get_entries_tagged(self, tag):
         """return entries matching tag name ordered by date."""
@@ -408,9 +408,9 @@ class Tanuki:
         tagged = self.markup(tagged)
         tagged = self.postprocess(tagged)
         num = len(tagged)
-        controls = ['home', 'list', 'tags', 'search', 'new']
+        controls = ['home', 'list', 'tags', 'search', 'new', 'help']
         title = "#%s (%d)" % (tag, num)
-        msg = '%d tagged "%s" %s' % (num, tag, self.tagged_msg(tag, view))
+        msg = '%d tagged "%s" %s' % (num, tag, self.msg_options(tag, view))
         template = 'list.html' if not view else 'gallery.html'
         return render_template(template,
                                msg=msg,
