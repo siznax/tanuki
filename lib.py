@@ -9,7 +9,7 @@ import sqlite3
 import string
 import sys
 
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, abort
 
 
 class Tanuki:
@@ -20,7 +20,6 @@ class Tanuki:
     def __init__(self, config):
         self.DEBUG = config['DEBUG']
         self.config = config
-        self.editing = False
         if self.DEBUG:
             print self.config
 
@@ -77,7 +76,7 @@ class Tanuki:
                                body_class='edit')
 
     def render_edit_form(self, entry_id):
-        entry = self.get_entry(entry_id, False, None, True)
+        entry = self.get_entry(entry_id, True)
         referrer = request.referrer
         if not referrer:
             referrer = "/entry/%s" % entry_id
@@ -146,15 +145,16 @@ class Tanuki:
             ref = req.form['referrer'] if 'referrer' in req.form else url
             return redirect(ref)
         except ValueError:
-            msg = "ValueError raised, try again."
-            return render_template('error.html', msg=msg)
+            return render_template('error.html',
+                                   msg="ValueError raised, try again.")
         except sqlite3.IntegrityError:
-            msg = "Try again, title or text not unique."
-            return render_template('error.html', msg=msg)
+            return render_template('error.html',
+                                   msg="Title or text not unique, try again.")
 
     def render_confirm_form(self, entry_id):
-        entry = self.get_entry(entry_id)
-        return render_template('confirm.html', entry=entry, func='destroy')
+        return render_template('confirm.html',
+                               entry=self.get_entry(entry_id),
+                               func='destroy')
 
     def delete(self, entry_id):
         self.clear_tags(entry_id)
@@ -168,10 +168,10 @@ class Tanuki:
             t.append(r[0])
         return sorted(t)
 
-    def apply_tags(self, entries):
+    def apply_tags(self, entries, editing=False):
         for x in entries:
             tags = self.get_tags(x['id'])
-            if self.editing:
+            if editing:
                 x['tags'] = ', '.join(str(x) for x in tags)
             else:
                 x['tags'] = tags
@@ -243,8 +243,6 @@ class Tanuki:
 
     def pre_markdown(self, entries):
         """pre-markdown needful operations."""
-        if self.editing:
-            return entries
         for x in entries:
             if self.DEBUG:
                 print "+ TANUKI pre_markdown %d" % (x['id'])
@@ -262,8 +260,6 @@ class Tanuki:
 
     def post_markdown(self, entries):
         """post-markdown needful operations."""
-        if self.editing:
-            return entries
         for x in entries:
             if self.DEBUG:
                 print "+ TANUKI post_markdown %d" % (x['id'])
@@ -303,34 +299,25 @@ class Tanuki:
         controls = ['home', 'tags', 'search', 'new', 'help']
         return render_template('list.html',
                                title="list (%d)" % len(entries),
-                               msg="%d entries" % len(entries),
+                               msg=self.get_status_msg(),
                                controls=self.controls(0, controls),
                                entries=entries)
 
-    def get_entry(self, entry_id, mrkdwn=False, title=None, editing=False):
-        """returns single entry as HTML."""
-        if editing:
-            self.editing = True
-        if title:
-            sql = 'select * from entries where title=?'
-            row = self.dbquery(sql, [title]).fetchone()
-        else:
-            sql = 'select * from entries where id=?'
-            row = self.dbquery(sql, [entry_id]).fetchone()
+    def get_entry(self, entry_id, editing=False):
+        """returns single entry as HTML or markdown text."""
+        sql = 'select * from entries where id=?'
+        row = self.dbquery(sql, [entry_id]).fetchone()
         if not row:
-            return None
-        entries = [self.demux(row)]
-        entries = self.apply_tags(entries)
-        entries = self.pre_markdown(entries)
-        if mrkdwn:
-            entries = self.markdown_entries(entries)
-        self.editing = False
-        return entries[0]
+            abort(404)
+        entry = [self.demux(row)]
+        entry = self.apply_tags(entry, editing)
+        if not editing:
+            entry = self.pre_markdown(entry)
+            entry = self.markdown_entries(entry)
+        return entry[0]
 
     def render_entry(self, entry_id):
-        entry = self.get_entry(entry_id, True)
-        if not entry:
-            return redirect(url_for('index'))
+        entry = self.get_entry(entry_id)
         controls = ['home', 'list', 'tags', 'search', 'new', 'edit',
                     'delete', 'help']
         return render_template('entry.html',
