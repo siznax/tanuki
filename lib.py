@@ -183,22 +183,9 @@ class Tanuki:
             x['tags'] = ', '.join(tags) if self.editing else tags
         return entries
 
-    def date_str(self, date):
-        try:
-            return datetime.datetime.strptime(
-                date, '%Y-%m-%d').strftime('%a %d %b %Y')
-        except:
-            return 'MALFORMED'
-
-    def ymd(self, date):
-        parsed = datetime.datetime.strptime(date, '%Y-%m-%d')
-        return [parsed.strftime('%Y'),
-                parsed.strftime('%b'),
-                parsed.strftime('%d')]
-
     def demux(self, row):
         # overevaluated, don't try to do much here
-        ymd = self.ymd(row[3])
+        ymd = parse_ymd(row[3])
         text = None
         if request.path.startswith('/confirm')\
                 or request.path.startswith('/edit')\
@@ -215,7 +202,7 @@ class Tanuki:
                 'public': row[5],
                 'year': ymd[0],
                 'month': ymd[1],
-                'date_str': self.date_str(row[3]),
+                'date_str': date_str(row[3]),
                 'mediatype': 'text'}
 
     def markdown(self, entry_id, text):
@@ -459,6 +446,23 @@ class Tanuki:
                                body_class="help")
 
 
+def date_str(date):
+    """return "Mon 1 Jan 1970" from 'YYYY-mm-dd'."""
+    try:
+        date = datetime.datetime.strptime(date, '%Y-%m-%d')
+        return date.strftime('%a %d %b %Y')
+    except:
+        return 'MALFORMED'
+
+
+def parse_ymd(date):
+    """return [y, m, d] from 'YYYY-mm-dd'"""
+    parsed = datetime.datetime.strptime(date, '%Y-%m-%d')
+    return [parsed.strftime('%Y'),
+            parsed.strftime('%b'),
+            parsed.strftime('%d')]
+
+
 def str_is_int(_str):
     """return True if string is merely an integer."""
     try:
@@ -469,12 +473,13 @@ def str_is_int(_str):
 
 
 def ui_img(alt, href=None):
-    """return img tag given UI key (by convention).""" 
+    """return img tag given UI key (by convention)."""
     img = '<img id="%s" alt="%s" src="/static/%s.png">' % (alt, alt, alt)
     if href:
         return '<a href="%s">%s</a>' % (href, img)
     else:
         return img
+
 
 def utcnow():
     """return simpler ISO 8601 date string."""
