@@ -231,10 +231,6 @@ class Tanuki:
             _str += "%s\n" % (btns[wtd])
         return _str
 
-    def href2img(self, href, alt):
-        img = '<img alt="%s" title="%s" src="%s">' % (alt, alt, href)
-        return '<a href="%s">%s</a>' % (href, img)
-
     def pre_markdown(self, entries):
         """pre-markdown needful operations."""
         for x in entries:
