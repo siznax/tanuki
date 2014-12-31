@@ -29,7 +29,7 @@ def teardown_request(exception):
 
 @app.route('/')
 def index():
-    return tanuki.index()
+    return tanuki.render_index()
 
 
 @app.route('/favicon.ico')
@@ -39,12 +39,12 @@ def favicon():
 
 @app.route('/list')
 def list():
-    return tanuki.list()
+    return tanuki.render_list()
 
 
 @app.route('/new')
 def new():
-    return tanuki.new()
+    return tanuki.render_new_form()
 
 
 @app.route('/store', methods=['POST'])
@@ -54,17 +54,17 @@ def store():
 
 @app.route('/entry/<int:_id>')
 def entry(_id):
-    return tanuki.singleton(_id)
+    return tanuki.render_entry(_id)
 
 
 @app.route('/edit/<int:_id>')
 def edit(_id):
-    return tanuki.edit(_id)
+    return tanuki.render_edit_form(_id)
 
 
 @app.route('/confirm/<int:_id>')
 def confirm(_id):
-    return tanuki.confirm(_id)
+    return tanuki.render_confirm_form(_id)
 
 
 @app.route('/delete', methods=['POST'])
@@ -75,27 +75,27 @@ def delete():
 
 @app.route('/tags')
 def tags():
-    return tanuki.tags()
+    return tanuki.render_tags()
 
 
 @app.route('/tagged/<tag>')
 def tagged(tag):
-    return tanuki.tagged(tag, None)
+    return tanuki.render_tagged(tag, None)
 
 
 @app.route('/tagged/<tag>/v:<view>')
 def tagged_view(tag, view):
-    return tanuki.tagged(tag, view)
+    return tanuki.render_tagged(tag, view)
 
 
 @app.route('/notag')
 def notag():
-    return tanuki.notag()
+    return tanuki.render_notags()
 
 
 @app.route('/search')
 def search():
-    return tanuki.search()
+    return tanuki.render_search_form()
 
 
 @app.route('/found', methods=['GET'])
@@ -105,17 +105,17 @@ def found():
 
 @app.route('/help')
 def help():
-    return tanuki.help()
+    return tanuki.render_help()
 
 
 @app.route('/help/<int:_id>')
 def help_entry(_id):
-    return tanuki.singleton(_id)
+    return tanuki.render_entry(_id)
 
 
 @app.route('/help/edit/<int:_id>')
 def help_edit_id(_id):
-    return tanuki.edit(_id)
+    return tanuki.render_edit_form(_id)
 
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@
 {% if "tanuki.siznax.net" in request.host %}
 <title>{% if title %}{{ title }}{% else %}tanuki タヌキ {{config['TITLE']}}{% endif %}</title>
 {% else %}
-<title>{% if title %}{{ title }}{% else %}tanuki タヌキ{% endif %}</title>
+<title>{% if title %}タヌキ {{ title }}{% else %}tanuki タヌキ{% endif %}</title>
 {% endif %}
 <link id="layout" rel="stylesheet" href="/static/style.css">
 <link id="layout" rel="stylesheet" href="/static/special.css">

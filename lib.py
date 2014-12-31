@@ -29,12 +29,12 @@ class Tanuki:
         dbfile = os.path.join(os.path.dirname(__file__), "tanuki.db")
         if request.path.startswith('/help'):
             dbfile = os.path.join(os.path.dirname(__file__), "help.db")
+        self.dbfile = dbfile
         if self.DEBUG:
             print "+ TANUKI connecting to %s" % (dbfile)
         self.con = sqlite3.connect(dbfile)
         self.con.execute('pragma foreign_keys = on')  # !important
         self.db = self.con.cursor()
-        self.dbfile = dbfile
 
     def dbquery(self, sql, val=''):
         msg = "+ TANUKI SQL: %s" % (sql)
@@ -46,21 +46,19 @@ class Tanuki:
         return result
 
     def get_num_entries(self):
+        """returns count of entries table."""
         sql = 'select count(*) from entries'
         val = ''
         return self.dbquery(sql, val).fetchone()[0]
 
-    def tag_set(self):
-        sql = 'select count(*),name from tags group by name order by name'
-        val = ''
-        return [{'count': r[0], 'name': r[1]} for r in self.dbquery(sql, val)]
-
     def get_status(self):
+        """get and set status data, mostly counts."""
         self.num_entries = self.get_num_entries()
-        self.num_tags = len(self.tag_set())
-        self.num_notag = len(self.entries(None, True))
+        self.num_tags = len(self.get_tag_set())
+        self.num_notag = len(self.get_notag_entries())
 
     def get_status_msg(self):
+        """return interface status string."""
         self.get_status()
         return " ".join([str(self.num_entries), "entries",
                          str(self.num_tags), "tags",
@@ -73,26 +71,25 @@ class Tanuki:
         else:
             return img
 
-    def new(self):
-        date = datetime.date.today().isoformat()
-        n = {'date': date,
-             'text': 'text',
-             'title': 'title',
-             'tags': 'tags',
-             'public': 0}
-        controls = ['home', 'list', 'tags', 'search']
+    def render_new_form(self):
+        entry = {'date': datetime.date.today().isoformat(),
+                 'text': 'text',
+                 'title': 'title',
+                 'tags': 'tags',
+                 'public': 0}
+        controls = ['home', 'list', 'tags', 'search', 'help']
         return render_template('edit.html',
-                               entry=n,
+                               entry=entry,
                                controls=self.controls(0, controls),
                                title='new entry',
                                body_class='edit')
 
-    def edit(self, entry_id):
+    def render_edit_form(self, entry_id):
         entry = self.get_entry(entry_id, False, None, True)
         referrer = request.referrer
         if not referrer:
             referrer = "/entry/%s" % entry_id
-        controls = ['home', 'list', 'tags', 'search', 'new']
+        controls = ['home', 'list', 'tags', 'search', 'new', 'help']
         title = "edit %s: %s" % (entry_id, entry['title'])
         return render_template('edit.html',
                                entry=entry,
@@ -104,7 +101,7 @@ class Tanuki:
     def clear_tags(self, entry_id):
         self.dbquery("delete from tags where id=?", [entry_id])
 
-    def norm_tags(self, blob):
+    def normalize_tags(self, blob):
         norm = []
         # lower, strip, split, unique
         for tag in set(''.join(blob.lower().split()).split(',')):
@@ -118,7 +115,7 @@ class Tanuki:
         if not tags or tags == 'tags':
             return
         count = 0
-        for tag in self.norm_tags(tags):
+        for tag in self.normalize_tags(tags):
             if count > 5:
                 return
             sql = 'insert into tags values(?,?,?)'
@@ -180,7 +177,7 @@ class Tanuki:
             msg = "Try again, title or text not unique."
             return render_template('error.html', msg=msg)
 
-    def confirm(self, entry_id):
+    def render_confirm_form(self, entry_id):
         entry = self.get_entry(entry_id)
         return render_template('confirm.html', entry=entry, func='destroy')
 
@@ -190,6 +187,7 @@ class Tanuki:
         self.con.commit()
 
     def get_tags(self, eid):
+        """return sorted list of tag names."""
         t = []
         for r in self.dbquery('select name from tags where id=?', [eid]):
             t.append(r[0])
@@ -310,89 +308,24 @@ class Tanuki:
             x['img'] = self.find_img(x['text'])
         return entries
 
-    def get_entry(self, entry_id, markup=False, title=None, editing=False):
-        """ returns single entry as HTML """
-        if editing:
-            self.editing = True
-        if title:
-            sql = 'select * from entries where title=?'
-            row = self.dbquery(sql, [title]).fetchone()
-        else:
-            sql = 'select * from entries where id=?'
-            row = self.dbquery(sql, [entry_id]).fetchone()
-        if not row:
-            return None
-        entries = [self.demux(row)]
-        entries = self.apply_tags(entries)
-        entries = self.preprocess(entries)
-        if markup:
-            entries = self.markup(entries)
-        self.editing = False
-        return entries[0]
-
-    def entries_tagged(self, tag):
-        sql = 'select * from entries,tags '\
-            'where tags.name=? and tags.id=entries.id '\
-            'order by date desc'
-        return [self.demux(x) for x in self.dbquery(sql, [tag])]
-
-    def entries_notag(self):
-        sql = 'select * from entries where id not in (select id from tags)'
-        val = ''
-        return [self.demux(x) for x in self.dbquery(sql, val)]
-
-    def entries_matching(self, terms):
-        sql = 'select * from entries '\
-            'where title like ? or text like ? '\
-            'order by id desc'
-        val = [terms, terms]
-        return [self.demux(x) for x in self.dbquery(sql, val)]
-
-    def entries_latest(self):
+    def get_latest_entries(self):
+        """return last ten entries updated."""
         sql = 'select * from entries order by updated desc limit 10'
         val = ''
         return [self.demux(x) for x in self.dbquery(sql, val)]
 
-    def entries(self, tag=None, notag=False, terms=None, latest=None):
-        if "help.db" in self.dbfile:
-            sql = 'select * from entries'
-            return [self.demux(x) for x in self.dbquery(sql)]
-        if tag:
-            entries = self.entries_tagged(tag)
-        elif notag:
-            entries = self.entries_notag()
-        elif terms:
-            terms = '%' + terms.encode('ascii', 'ignore') + '%'
-            entries = self.entries_matching(terms)
-        elif latest:
-            entries = self.entries_latest()
-        else:
-            sql = 'select * from entries order by date desc,id desc'
-            val = ''
-            entries = [self.demux(x) for x in self.dbquery(sql, val)]
-        if self.DEBUG:
-            print "+ TANUKI entries %d bytes" % (sys.getsizeof(entries))
-        return entries
-
-    def index(self, page=0):
-        latest = self.entries(None, False, None, True)
-        readme = self.entries_tagged("readme")
+    def render_index(self, page=0):
+        readme = self.get_entries_tagged("readme")
         controls = ['home', 'list', 'tags', 'search', 'new', 'help']
+        msg = self.get_status_msg()
         return render_template('index.html',
+                               msg=msg,
+                               title=self.num_entries,
                                controls=self.controls(0, controls),
-                               latest=latest,
+                               latest=self.get_latest_entries(),
                                readme=readme,
-                               tag_set=self.tag_set(),
-                               body_class='index',
-                               msg=self.get_status_msg())
-
-    def help(self):
-        controls = self.controls(0, ['home', 'list', 'tags', 'search', 'new'])
-        return render_template("help.html",
-                               controls=controls,
-                               entries=self.entries(),  # connected to help.db
-                               title="help",
-                               body_class="help")
+                               tag_set=self.get_tag_set(),
+                               body_class='index')
 
     def find_img(self, html):
         if not html:
@@ -437,25 +370,45 @@ class Tanuki:
                 x['text'] = self.iframe_stub(x['text'])
         return entries
 
-    def result_words(self, total, from_to=None):
-        if (from_to):
-            return "%s of %d entries" % (from_to, total)
-        else:
-            return "%d entries" % (total)
+    def get_entries(self):
+        """return fully hydrated entries ordered by date."""
+        sql = 'select * from entries order by date desc,id desc'
+        val = ''
+        entries = [self.demux(x) for x in self.dbquery(sql, val)]
+        if self.DEBUG:
+            print "+ TANUKI entries %d bytes" % (sys.getsizeof(entries))
+        return entries
 
-    def list(self):
-        entries = self.entries()  # consider removing text
-        controls = self.controls(0, ['home', 'tags', 'search', 'new'])
-        if not entries:
-            msg = "<h3>Unbelievable. No entries yet.</h3>"
-        else:
-            msg = self.result_words(len(entries))
+    def render_list(self):
+        entries = self.get_entries()  # consider removing text
+        controls = ['home', 'tags', 'search', 'new', 'help']
         return render_template('list.html',
-                               msg=msg,
-                               controls=controls,
+                               title="list (%d)" % len(entries),
+                               msg="%d entries" % len(entries),
+                               controls=self.controls(0, controls),
                                entries=entries)
 
-    def singleton(self, entry_id):
+    def get_entry(self, entry_id, markup=False, title=None, editing=False):
+        """returns single entry as HTML."""
+        if editing:
+            self.editing = True
+        if title:
+            sql = 'select * from entries where title=?'
+            row = self.dbquery(sql, [title]).fetchone()
+        else:
+            sql = 'select * from entries where id=?'
+            row = self.dbquery(sql, [entry_id]).fetchone()
+        if not row:
+            return None
+        entries = [self.demux(row)]
+        entries = self.apply_tags(entries)
+        entries = self.preprocess(entries)
+        if markup:
+            entries = self.markup(entries)
+        self.editing = False
+        return entries[0]
+
+    def render_entry(self, entry_id):
         entry = self.get_entry(entry_id, True)
         if not entry:
             return redirect(url_for('index'))
@@ -467,6 +420,22 @@ class Tanuki:
                                title=entry['title'],
                                body_class="entry")
 
+    def get_tag_set(self):
+        """return dict of tag names keyed on count."""
+        sql = 'select count(*),name from tags group by name order by name'
+        val = ''
+        return [{'count': r[0], 'name': r[1]} for r in self.dbquery(sql, val)]
+
+    def render_tags(self):
+        tag_set = self.get_tag_set()
+        title = "%d tags" % len(tag_set)
+        controls = ['home', 'list', 'search', 'new', 'help']
+        return render_template('tags.html',
+                               title=title,
+                               msg=self.get_status_msg(),
+                               controls=self.controls(0, controls),
+                               tag_set=tag_set)
+
     def tagged_msg(self, tag, view='list'):
         part1 = '<b>list</b>'
         part2 = '<a href="/tagged/%s/v:gallery">gallery</a>' % (tag)
@@ -475,53 +444,78 @@ class Tanuki:
             part2 = '<b>gallery</b>'
         return " &mdash; " + ' | '.join([part1, part2])
 
-    def tagged(self, tag, view=None):
-        haztag = self.entries(tag)
-        haztag = self.apply_tags(haztag)
-        haztag = self.preprocess(haztag)
-        haztag = self.markup(haztag)
-        haztag = self.postprocess(haztag)
-        num = len(haztag)
+    def get_entries_tagged(self, tag):
+        """return entries matching tag name ordered by date."""
+        sql = 'select * from entries,tags '\
+            'where tags.name=? and tags.id=entries.id '\
+            'order by date desc'
+        return [self.demux(x) for x in self.dbquery(sql, [tag])]
+
+    def render_tagged(self, tag, view=None):
+        tagged = self.get_entries_tagged(tag)
+        tagged = self.apply_tags(tagged)
+        tagged = self.preprocess(tagged)
+        tagged = self.markup(tagged)
+        tagged = self.postprocess(tagged)
+        num = len(tagged)
         controls = ['home', 'list', 'tags', 'search', 'new']
         title = "#%s (%d)" % (tag, num)
         msg = '%d tagged "%s" %s' % (num, tag, self.tagged_msg(tag, view))
-        return render_template('list.html' if not view else 'gallery.html',
+        template = 'list.html' if not view else 'gallery.html'
+        return render_template(template,
                                msg=msg,
                                controls=self.controls(0, controls),
                                title=title,
-                               entries=haztag)
+                               entries=tagged)
 
-    def tags(self):
-        tag_set = self.tag_set()
-        title = "%d tags" % len(tag_set)
-        controls = self.controls(0, ['home', 'list', 'search', 'new'])
-        return render_template('tags.html',
-                               title=title,
-                               msg=self.get_status_msg(),
-                               controls=controls,
-                               tag_set=tag_set)
+    def get_notag_entries(self):
+        """return entries having no tags."""
+        sql = 'select * from entries where id not in (select id from tags)'
+        val = ''
+        return [self.demux(x) for x in self.dbquery(sql, val)]
 
-    def notag(self):
-        untagged = self.entries(None, True)
+    def render_notags(self):
+        untagged = self.get_notag_entries()
         controls = ['home', 'list', 'tags', 'search', 'new']
-        title = "%d notag" % len(untagged)
         msg = "%d not tagged" % len(untagged)
         return render_template('list.html',
-                               title=title,
+                               title=msg,
                                msg=msg,
                                controls=self.controls(0, controls),
                                entries=untagged)
 
-    def search(self):
-        controls = self.controls(0, ['home', 'list', 'tags', 'new'])
+    def render_search_form(self):
+        controls = ['home', 'list', 'tags', 'new', 'help']
         return render_template('search.html',
-                               controls=controls)
+                               controls=self.controls(0, controls))
+
+    def get_entries_matching(self, terms):
+        """return entries matching terms in title or text."""
+        terms = '%' + terms.encode('ascii', 'ignore') + '%'
+        sql = 'select * from entries '\
+            'where title like ? or text like ? '\
+            'order by id desc'
+        val = [terms, terms]
+        return [self.demux(x) for x in self.dbquery(sql, val)]
 
     def found(self, terms):
-        found = self.entries(None, False, terms)
+        found = self.get_entries_matching(terms)
         controls = ['home', 'list', 'tags', 'search', 'new']
-        msg='found (%d) matching "%s"' % (len(found), terms)
+        msg = 'found (%d) matching "%s"' % (len(found), terms)
         return render_template('list.html',
-                               msg = msg,
+                               msg=msg,
                                controls=self.controls(0, controls),
                                entries=found)
+
+    def get_help_entries(self):
+        """return entries from help.db."""
+        sql = 'select * from entries'
+        return [self.demux(x) for x in self.dbquery(sql)]
+
+    def render_help(self):
+        controls = ['home', 'list', 'tags', 'search', 'new']
+        return render_template("help.html",
+                               controls=self.controls(0, controls),
+                               entries=self.get_help_entries(),
+                               title="help",
+                               body_class="help")
