@@ -16,7 +16,7 @@ tanuki = Tanuki(app.config)
 @app.before_request
 def before_request():
     if '/static' not in request.path:
-        tanuki.connect()
+        tanuki.db_connect()
 
 
 @app.teardown_request

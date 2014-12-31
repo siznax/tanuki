@@ -23,7 +23,7 @@ class Tanuki:
         if self.DEBUG:
             print self.config
 
-    def connect(self):
+    def db_connect(self):
         dbfile = os.path.join(os.path.dirname(__file__), "tanuki.db")
         if request.path.startswith('/help'):
             dbfile = os.path.join(os.path.dirname(__file__), "help.db")
@@ -34,12 +34,12 @@ class Tanuki:
         self.con.execute('pragma foreign_keys = on')  # !important
         self.db = self.con.cursor()
 
-    def dbquery(self, sql, val=''):
-        msg = "+ TANUKI SQL: %s" % (sql)
-        if val:
-            msg += " VAL: %s" % (''.join(str(val)))
+    def db_query(self, sql, val=''):
         result = self.db.execute(sql, val)
         if self.DEBUG:
+            msg = "+ TANUKI SQL: %s" % (sql)
+            if val:
+                msg += " VAL: %s" % (''.join(str(val)))
             print msg
         return result
 
@@ -47,7 +47,7 @@ class Tanuki:
         """returns count of entries table."""
         sql = 'select count(*) from entries'
         val = ''
-        return self.dbquery(sql, val).fetchone()[0]
+        return self.db_query(sql, val).fetchone()[0]
 
     def get_status(self):
         """get and set status data, mostly counts."""
@@ -90,7 +90,7 @@ class Tanuki:
                                body_class='edit')
 
     def clear_tags(self, entry_id):
-        self.dbquery("delete from tags where id=?", [entry_id])
+        self.db_query("delete from tags where id=?", [entry_id])
 
     def store_tags(self, entry_id, tags):
         self.clear_tags(entry_id)
@@ -102,7 +102,7 @@ class Tanuki:
                 return
             sql = 'insert into tags values(?,?,?)'
             date = datetime.date.today().isoformat()
-            self.dbquery(sql, [entry_id, tag[:32], date])
+            self.db_query(sql, [entry_id, tag[:32], date])
             count += 1
 
     def upsert(self, req):
@@ -125,7 +125,7 @@ class Tanuki:
                        utcnow(),
                        0,
                        req.form['entry_id'])
-                self.dbquery(sql, val)
+                self.db_query(sql, val)
                 entry_id = req.form['entry_id']
             else:
                 sql = 'insert into entries values(?,?,?,?,?,?)'
@@ -135,7 +135,7 @@ class Tanuki:
                        req.form['date'],
                        utcnow(),
                        0]
-                cur = self.dbquery(sql, val)
+                cur = self.db_query(sql, val)
                 entry_id = cur.lastrowid
 
             self.store_tags(entry_id, req.form['tags'])
@@ -151,20 +151,20 @@ class Tanuki:
             return render_template('error.html',
                                    msg="Title or text not unique, try again.")
 
+    def delete(self, entry_id):
+        self.clear_tags(entry_id)
+        self.db_query('DELETE from entries WHERE id=?', [entry_id])
+        self.con.commit()
+
     def render_confirm_form(self, entry_id):
         return render_template('confirm.html',
                                entry=self.get_entry(entry_id),
                                func='destroy')
 
-    def delete(self, entry_id):
-        self.clear_tags(entry_id)
-        self.dbquery('DELETE from entries WHERE id=?', [entry_id])
-        self.con.commit()
-
     def get_tags(self, eid):
         """return sorted list of tag names."""
         t = []
-        for r in self.dbquery('select name from tags where id=?', [eid]):
+        for r in self.db_query('select name from tags where id=?', [eid]):
             t.append(r[0])
         return sorted(t)
 
@@ -198,12 +198,6 @@ class Tanuki:
                 'month': ymd[1],
                 'date_str': date_str(row[3]),
                 'mediatype': 'text'}
-
-    def markdown(self, entry_id, text):
-        if self.DEBUG:
-            print "+ TANUKI markdown %d %d bytes"\
-                % (entry_id, sys.getsizeof(text))
-        return markdown.markdown(text)
 
     def markdown_entries(self, entries):  # Warning! this can be expensive
         for x in entries:
@@ -270,7 +264,7 @@ class Tanuki:
         """return last ten entries updated."""
         sql = 'select * from entries order by updated desc limit 10'
         val = ''
-        return [self.demux(x) for x in self.dbquery(sql, val)]
+        return [self.demux(x) for x in self.db_query(sql, val)]
 
     def render_index(self, page=0):
         readme = self.get_entries_tagged("readme")
@@ -289,7 +283,7 @@ class Tanuki:
         """return fully hydrated entries ordered by date."""
         sql = 'select * from entries order by date desc,id desc'
         val = ''
-        entries = [self.demux(x) for x in self.dbquery(sql, val)]
+        entries = [self.demux(x) for x in self.db_query(sql, val)]
         if self.DEBUG:
             print "+ TANUKI entries %d bytes" % (sys.getsizeof(entries))
         return entries
@@ -306,7 +300,7 @@ class Tanuki:
     def get_entry(self, entry_id, editing=False):
         """returns single entry as HTML or markdown text."""
         sql = 'select * from entries where id=?'
-        row = self.dbquery(sql, [entry_id]).fetchone()
+        row = self.db_query(sql, [entry_id]).fetchone()
         if not row:
             abort(404)
         entry = [self.demux(row)]
@@ -330,7 +324,7 @@ class Tanuki:
         """return dict of tag names keyed on count."""
         sql = 'select count(*),name from tags group by name order by name'
         val = ''
-        return [{'count': r[0], 'name': r[1]} for r in self.dbquery(sql, val)]
+        return [{'count': r[0], 'name': r[1]} for r in self.db_query(sql, val)]
 
     def render_tags(self):
         tag_set = self.get_tag_set()
@@ -355,7 +349,7 @@ class Tanuki:
         sql = 'select * from entries,tags '\
             'where tags.name=? and tags.id=entries.id '\
             'order by date desc'
-        return [self.demux(x) for x in self.dbquery(sql, [tag])]
+        return [self.demux(x) for x in self.db_query(sql, [tag])]
 
     def render_tagged(self, tag, view=None):
         tagged = self.get_entries_tagged(tag)
@@ -378,7 +372,7 @@ class Tanuki:
         """return entries having no tags."""
         sql = 'select * from entries where id not in (select id from tags)'
         val = ''
-        return [self.demux(x) for x in self.dbquery(sql, val)]
+        return [self.demux(x) for x in self.db_query(sql, val)]
 
     def render_notags(self):
         untagged = self.get_notag_entries()
@@ -402,7 +396,7 @@ class Tanuki:
             'where title like ? or text like ? '\
             'order by id desc'
         val = [terms, terms]
-        return [self.demux(x) for x in self.dbquery(sql, val)]
+        return [self.demux(x) for x in self.db_query(sql, val)]
 
     def found(self, terms):
         found = self.get_entries_matching(terms)
@@ -416,7 +410,7 @@ class Tanuki:
     def get_help_entries(self):
         """return entries from help.db."""
         sql = 'select * from entries'
-        return [self.demux(x) for x in self.dbquery(sql)]
+        return [self.demux(x) for x in self.db_query(sql)]
 
     def render_help(self):
         controls = ['home', 'list', 'tags', 'search', 'new']
