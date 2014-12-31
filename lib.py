@@ -231,10 +231,10 @@ class Tanuki:
                 % (entry_id, sys.getsizeof(text))
         return markdown.markdown(text)
 
-    def markup(self, entries):  # Warning! this can be expensive
+    def markdown_entries(self, entries):  # Warning! this can be expensive
         for x in entries:
             if self.DEBUG:
-                print "+ TANUKI markup %d %d bytes"\
+                print "+ TANUKI markdown %d %d bytes"\
                     % (x['id'], sys.getsizeof(x['text']))
             x['text'] = markdown.markdown(x['text'])
         return entries
@@ -266,20 +266,13 @@ class Tanuki:
         img = '<img alt="%s" title="%s" src="%s">' % (alt, alt, href)
         return '<a href="%s">%s</a>' % (href, img)
 
-    def preprocess(self, entries):  # before markdown
+    def pre_markdown(self, entries):
+        """pre-markdown needful operations."""
         if self.editing:
             return entries
         for x in entries:
             if self.DEBUG:
-                print "+ TANUKI preprocess %d" % (x['id'])
-            if x['text'].startswith('http'):
-                x['mediatype'] = 'img'
-                text = x['text'].strip()
-                lines = text.split("\n")
-                first_line = lines[0].strip()
-                # convert URL to <img>
-                img_tag = self.href2img(first_line, x['title'])
-                x['text'] = "%s\n%s" % (img_tag, "\n".join(lines[1:]))
+                print "+ TANUKI pre_markdown %d" % (x['id'])
             if re.match(r'^<video|<iframe|<object', x['text']):
                 x['mediatype'] = 'video'
         return entries
@@ -292,12 +285,13 @@ class Tanuki:
         for src in doc.xpath("//img/@src"):
             return src
 
-    def postprocess(self, entries):  # AFTER markdown
+    def post_markdown(self, entries):
+        """post-markdown needful operations."""
         if self.editing:
             return entries
         for x in entries:
             if self.DEBUG:
-                print "+ TANUKI postprocess %d" % (x['id'])
+                print "+ TANUKI post_markdown %d" % (x['id'])
             x['img'] = self.find_img(x['text'])
         return entries
 
@@ -338,7 +332,7 @@ class Tanuki:
                                controls=self.controls(0, controls),
                                entries=entries)
 
-    def get_entry(self, entry_id, markup=False, title=None, editing=False):
+    def get_entry(self, entry_id, mrkdwn=False, title=None, editing=False):
         """returns single entry as HTML."""
         if editing:
             self.editing = True
@@ -352,9 +346,9 @@ class Tanuki:
             return None
         entries = [self.demux(row)]
         entries = self.apply_tags(entries)
-        entries = self.preprocess(entries)
-        if markup:
-            entries = self.markup(entries)
+        entries = self.pre_markdown(entries)
+        if mrkdwn:
+            entries = self.markdown_entries(entries)
         self.editing = False
         return entries[0]
 
@@ -404,9 +398,9 @@ class Tanuki:
     def render_tagged(self, tag, view=None):
         tagged = self.get_entries_tagged(tag)
         tagged = self.apply_tags(tagged)
-        tagged = self.preprocess(tagged)
-        tagged = self.markup(tagged)
-        tagged = self.postprocess(tagged)
+        tagged = self.pre_markdown(tagged)
+        tagged = self.markdown_entries(tagged)
+        tagged = self.post_markdown(tagged)
         num = len(tagged)
         controls = ['home', 'list', 'tags', 'search', 'new', 'help']
         title = "#%s (%d)" % (tag, num)
