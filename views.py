@@ -17,12 +17,14 @@ tanuki = Tanuki(app.config)
 def before_request():
     if '/static' not in request.path:
         tanuki.db_connect()
+        tanuki.get_status()
 
 
 @app.teardown_request
 def teardown_request(exception):
     if '/static' not in request.path:
         tanuki.db_disconnect()
+
 
 @app.route('/')
 def index():

@@ -57,26 +57,24 @@ class Tanuki:
         self.log.debug("%s | %s" % (sql, ''.join(str(val))))
         return self.db.execute(sql, val)
 
-    def get_num_entries(self):
-        """returns count of entries table."""
-        sql = 'select count(*) from entries'
-        return self.db_query(sql).fetchone()[0]
-
     def get_status(self):
         """get and set status data, mostly counts."""
         self.num_entries = self.get_num_entries()
         self.num_tags = len(self.get_tag_set())
         self.num_notag = len(self.get_notag_entries())
 
+    def get_num_entries(self):
+        """returns count of entries table."""
+        sql = 'select count(*) from entries'
+        return self.db_query(sql).fetchone()[0]
+
     def get_status_msg(self):
         """return status string for most routes."""
-        self.get_status()
         return "%d entries %d tags " % (self.num_entries,
                                         self.num_tags)
 
     def get_tags_status_msg(self):
         """return /tags status string."""
-        self.get_status()
         notag_link = '<a href="/notag">notag</a>'
         return "%d entries %d tags (%d %s) " % (self.num_entries,
                                                 self.num_tags,
