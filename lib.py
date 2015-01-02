@@ -69,11 +69,19 @@ class Tanuki:
         self.num_notag = len(self.get_notag_entries())
 
     def get_status_msg(self):
-        """return interface status string."""
+        """return status string for most routes."""
         self.get_status()
-        return " ".join([str(self.num_entries), "entries",
-                         str(self.num_tags), "tags",
-                         str(self.num_notag), '<a href="/notag">notag</a>'])
+        return "%d entries %d tags " % (self.num_entries,
+                                        self.num_tags)
+
+    def get_tags_status_msg(self):
+        """return /tags status string."""
+        self.get_status()
+        notag_link = '<a href="/notag">notag</a>'
+        return "%d entries %d tags (%d %s) " % (self.num_entries,
+                                                self.num_tags,
+                                                self.num_notag,
+                                                notag_link)
 
     def render_new_form(self):
         entry = {'date': datetime.date.today().isoformat(),
@@ -300,7 +308,7 @@ class Tanuki:
         controls = ['home', 'list', 'search', 'new', 'help']
         return render_template('tags.html',
                                title=title,
-                               msg=self.get_status_msg(),
+                               msg=self.get_tags_status_msg(),
                                controls=self.controls(0, controls),
                                tag_set=tag_set)
 
@@ -358,9 +366,9 @@ class Tanuki:
     def render_notags(self):
         untagged = self.get_notag_entries()
         controls = ['home', 'list', 'tags', 'search', 'new']
-        msg = "%d not tagged" % len(untagged)
+        msg = "(%d) entries not tagged" % len(untagged)
         return render_template('list.html',
-                               title=msg,
+                               title="%d notag" % len(untagged),
                                msg=msg,
                                controls=self.controls(0, controls),
                                entries=untagged)
