@@ -163,6 +163,7 @@ class Tanuki:
                                    msg="Title or text not unique, try again.")
 
     def delete(self, entry_id):
+        """purge entry and associated tags."""
         self.clear_tags(entry_id)
         self.db_query('DELETE from entries WHERE id=?', [entry_id])
         self.con.commit()
@@ -180,6 +181,9 @@ class Tanuki:
         return sorted(t)
 
     def apply_tags(self, entries, editing=False):
+        """update entries dict w/tag list or comma-seperated list if
+        editing.
+        """
         for x in entries:
             tags = self.get_tags(x['id'])
             if editing:
@@ -187,28 +191,6 @@ class Tanuki:
             else:
                 x['tags'] = tags
         return entries
-
-    def demux(self, row):
-        # overevaluated, don't try to do much here
-        ymd = parse_ymd(row[3])
-        text = None
-        if request.path.startswith('/confirm')\
-                or request.path.startswith('/edit')\
-                or request.path.startswith('/entry')\
-                or request.path.startswith('/help')\
-                or request.path.startswith('/store')\
-                or request.path.startswith('/tagged'):
-            text = row[2]
-        return {'id': row[0],
-                'title': row[1],
-                'text': text,
-                'date': row[3],
-                'updated': row[4],
-                'public': row[5],
-                'year': ymd[0],
-                'month': ymd[1],
-                'date_str': date_str(row[3]),
-                'mediatype': 'text'}
 
     def markdown_entries(self, entries):
         """return Markdown text from HTML entries"""
@@ -253,7 +235,7 @@ class Tanuki:
     def get_latest_entries(self):
         """return last ten entries updated."""
         sql = 'select * from entries order by updated desc limit 10'
-        return [self.demux(x) for x in self.db_query(sql)]
+        return [entry2dict(x) for x in self.db_query(sql)]
 
     def render_index(self, page=0):
         readme = self.get_entries_tagged("readme")
@@ -271,7 +253,7 @@ class Tanuki:
     def get_entries(self):
         """return fully hydrated entries ordered by date."""
         sql = 'select * from entries order by date desc,id desc'
-        entries = [self.demux(x) for x in self.db_query(sql)]
+        entries = [entry2dict(x) for x in self.db_query(sql)]
         self.log.debug("entries %d bytes" % (sys.getsizeof(entries)))
         return entries
 
@@ -290,7 +272,7 @@ class Tanuki:
         row = self.db_query(sql, [entry_id]).fetchone()
         if not row:
             abort(404)
-        entry = [self.demux(row)]
+        entry = [entry2dict(row)]
         entry = self.apply_tags(entry, editing)
         if not editing:
             entry = self.pre_markdown(entry)
@@ -334,7 +316,7 @@ class Tanuki:
         """return entries matching tag name ordered by date."""
         sql = ("select * from entries,tags where tags.name=? and "
                "tags.id=entries.id order by date desc")
-        return [self.demux(x) for x in self.db_query(sql, [tag])]
+        return [entry2dict(x) for x in self.db_query(sql, [tag])]
 
     def render_tagged(self, tag, view=None):
         tagged = self.get_entries_tagged(tag)
@@ -371,7 +353,7 @@ class Tanuki:
     def get_notag_entries(self):
         """return entries having no tags."""
         sql = 'select * from entries where id not in (select id from tags)'
-        return [self.demux(x) for x in self.db_query(sql)]
+        return [entry2dict(x) for x in self.db_query(sql)]
 
     def render_notags(self):
         untagged = self.get_notag_entries()
@@ -394,7 +376,7 @@ class Tanuki:
         sql = ("select * from entries where title like ? or text like ? "
                "order by id desc")
         val = [terms, terms]
-        return [self.demux(x) for x in self.db_query(sql, val)]
+        return [entry2dict(x) for x in self.db_query(sql, val)]
 
     def render_search_results(self, terms):
         found = self.get_entries_matching(terms)
@@ -408,7 +390,7 @@ class Tanuki:
     def get_help_entries(self):
         """return entries from help.db."""
         sql = 'select * from entries'
-        return [self.demux(x) for x in self.db_query(sql)]
+        return [entry2dict(x) for x in self.db_query(sql)]
 
     def render_help(self):
         controls = ['home', 'list', 'tags', 'search', 'new']
@@ -439,6 +421,20 @@ def date_str(date):
         return date.strftime('%a %d %b %Y')
     except:
         return 'MALFORMED'
+
+
+def entry2dict(row):
+    """map entries DB row to dict."""
+    return {'id': row[0],
+            'title': row[1],
+            'text': row[2],
+            'date': row[3],
+            'updated': row[4],
+            'public': row[5],
+            'year': parse_ymd(row[3])[0],
+            'month': parse_ymd(row[3])[1],
+            'date_str': date_str(row[3]),
+            'mediatype': 'text'}
 
 
 def img_src(html):
