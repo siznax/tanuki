@@ -1,5 +1,5 @@
 __author__ = "siznax"
-__version__ = 2014
+__date__ = "Jan 2015"
 
 # from flask import Flask
 # app = Flask(__name__)
@@ -22,10 +22,7 @@ def before_request():
 @app.teardown_request
 def teardown_request(exception):
     if '/static' not in request.path:
-        if tanuki.DEBUG:
-            print "+ TANUKI closing DB %s" % tanuki.con.total_changes
-        tanuki.con.close()
-
+        tanuki.db_disconnect()
 
 @app.route('/')
 def index():

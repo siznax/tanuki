@@ -1,7 +1,8 @@
 __author__ = "siznax"
-__version__ = 2014
+__date__ = "Jan 2015"
 
 import datetime
+import logging
 import markdown
 import os
 import re
@@ -14,40 +15,42 @@ from flask import render_template, request, redirect, abort
 
 class Tanuki:
 
+    MAX_TAG_LEN = 32
     MAX_TITLE_LEN = 80
     MAX_ENTRY_LEN = 131072
 
     def __init__(self, config):
-        self.DEBUG = config['DEBUG']
+        if config['DEBUG']:
+            self.log = console_logger(__name__)
+        else:
+            self.log = console_logger(__name__, logging.INFO)
         self.config = config
-        if self.DEBUG:
-            print self.config
+        self.log.debug(self.config)
 
     def db_connect(self):
         dbfile = os.path.join(os.path.dirname(__file__), "tanuki.db")
         if request.path.startswith('/help'):
             dbfile = os.path.join(os.path.dirname(__file__), "help.db")
         self.dbfile = dbfile
-        if self.DEBUG:
-            print "+ TANUKI connecting to %s" % (dbfile)
+        self.log.info("Connecting %s" % (dbfile))
         self.con = sqlite3.connect(dbfile)
         self.con.execute('pragma foreign_keys = on')  # !important
         self.db = self.con.cursor()
 
+    def db_disconnect(self):
+        nchanges = self.con.total_changes
+        msg = "Disconnect %s (%s changes)" % (self.dbfile, nchanges)
+        self.log.info(msg)
+        self.con.close()
+
     def db_query(self, sql, val=''):
-        result = self.db.execute(sql, val)
-        if self.DEBUG:
-            msg = "+ TANUKI SQL: %s" % (sql)
-            if val:
-                msg += " VAL: %s" % (''.join(str(val)))
-            print msg
-        return result
+        self.log.debug("%s | %s" % (sql, ''.join(str(val))))
+        return self.db.execute(sql, val)
 
     def get_num_entries(self):
         """returns count of entries table."""
         sql = 'select count(*) from entries'
-        val = ''
-        return self.db_query(sql, val).fetchone()[0]
+        return self.db_query(sql, '').fetchone()[0]
 
     def get_status(self):
         """get and set status data, mostly counts."""
@@ -102,7 +105,7 @@ class Tanuki:
                 return
             sql = 'insert into tags values(?,?,?)'
             date = datetime.date.today().isoformat()
-            self.db_query(sql, [entry_id, tag[:32], date])
+            self.db_query(sql, [entry_id, tag[:Tanuki.MAX_TAG_LEN], date])
             count += 1
 
     def upsert(self, req):
@@ -201,9 +204,8 @@ class Tanuki:
 
     def markdown_entries(self, entries):  # Warning! this can be expensive
         for x in entries:
-            if self.DEBUG:
-                print "+ TANUKI markdown %d %d bytes"\
-                    % (x['id'], sys.getsizeof(x['text']))
+            nbytes = sys.getsizeof(x['text'])
+            self.log.debug("markdown %d (%d bytes)" % (x['id'], nbytes))
             x['text'] = markdown.markdown(x['text'])
         return entries
 
@@ -234,8 +236,7 @@ class Tanuki:
     def pre_markdown(self, entries):
         """pre-markdown needful operations."""
         for x in entries:
-            if self.DEBUG:
-                print "+ TANUKI pre_markdown %d" % (x['id'])
+            self.log.debug("pre_markdown " + x['id'])
             if re.match(r'^<video|<iframe|<object', x['text']):
                 x['mediatype'] = 'video'
         return entries
@@ -251,8 +252,7 @@ class Tanuki:
     def post_markdown(self, entries):
         """post-markdown needful operations."""
         for x in entries:
-            if self.DEBUG:
-                print "+ TANUKI post_markdown %d" % (x['id'])
+            self.log.debug("post_markdown " + x['id'])
             x['img'] = self.find_img(x['text'])
         return entries
 
@@ -280,8 +280,7 @@ class Tanuki:
         sql = 'select * from entries order by date desc,id desc'
         val = ''
         entries = [self.demux(x) for x in self.db_query(sql, val)]
-        if self.DEBUG:
-            print "+ TANUKI entries %d bytes" % (sys.getsizeof(entries))
+        self.log.debug("entries %d bytes" % (sys.getsizeof(entries)))
         return entries
 
     def render_list(self):
@@ -426,6 +425,18 @@ def date_str(date):
         return 'MALFORMED'
 
 
+def console_logger(user_agent, level=logging.DEBUG):
+    """return logger emitting to console."""
+    lgr = logging.getLogger(user_agent)
+    lgr.setLevel(logging.DEBUG)
+    fmtr = logging.Formatter('%(name)s %(levelname)s: %(message)s')
+    clog = logging.StreamHandler(sys.stdout)
+    clog.setLevel(level)
+    clog.setFormatter(fmtr)
+    lgr.addHandler(clog)
+    return lgr
+
+
 def normalize_tags(blob):
     norm = []
     # lower, strip, split, unique
@@ -463,5 +474,5 @@ def ui_img(alt, href=None):
 
 
 def utcnow():
-    """return simpler ISO 8601 date string."""
+    """return simpler ISO datetime (UTC) string."""
     return datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
