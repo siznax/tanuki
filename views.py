@@ -97,7 +97,7 @@ def search():
 
 @app.route('/found', methods=['GET'])
 def found():
-    return tanuki.found(request.args['terms'])
+    return tanuki.render_search_results(request.args['terms'])
 
 
 @app.route('/help')

@@ -15,11 +15,15 @@ from flask import render_template, request, redirect, abort
 
 class Tanuki:
 
+    DEFAULT_DB = "tanuki.db"
+    DEFAULT_HELP_DB = "help.db"
+    MAX_ENTRY_LEN = 131072
+    MAX_TAGS_PER_ENTRY = 5
     MAX_TAG_LEN = 32
     MAX_TITLE_LEN = 80
-    MAX_ENTRY_LEN = 131072
 
     def __init__(self, config):
+        """initialize tanuki instance."""
         if config['DEBUG']:
             self.log = console_logger(__name__)
         else:
@@ -28,9 +32,13 @@ class Tanuki:
         self.log.debug(self.config)
 
     def db_connect(self):
-        dbfile = os.path.join(os.path.dirname(__file__), "tanuki.db")
+        """connect to default DB."""
         if request.path.startswith('/help'):
-            dbfile = os.path.join(os.path.dirname(__file__), "help.db")
+            dbfile = os.path.join(os.path.dirname(__file__), 
+                                  Tanuki.DEFAULT_DB_HELP)
+        else:
+            dbfile = os.path.join(os.path.dirname(__file__), 
+                                  Tanuki.DEFAULT_DB)
         self.dbfile = dbfile
         self.log.info("Connecting %s" % (dbfile))
         self.con = sqlite3.connect(dbfile)
@@ -38,19 +46,21 @@ class Tanuki:
         self.db = self.con.cursor()
 
     def db_disconnect(self):
+        """teardown DB."""
         nchanges = self.con.total_changes
         msg = "Disconnect %s (%s changes)" % (self.dbfile, nchanges)
         self.log.info(msg)
         self.con.close()
 
-    def db_query(self, sql, val=''):
+    def db_query(self, sql, val=''):  # TODO: ORM
+        """query database."""
         self.log.debug("%s | %s" % (sql, ''.join(str(val))))
         return self.db.execute(sql, val)
 
     def get_num_entries(self):
         """returns count of entries table."""
         sql = 'select count(*) from entries'
-        return self.db_query(sql, '').fetchone()[0]
+        return self.db_query(sql).fetchone()[0]
 
     def get_status(self):
         """get and set status data, mostly counts."""
@@ -93,20 +103,18 @@ class Tanuki:
                                body_class='edit')
 
     def clear_tags(self, entry_id):
+        """remove all tags referencing given id."""
         self.db_query("delete from tags where id=?", [entry_id])
 
     def store_tags(self, entry_id, tags):
+        """store tags specified in edit form"""
         self.clear_tags(entry_id)
-        if not tags or tags == 'tags':
-            return
-        count = 0
-        for tag in normalize_tags(tags):
-            if count > 5:
+        for count, tag in enumerate(normalize_tags(tags)):
+            if (count + 1) > Tanuki.MAX_TAGS_PER_ENTRY:
                 return
             sql = 'insert into tags values(?,?,?)'
             date = datetime.date.today().isoformat()
             self.db_query(sql, [entry_id, tag[:Tanuki.MAX_TAG_LEN], date])
-            count += 1
 
     def upsert(self, req):
         self.environ = req.environ
@@ -209,7 +217,7 @@ class Tanuki:
             x['text'] = markdown.markdown(x['text'])
         return entries
 
-    def controls(self, entry_id, wanted=None):
+    def controls(self, entry_id, wanted=None):  # TODO: cleanup this mess!
         """compute UI "buttons" string."""
         delete = ui_img('delete', "/confirm/%d" % (entry_id))
         edit_href = "/edit/%d" % (entry_id)
@@ -236,14 +244,12 @@ class Tanuki:
     def pre_markdown(self, entries):
         """pre-markdown needful operations."""
         for x in entries:
-            self.log.debug("pre_markdown " + x['id'])
+            self.log.debug("pre_markdown %d" % x['id'])
             if re.match(r'^<video|<iframe|<object', x['text']):
                 x['mediatype'] = 'video'
         return entries
 
     def find_img(self, html):
-        if not html:
-            return None
         import lxml.html
         doc = lxml.html.document_fromstring(html)
         for src in doc.xpath("//img/@src"):
@@ -252,15 +258,14 @@ class Tanuki:
     def post_markdown(self, entries):
         """post-markdown needful operations."""
         for x in entries:
-            self.log.debug("post_markdown " + x['id'])
-            x['img'] = self.find_img(x['text'])
+            self.log.debug("post_markdown %d" % x['id'])
+            x['img'] = None if not x['text'] else self.find_img(x['text'])
         return entries
 
     def get_latest_entries(self):
         """return last ten entries updated."""
         sql = 'select * from entries order by updated desc limit 10'
-        val = ''
-        return [self.demux(x) for x in self.db_query(sql, val)]
+        return [self.demux(x) for x in self.db_query(sql)]
 
     def render_index(self, page=0):
         readme = self.get_entries_tagged("readme")
@@ -278,8 +283,7 @@ class Tanuki:
     def get_entries(self):
         """return fully hydrated entries ordered by date."""
         sql = 'select * from entries order by date desc,id desc'
-        val = ''
-        entries = [self.demux(x) for x in self.db_query(sql, val)]
+        entries = [self.demux(x) for x in self.db_query(sql)]
         self.log.debug("entries %d bytes" % (sys.getsizeof(entries)))
         return entries
 
@@ -318,8 +322,7 @@ class Tanuki:
     def get_tag_set(self):
         """return dict of tag names keyed on count."""
         sql = 'select count(*),name from tags group by name order by name'
-        val = ''
-        return [{'count': r[0], 'name': r[1]} for r in self.db_query(sql, val)]
+        return [{'count': r[0], 'name': r[1]} for r in self.db_query(sql)]
 
     def render_tags(self):
         tag_set = self.get_tag_set()
@@ -341,9 +344,8 @@ class Tanuki:
 
     def get_entries_tagged(self, tag):
         """return entries matching tag name ordered by date."""
-        sql = 'select * from entries,tags '\
-            'where tags.name=? and tags.id=entries.id '\
-            'order by date desc'
+        sql = ("select * from entries,tags where tags.name=? and "
+               "tags.id=entries.id order by date desc")
         return [self.demux(x) for x in self.db_query(sql, [tag])]
 
     def render_tagged(self, tag, view=None):
@@ -366,8 +368,7 @@ class Tanuki:
     def get_notag_entries(self):
         """return entries having no tags."""
         sql = 'select * from entries where id not in (select id from tags)'
-        val = ''
-        return [self.demux(x) for x in self.db_query(sql, val)]
+        return [self.demux(x) for x in self.db_query(sql)]
 
     def render_notags(self):
         untagged = self.get_notag_entries()
@@ -387,13 +388,12 @@ class Tanuki:
     def get_entries_matching(self, terms):
         """return entries matching terms in title or text."""
         terms = '%' + terms.encode('ascii', 'ignore') + '%'
-        sql = 'select * from entries '\
-            'where title like ? or text like ? '\
-            'order by id desc'
+        sql = ("select * from entries where title like ? or text like ? "
+               "order by id desc")
         val = [terms, terms]
         return [self.demux(x) for x in self.db_query(sql, val)]
 
-    def found(self, terms):
+    def render_search_results(self, terms):
         found = self.get_entries_matching(terms)
         controls = ['home', 'list', 'tags', 'search', 'new']
         msg = 'found (%d) matching "%s"' % (len(found), terms)
