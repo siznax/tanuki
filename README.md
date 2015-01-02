@@ -1,19 +1,16 @@
 Tanuki allows you to take private, media rich notes inside your web
 browser. It was built for taking personal notes kept offline, but you
-could easily deploy it online as a blog. Try the demo to see what it's
-like. 
+could easily deploy it as a blog.
 
 * Demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
 * Help: [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
-
-Dependencies:
+* Dependencies:
 [python](https://python.org),
 [flask](http://flask.pocoo.org/),
 [sqlite](http://www.sqlite.org/),
 [markdown](http://daringfireball.net/projects/markdown/),
 [lxml](http://lxml.de/)
-
-Recommended:
+* Recommended:
 [virtualenvwrapper](http://virtualenvwrapper.readthedocs.org/), 
 [dropbox](https://www.dropbox.com/)
 
@@ -83,10 +80,7 @@ You can try the demo to see what it's like to take notes in [tanuki.siznax.net](
 
 If you want to run tanuki as a WSGI module on your web server, see the tips at [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 
-### Thanks!
+#### Thanks
 
 Tanuki (raccoon) icon courtesy of
 [artrelatedblog](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
-
-
-@siznax
