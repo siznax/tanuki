@@ -32,13 +32,13 @@ $ cd ~/sw
 $ git clone https://github.com/siznax/tanuki.git
 ```
 
-Create a config file (e.g. <tt>~/sw/tanuki/CONFIG</tt>) and – you could do more here, but add:
+Create a config file (e.g. <tt>~/sw/tanuki/CONFIG</tt>) and (at least) add:
 
 ```shell
 TITLE = "tanuki"    
 ```
 
-Point to your new config file by adding this to your <tt>.bashrc</tt>, for instance:
+Point to your new config file in your shell config (e.g. <tt>.bashrc</tt>):
 
 ```shell
 export TANUKI_CONFIG=$HOME/sw/tanuki/CONFIG
@@ -50,7 +50,7 @@ Create a database from the schema provided:
 $ sqlite3 tanuki.db < schema.sql
 ```
 
-This is _optional_, but you can put your database in the "cloud" &#x2601; to share on all your computers and to have a durable backup. Keep in mind, there is nothing in tanuki protecting your database.
+Optionally, you can put your database in a "cloud" &#x2601; to share on all your computers, and to have a durable backup. Please keep in mind, there is nothing in tanuki protecting your database.
 
 ```shell
 $ mv tanuki.db ~/Dropbox/tanuki.db    
