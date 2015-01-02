@@ -7,12 +7,18 @@
 
 <div id="content" class="match_gallery">
 
+<p>{% if not found %}
+No images found in ({{entries|length()}}) entries.
+{% else %}
+Found in ({{found|length()}}) images in ({{entries|length()}}) entries.
+{% endif %}</p>
+
 {% set count = 1 %}
 {% for entry in entries %}
-{% if entry.img %}
+{%   if entry.img %}
 <a href="/entry/{{ entry.id }}"><img src="{{ entry.img }}" 
  alt="{{ entry.title }}" title="[{{ count }}] {{ entry.title }}"></a>
-{% endif %}
+{%   endif %}
 {% set count = count + 1 %}
 {% endfor %}
 

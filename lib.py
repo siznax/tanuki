@@ -34,10 +34,10 @@ class Tanuki:
     def db_connect(self):
         """connect to default DB."""
         if request.path.startswith('/help'):
-            dbfile = os.path.join(os.path.dirname(__file__), 
-                                  Tanuki.DEFAULT_DB_HELP)
+            dbfile = os.path.join(os.path.dirname(__file__),
+                                  Tanuki.DEFAULT_HELP_DB)
         else:
-            dbfile = os.path.join(os.path.dirname(__file__), 
+            dbfile = os.path.join(os.path.dirname(__file__),
                                   Tanuki.DEFAULT_DB)
         self.dbfile = dbfile
         self.log.info("Connecting %s" % (dbfile))
@@ -210,7 +210,8 @@ class Tanuki:
                 'date_str': date_str(row[3]),
                 'mediatype': 'text'}
 
-    def markdown_entries(self, entries):  # Warning! this can be expensive
+    def markdown_entries(self, entries):
+        """return Markdown text from HTML entries"""
         for x in entries:
             nbytes = sys.getsizeof(x['text'])
             self.log.debug("markdown %d (%d bytes)" % (x['id'], nbytes))
@@ -247,19 +248,6 @@ class Tanuki:
             self.log.debug("pre_markdown %d" % x['id'])
             if re.match(r'^<video|<iframe|<object', x['text']):
                 x['mediatype'] = 'video'
-        return entries
-
-    def find_img(self, html):
-        import lxml.html
-        doc = lxml.html.document_fromstring(html)
-        for src in doc.xpath("//img/@src"):
-            return src
-
-    def post_markdown(self, entries):
-        """post-markdown needful operations."""
-        for x in entries:
-            self.log.debug("post_markdown %d" % x['id'])
-            x['img'] = None if not x['text'] else self.find_img(x['text'])
         return entries
 
     def get_latest_entries(self):
@@ -350,20 +338,35 @@ class Tanuki:
 
     def render_tagged(self, tag, view=None):
         tagged = self.get_entries_tagged(tag)
-        tagged = self.apply_tags(tagged)
-        tagged = self.pre_markdown(tagged)
-        tagged = self.markdown_entries(tagged)
-        tagged = self.post_markdown(tagged)
-        num = len(tagged)
         controls = ['home', 'list', 'tags', 'search', 'new', 'help']
+        num = len(tagged)
         title = "#%s (%d)" % (tag, num)
         msg = '%d tagged "%s" %s' % (num, tag, self.msg_options(tag, view))
-        template = 'list.html' if not view else 'gallery.html'
-        return render_template(template,
+        if view == 'gallery':
+            return self.render_tagged_gallery(title, msg, controls, tagged)
+        return render_template('list.html',
                                msg=msg,
                                controls=self.controls(0, controls),
                                title=title,
                                entries=tagged)
+
+    def get_entries_img_src(self, entries):
+        """update entries with <img> src attribute."""
+        for x in entries:
+            x['img'] = None if not x['text'] else img_src(x['text'])
+            self.log.debug("%d %s" % (x['id'], x['img']))
+        return entries
+
+    def render_tagged_gallery(self, title, msg, controls, entries):
+        tagged = self.markdown_entries(entries)
+        tagged = self.get_entries_img_src(tagged)
+        found = set(x['img'] for x in tagged if x['img'])
+        return render_template('gallery.html',
+                               title=title,
+                               msg=msg,
+                               controls=self.controls(0, controls),
+                               entries=tagged,
+                               found=found)
 
     def get_notag_entries(self):
         """return entries having no tags."""
@@ -416,6 +419,19 @@ class Tanuki:
                                body_class="help")
 
 
+def console_logger(user_agent, level=logging.DEBUG):
+    """return logger emitting to console."""
+    lgr = logging.getLogger(user_agent)
+    lgr.setLevel(logging.DEBUG)
+    fmtr = logging.Formatter("%(name)s %(levelname)s %(funcName)s: "
+                             "%(message)s")
+    clog = logging.StreamHandler(sys.stdout)
+    clog.setLevel(level)
+    clog.setFormatter(fmtr)
+    lgr.addHandler(clog)
+    return lgr
+
+
 def date_str(date):
     """return "Mon 1 Jan 1970" from 'YYYY-mm-dd'."""
     try:
@@ -425,16 +441,12 @@ def date_str(date):
         return 'MALFORMED'
 
 
-def console_logger(user_agent, level=logging.DEBUG):
-    """return logger emitting to console."""
-    lgr = logging.getLogger(user_agent)
-    lgr.setLevel(logging.DEBUG)
-    fmtr = logging.Formatter('%(name)s %(levelname)s: %(message)s')
-    clog = logging.StreamHandler(sys.stdout)
-    clog.setLevel(level)
-    clog.setFormatter(fmtr)
-    lgr.addHandler(clog)
-    return lgr
+def img_src(html):
+    """return (first) <img> src attribute from HTML."""
+    import lxml.html
+    doc = lxml.html.document_fromstring(html)
+    for src in doc.xpath("//img/@src"):
+        return src
 
 
 def normalize_tags(blob):
