@@ -1,23 +1,15 @@
 {% extends "layout.html" %}
 {% block body %}
-
-{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
-
+{% include "header.html" %}
 <div id="content" class="search">
 
-<div id="search" align="center">
-
 <form action="/found" method="GET">
-<a href="http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/"><img alt="http://artrelatedblog.wordpress.com/"
- title="http://artrelatedblog.wordpress.com/"
- src="/static/tanuki.png"></a>
-<input type="text" name="terms" required>
+<img style="vertical-align:bottom" src="/static/tanuki.png">
+<input style="font-size:16pt" 
+ type="text" name="terms" placeholder="terms" required>
 <input type="submit" value="Search">
 </form>
 
 </div>
-
-</div>
-
 {% endblock %}
 

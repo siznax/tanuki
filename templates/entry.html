@@ -1,30 +1,28 @@
-{% include "layout.html" %}
+{% extends "layout.html" %}
 {% block body %}
+{% include "header.html" %}
+<div id="content" class="entry">
 
-{% if msg %}<div id="header">{{ msg|safe }}</div>{% endif %}
-
-{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
-
-<a name="{{ entry.id }}"></a>
-<div id="{{ entry.id }}" class="entry {{ entry.mediatype }} {{ path_class }}">
-<div class="entry_head">
-<div id="date">{{ entry.date_str }}</div>
-<div id="title">{% 
-    if request.path.startswith("/help") 
-%}♨ {% 
-    endif 
-%}{{ entry.title }}</div>
-</div>
-<div class="entry_body">{{ entry.text|safe }}</div>
-<div class="entry_foot">
-<div id="entry_tags">{% 
-    for tag in entry.tags
-%}<span class="tag"><i>#</i><a href="/tagged/{{ tag }}">{{tag}}</a></span> {% 
-    endfor 
-%}</div>
- </div>
+{% if not request.path.startswith("/help") %}
+<div style="float:left">
+<span style="opacity:0.6">{{entry.date_str}}</span>
+{% for tag in entry.tags %}
+#<a href="/tagged/{{tag}}">{{tag}}</a>
+{% endfor %}
 </div>
 
-{% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
+<div style="float:right">
+<a href="/edit/{{entry.id}}">edit</a> |
+<a href="/confirm/{{entry.id}}">delete</a>
+</div>
+{% endif %}
+
+<div style="clear:both">
+
+<h2>{{ entry.title }}</h2>
+
+{{ entry.text|safe }}
+
+</div>
 
 {% endblock %}

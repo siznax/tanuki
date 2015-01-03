@@ -1,9 +1,6 @@
 {% extends "layout.html" %}
-{%  block body %}
-
-{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
-
-<div id="edit">
+{% block body %}
+<div id="content" class="form">
 
 <form id="edit" action="/store" method="POST">
 
@@ -38,7 +35,6 @@
 <input id="save_btn" type="submit" value="Save" onclick="return validate();">
 
 </table>
-
 </form>
 
 </div>

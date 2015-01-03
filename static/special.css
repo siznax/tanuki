@@ -9,15 +9,18 @@
 .art.wide img {
     width:640px;
 }
+.book {
+    margin-left:1em;
+    margin-bottom:1em;
+    float:right;
+    width:240px;
+}
 .blockflow {
     overflow:auto;
     margin-bottom:1em;
 }
-pre code {
-    display:block;
-    padding:1em;
-    background:#333;
-    color:white;
+pre {
+    overflow-y:hidden;
 }
 .quote {
     overflow:auto;
@@ -28,26 +31,19 @@ pre code {
     background:#d3d3d3;
     border-radius:0.4em;
 }
-.entry_body img {
-    max-width:100%;
+#playlist {
+    clear:both;
 }
-.entry_body .cover, .entry_body .book {
+#viewtube {
     float:right;
-    margin:0;
-    padding:0;
-    margin-left:2em;
-    margin-bottom:1em;
-    max-width:240px;
+    margin-left:1em;
 }
-.entry_body .clipping {
+.clipping {
     margin:0;
     padding:0;
     font-size:1.2em;
     text-align:justify;
     font-family:Georgia,Times,Serif;
-}
-.entry div.clear {
-  clear:both;
 }
 .entry .clipping img {
     margin:0;
@@ -55,16 +51,6 @@ pre code {
     margin-left:2em;
     margin-bottom:1em;
     max-width:240px;
-}
-.entry .didactic { /* museum placard (object label) */
-    margin:0;
-    padding:0;
-    margin-top:-1em;
-    font-style:italic;
-    white-space:pre;
-}
-.entry .embed {
-    width:320px;
 }
 .entry .inline_right {
     float:right;
@@ -77,9 +63,6 @@ pre code {
     width:240px;
     font-size:12px;
 }
-.entry .inline_right img {
-    width:240px;
-}
 .entry .inline_left {
     float:left;
     margin-right:1em;
@@ -87,17 +70,4 @@ pre code {
     width:180px;
     font-size:10px;
     text-align:center;
-}
-img.thumb {
-    float:right;
-    margin:0;
-    margin-left:1em;
-    margin-bottom:1em;
-    max-width:120px;
-}
-img.portrait {
-    float:right;
-    width:240px;
-    margin-left:1em;
-    margin-bottom:1em;
 }

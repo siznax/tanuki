@@ -1,28 +1,18 @@
 <!doctype html>
 <head>
 <meta charset="UTF-8">
-{% if "tanuki.siznax.net" in request.host %}
-<title>{% if title %}{{ title }}{% else %}tanuki タヌキ {{config['TITLE']}}{% endif %}</title>
-{% else %}
-<title>{% if title %}タヌキ {{ title }}{% else %}tanuki タヌキ{% endif %}</title>
-{% endif %}
-<link id="layout" rel="stylesheet" href="/static/style.css">
-<link id="layout" rel="stylesheet" href="/static/special.css">
-<link id="color" rel="stylesheet" href="/static/light.css">
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script> 
+<title>タヌキ {{ title }}</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css" />
+<link rel="stylesheet" type="text/css" href="/static/special.css" />
+<link rel="stylesheet" type="text/css" href="/static/color.css" />
+<link rel="stylesheet" type="text/css" href="/static/gallery.css" />
+<link rel="stylesheet" type="text/css" href="/static/prettify/sunburst.css" />
+<script src="/static/jquery.js"></script>
 <script src="/static/tanuki.js"></script>
-{% 
-    if not request.path.startswith('/edit') and entry and "galleryjs" in entry.text 
-%}<script src="/static/gallery.js"></script>
-<link rel="stylesheet" href="/static/gallery.css" />
-{%
-    endif 
-%}{% 
-    if not request.path.startswith('/edit') and entry and "prettyprint" in entry.text 
-%}<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>{%
-    endif 
-%}</head>
-<body{% if body_class %} class="{{body_class}}"{% endif %}>
+<script src="/static/gallery.js"></script>
+<script src="/static/prettify/prettify.js"></script>
+</head>
+<body onload="prettyPrint()">
 {% block body %}
 {% endblock %}
 </body>

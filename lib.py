@@ -59,9 +59,9 @@ class Tanuki:
 
     def get_status(self):
         """get and set status data, mostly counts."""
-        self.num_entries = self.get_num_entries()
-        self.num_tags = len(self.get_tag_set())
-        self.num_notag = len(self.get_notag_entries())
+        self.status = {'entries': self.get_num_entries(),
+                       'tags': len(self.get_tag_set()),
+                       'notag': len(self.get_notag_entries())}
 
     def get_num_entries(self):
         """returns count of entries table."""
@@ -70,15 +70,15 @@ class Tanuki:
 
     def get_status_msg(self):
         """return status string for most routes."""
-        return "%d entries %d tags " % (self.num_entries,
-                                        self.num_tags)
+        return "%d entries %d tags " % (self.status['entries'],
+                                        self.status['tags'])
 
     def get_tags_status_msg(self):
         """return /tags status string."""
         notag_link = '<a href="/notag">notag</a>'
-        return "%d entries %d tags (%d %s) " % (self.num_entries,
-                                                self.num_tags,
-                                                self.num_notag,
+        return "%d entries %d tags (%d %s) " % (self.status['entries'],
+                                                self.status['tags'],
+                                                self.status['notag'],
                                                 notag_link)
 
     def render_new_form(self):
@@ -87,26 +87,21 @@ class Tanuki:
                  'title': 'title',
                  'tags': 'tags',
                  'public': 0}
-        controls = ['home', 'list', 'tags', 'search', 'help']
         return render_template('edit.html',
                                entry=entry,
-                               controls=self.controls(0, controls),
-                               title='new entry',
-                               body_class='edit')
+                               title='new entry')
 
     def render_edit_form(self, entry_id):
         entry = self.get_entry(entry_id, True)
         referrer = request.referrer
         if not referrer:
             referrer = "/entry/%s" % entry_id
-        controls = ['home', 'list', 'tags', 'search', 'new', 'help']
         title = "edit %s: %s" % (entry_id, entry['title'])
         return render_template('edit.html',
                                entry=entry,
                                referrer=referrer,
                                title=title,
-                               controls=self.controls(0, controls),
-                               body_class='edit')
+                               status=self.status)
 
     def clear_tags(self, entry_id):
         """remove all tags referencing given id."""
@@ -206,30 +201,6 @@ class Tanuki:
             x['text'] = markdown.markdown(x['text'])
         return entries
 
-    def controls(self, entry_id, wanted=None):  # TODO: cleanup this mess!
-        """compute UI "buttons" string."""
-        delete = ui_img('delete', "/confirm/%d" % (entry_id))
-        edit_href = "/edit/%d" % (entry_id)
-        entry_href = "/entry/%d" % (entry_id)
-        if request.path.startswith('/help'):
-            delete = ''
-            edit_href = "/help/edit/%d" % (entry_id)
-        if '/entry' in request.path:
-            entry_href = ''
-        btns = {'home': ui_img('home', '/'),
-                'new': ui_img('new', '/new'),
-                'entry': ui_img('entry', entry_href),
-                'edit': ui_img('edit', edit_href),
-                'delete': delete,
-                'list': ui_img('list', '/list'),
-                'tags': ui_img('tags', '/tags'),
-                'search': ui_img('search', '/search'),
-                'help': ui_img('help', '/help')}
-        _str = "\n"
-        for wtd in wanted:
-            _str += "%s\n" % (btns[wtd])
-        return _str
-
     def pre_markdown(self, entries):
         """pre-markdown needful operations."""
         for x in entries:
@@ -245,16 +216,12 @@ class Tanuki:
 
     def render_index(self, page=0):
         readme = self.get_entries_tagged("readme")
-        controls = ['home', 'list', 'tags', 'search', 'new', 'help']
-        msg = self.get_status_msg()
         return render_template('index.html',
-                               msg=msg,
-                               title=self.num_entries,
-                               controls=self.controls(0, controls),
+                               title=self.status['entries'],
                                latest=self.get_latest_entries(),
                                readme=readme,
                                tag_set=self.get_tag_set(),
-                               body_class='index')
+                               status=self.status)
 
     def get_entries(self):
         """return fully hydrated entries ordered by date."""
@@ -265,12 +232,10 @@ class Tanuki:
 
     def render_list(self):
         entries = self.get_entries()  # consider removing text
-        controls = ['home', 'tags', 'search', 'new', 'help']
         return render_template('list.html',
                                title="list (%d)" % len(entries),
-                               msg=self.get_status_msg(),
-                               controls=self.controls(0, controls),
-                               entries=entries)
+                               entries=entries,
+                               status=self.status)
 
     def get_entry(self, entry_id, editing=False):
         """returns single entry as HTML or markdown text."""
@@ -287,13 +252,10 @@ class Tanuki:
 
     def render_entry(self, entry_id):
         entry = self.get_entry(entry_id)
-        controls = ['home', 'list', 'tags', 'search', 'new', 'edit',
-                    'delete', 'help']
         return render_template('entry.html',
-                               controls=self.controls(entry_id, controls),
                                entry=entry,
                                title=entry['title'],
-                               body_class="entry")
+                               status=self.status)
 
     def get_tag_set(self):
         """return dict of tag names keyed on count."""
@@ -302,13 +264,10 @@ class Tanuki:
 
     def render_tags(self):
         tag_set = self.get_tag_set()
-        title = "%d tags" % len(tag_set)
-        controls = ['home', 'list', 'search', 'new', 'help']
         return render_template('tags.html',
-                               title=title,
-                               msg=self.get_tags_status_msg(),
-                               controls=self.controls(0, controls),
-                               tag_set=tag_set)
+                               title="tags (%d)" % len(tag_set),
+                               tag_set=tag_set,
+                               status=self.status)
 
     def msg_options(self, tag, view='list'):  # TODO: poor implementation
         opt1 = '<b>list</b>'
@@ -326,17 +285,15 @@ class Tanuki:
 
     def render_tagged(self, tag, view=None):
         tagged = self.get_entries_tagged(tag)
-        controls = ['home', 'list', 'tags', 'search', 'new', 'help']
         num = len(tagged)
         title = "#%s (%d)" % (tag, num)
-        msg = '%d tagged "%s" %s' % (num, tag, self.msg_options(tag, view))
         if view == 'gallery':
-            return self.render_tagged_gallery(title, msg, controls, tagged)
+            return self.render_tagged_gallery(title, msg, tagged)
         return render_template('list.html',
-                               msg=msg,
-                               controls=self.controls(0, controls),
                                title=title,
-                               entries=tagged)
+                               entries=tagged,
+                               tag=tag,
+                               status=self.status)
 
     def get_entries_img_src(self, entries):
         """update entries with <img> src attribute."""
@@ -345,14 +302,13 @@ class Tanuki:
             self.log.debug("%d %s" % (x['id'], x['img']))
         return entries
 
-    def render_tagged_gallery(self, title, msg, controls, entries):
+    def render_tagged_gallery(self, title, msg, entries):
         tagged = self.markdown_entries(entries)
         tagged = self.get_entries_img_src(tagged)
         found = set(x['img'] for x in tagged if x['img'])
         return render_template('gallery.html',
                                title=title,
                                msg=msg,
-                               controls=self.controls(0, controls),
                                entries=tagged,
                                found=found)
 
@@ -362,19 +318,15 @@ class Tanuki:
         return [entry2dict(x) for x in self.db_query(sql)]
 
     def render_notags(self):
-        untagged = self.get_notag_entries()
-        controls = ['home', 'list', 'tags', 'search', 'new']
-        msg = "(%d) entries not tagged" % len(untagged)
+        notag = self.get_notag_entries()
         return render_template('list.html',
-                               title="%d notag" % len(untagged),
-                               msg=msg,
-                               controls=self.controls(0, controls),
-                               entries=untagged)
+                               title="notag (%d)" % len(notag),
+                               entries=notag,
+                               notag=True,
+                               status=self.status)
 
     def render_search_form(self):
-        controls = ['home', 'list', 'tags', 'new', 'help']
-        return render_template('search.html',
-                               controls=self.controls(0, controls))
+        return render_template('search.html', status=self.status)
 
     def get_entries_matching(self, terms):
         """return entries matching terms in title or text."""
@@ -386,12 +338,11 @@ class Tanuki:
 
     def render_search_results(self, terms):
         found = self.get_entries_matching(terms)
-        controls = ['home', 'list', 'tags', 'search', 'new']
         msg = 'found (%d) matching "%s"' % (len(found), terms)
         return render_template('list.html',
                                msg=msg,
-                               controls=self.controls(0, controls),
-                               entries=found)
+                               entries=found,
+                               status=self.status)
 
     def get_help_entries(self):
         """return entries from help.db."""
@@ -399,12 +350,10 @@ class Tanuki:
         return [entry2dict(x) for x in self.db_query(sql)]
 
     def render_help(self):
-        controls = ['home', 'list', 'tags', 'search', 'new']
         return render_template("help.html",
-                               controls=self.controls(0, controls),
                                entries=self.get_help_entries(),
                                title="help",
-                               body_class="help")
+                               status=self.status)
 
 
 def console_logger(user_agent, level=logging.DEBUG):
@@ -476,15 +425,6 @@ def str_is_int(_str):
         return True
     except ValueError:
         return False
-
-
-def ui_img(alt, href=None):
-    """return img tag given UI key (by convention)."""
-    img = '<img id="%s" alt="%s" src="/static/%s.png">' % (alt, alt, alt)
-    if href:
-        return '<a href="%s">%s</a>' % (href, img)
-    else:
-        return img
 
 
 def utcnow():

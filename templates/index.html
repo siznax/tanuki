@@ -1,15 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
+{% include "header.html" %}
 
-{% if msg %}<div id="header"><b><a href="http://github.com/siznax/tanuki" title="Fork tanuki.">タヌキ</a></b> {{ msg|safe }}</div>{% endif %}
+<div id="content" class="index">
 
-{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
-
-<div id="content">
-
-<!-- LATEST UPDATED -->
-
-<div class="feature latest">
+<div class="feature" style="float:left">
 <ul>
 <lh><b>latest ({{latest|length()}}) updates</b></lh>
 {% if not latest %}<li>None</li>{% endif %}
@@ -19,9 +14,7 @@
 </ul>
 </div>
 
-<!-- README -->
-
-<div class="feature special">
+<div class="feature" style="float:right">
 <ul>
 <lh><b>README</b> (<a href="/tagged/readme">{{readme|length()}}</a>)</lh>
 {% if not readme %}<li>None</li>{% endif %}
@@ -31,23 +24,10 @@
 </ul>
 </div>
 
-<br clear="all" />
+<div style="clear:both">
 
-<!-- TAG CLOUD -->
+{% include "tag_set.html" %}
 
-<div id="content" class="tags">
-
-{% if tag_set %}
-<div id="tag_set">
-{% for tag in tag_set %}
-<span><i>{{ tag['count'] }}</i><a 
- href="/tagged/{{ tag['name'] }}">{{ tag['name'] }}</a></span>
-{% endfor %}
 </div>
-{% endif %}
-
-{% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
-
-</div><!-- /content -->
 
 {% endblock %}

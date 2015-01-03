@@ -1,26 +1,25 @@
 {% extends "layout.html" %}
 {% block body %}
-
-{% if msg %}<div id="header">{{ msg|safe }}</div>{% endif %}
-
-{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
+{% include "header.html" %}
 
 <div id="content" class="list">
 
-<div id="entry_list">
-<ol start="{{ start }}">
-{% for entry in entries %}
-{% set month = entry.month %}
-{% if '/list' in request.path %}
-{% if not month==last_month %}<lh><div>{{ month }} {{ entry.year }}</div></lh>{% endif %}
+{% if tag %}<h3>#{{tag}} ({{entries|length()}})</h3>
+{% elif notag %}<h3>({{entries|length()}}) not tagged</h3>
+{% else %}<h3>({{entries|length()}}) entries</h3>
 {% endif %}
-<li {% if request.path=="/list" %}value={{ entry.id }}{% endif %}><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></li>
-{% set last_month = month %}
-{% endfor %}
-</ol>
-</div>
 
-{% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
+<ol>
+{% for entry in entries %}
+{% if not entry.month == last_month %}
+</section><section>
+<p style="margin:1em 0 0 0"><b>{{entry.month}} {{entry.year}}</b></p>
+{% endif %}
+<li value="{{entry.id}}"><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>
+{% set last_month = entry.month %}
+{% endfor %}
+</section>
+</ol>
 
 </div>
 

@@ -1,11 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
+{% include "header.html" %}
 
-{% if msg %}<div id="header">{{ msg|safe }}</div>{% endif %}
-
-{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
-
-<div id="content" class="match_gallery">
+<div id="content" class="gallery">
 
 <p>{% if not found %}
 No images found in ({{entries|length()}}) entries.
@@ -15,14 +12,12 @@ Found in ({{found|length()}}) images in ({{entries|length()}}) entries.
 
 {% set count = 1 %}
 {% for entry in entries %}
-{%   if entry.img %}
-<a href="/entry/{{ entry.id }}"><img src="{{ entry.img }}" 
- alt="{{ entry.title }}" title="[{{ count }}] {{ entry.title }}"></a>
-{%   endif %}
+  {% if entry.img %}
+<a href="/entry/{{ entry.id }}"><img
+ src="{{ entry.img }}" alt="{{ entry.title }}" title="{{ entry.title }}"></a>
+  {% endif %}
 {% set count = count + 1 %}
 {% endfor %}
-
-{% if footer %}<div id="footer">{{ footer|safe }}</div>{% endif %}
 
 </div>
 

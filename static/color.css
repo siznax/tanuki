@@ -1,123 +1,23 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,800,700);
-
 body {
-  font-family:Georgia;
-  background:#444;
-  font-size:1.2em;
-  color:black;
+    font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;
+    background:lightgray url('/static/noise.png');
 }
-
-div#result_msg {
-  font-family:"Open Sans", sans-serif;
+h1,h2,h3,h4,h5,h6 {
+    text-shadow:0px 1px 0px white;
 }
-#result_msg img,.entry_foot img,span#controls img { opacity:0.2; }
-#result_msg img#tanuki { opacity:1; }
-#result_msg img:hover,.entry_foot img:hover,#goto img:hover { opacity:1; }
-#result_msg div#next_prev img { opacity:0.6; }
-#result_msg div#next_prev img:hover { opacity:1; }
-div#tag_set { font-family:"Open Sans", sans-serif; }
-div#tag_set span { color:#333; border:1px solid #333; border-radius:16px;}
-div#tag_set span a { color:#e5e5e5; }
-div#tag_set span:hover {
-  border:1px solid #333;
-  background:-webkit-gradient(linear,left top,left bottom,from(mediumorchid),to(indigo));
+hl {
+    background-color:khaki;
 }
-div#tag_set span:hover i { color:#333; }
-div#tag_set span:hover a { color:white; }
-
-div#entry_list { 
-  font-family:"Open Sans", sans-serif; 
-  font-weight:400; 
-  color:black;
+tt {
+    padding:0.1em 0.2em;
+    background:white;
+    border:1px solid silver;
+    border-radius:4px;
 }
-#entry_list i { color:black; }
-#entry_list a { color:#999; }
-#entry_list a:hover { color:mediumorchid; text-shadow:1px 1px 1px black; }
-div#tail {
-  font-family:"Open Sans", sans-serif; 
-  font-weight:400;
-  color:#666;
+#header {
+    text-shadow:0px 1px 0px snow;
 }
-div.entry_head {
-  background:-webkit-gradient(linear,left top,left bottom,from(#dcdcdc), to(#a9a9a9));
-  background:-webkit-gradient(linear,left top,left bottom,from(darkviolet),to(indigo));
-  background:-webkit-gradient(linear,left top,left bottom,from(#444), to(#000));
-  border-top:  1px solid black;
-  border-right:1px solid black;
-  border-left: 1px solid black;
-  -webkit-border-top-left-radius: 8px;
-  -webkit-border-top-right-radius: 8px;
-  -moz-border-radius-topleft: 8px;
-  -moz-border-radius-topright: 8px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  color:white;
+.feature {
+    border:1px solid #ccc;
+    background:white;
 }
-.entry_head a { color:white; }
-.entry_head #date {
-  font-family:"Open Sans", sans-serif; 
-  font-weight:200;
-  font-size:14px;
-}
-.entry_head #date a { color:#ccc; }
-.entry_head #date a:hover {
-  background:-webkit-gradient(linear,left top,left bottom,from(mediumorchid),to(indigo));
-  color:white;
-}
-.entry_head #title { 
-  font-family:"Open Sans", sans-serif; 
-  font-weight:bold;
-  font-size:x-large;
-}
-.entry_head #controls img { background:#333; }
-.entry_head #controls img:hover {
-  background:-webkit-gradient(linear,left top,left bottom,from(mediumorchid),to(indigo));
-  color:white;
-}
-div.entry_body {
-  background:whitesmoke;
-  border-right:1px solid black;
-  border-left: 1px solid black;
-}
-div.entry_text { font-family:Georgia; }
-div.entry_foot {
-  border-right: 1px solid black;
-  border-left:  1px solid black;
-  border-bottom:1px solid black;
-  background-color:dimgray;
-}
-.entry_foot #tags { font-family:"Open Sans", sans-serif; font-size:0.8em; }
-.entry_foot #tags a { color:#ccc; text-shadow:1px 1px 1px black; }
-.entry_foot #tags i { color:#ccc; }
-.entry_foot #tags span { 
-  padding:6px 8px; 
-  border-radius:16px; 
-  border:1px solid #444;
-  color:black; 
-}
-.entry_foot #tags span:hover { 
-  border:1px solid #444;
-  background:-webkit-gradient(linear,left top,left bottom,from(mediumorchid),to(indigo));
-}
-.entry_foot #tags span:hover a { color:snow; }
-.entry_foot #tags span:hover i { color:white; }
-
-div#confirm { border:1px solid black; background:#ccc; }
-#grid div.text {
-  font-family:"Open Sans",sans-serif;
-  font-size:10pt;
-  background:#666;
-  border:1px solid #666;
-}
-#grid a { color:#e5e5e5; }
-div.img { border:1px solid #666; }
-div.video { border:1px solid silver; }
-div.img b,div.video a {
-  font-family:sans-serif;
-  font-weight:400;
-  font-size:9px;
-}
-.entry_inline #tags a,.entry_inline #date a { color:#999; }
-.entry_inline a { color:#999; text-decoration:none; }
-.entry_inline a:hover { color:mediumorchid; text-shadow:1px 1px 1px black; }
-.entry_inline #controls img:hover { opacity:1; }

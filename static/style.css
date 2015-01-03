@@ -1,19 +1,9 @@
 /* div { border:1px solid magenta; } */
 @media screen {
-
     body { 
         margin:0;
         padding:0;
-    }
-    body.index {
-        margin:1em;
-    }
-    body.entry {
-        margin:32px;
-    }
-    body.help {
-        margin:2em;
-        margin-right:108px;
+        overlflow:none;
     }
     a { 
         text-decoration:none;
@@ -21,194 +11,36 @@
     a:hover {
         text-decoration:underline;
     }
-    pre {
-        overflow-y:hidden;
-    }
-
-/* ===================== CONTENT ============================ */
-
-    #content {
-        /* border:1px solid green; */
-        margin-left:auto;
-        margin-right:auto;
-        padding:0;
-    }
-    #content.list {
-        padding-right:2em;
-        padding-left:2em;
-    }
-    #content.search {
-        padding:2em;
-    }
-    #content.match_gallery {
-        padding:2em;
-	padding-top:0;
-    }
-    #content.match_gallery {
-        margin-right:72px;
-    }
-    #content.match_gallery img {
-        float:left;
-        height:120px;
-    }
-    #content.tags {
-        margin-left:16px;
-        margin-right:96px;
-        text-align:justify;
-    }
-    #header {
-        margin:0;
-        padding:0;
-        margin-top:32px;
-        padding-bottom:16px;
-        text-align:center;
-    }
-    #footer {
-        margin:16px;
-        margin-bottom:32px;
-    }
-    
     .feature {
         border-radius:8px;
-        margin:16px;
-        padding:0;
+        margin:8px;
         float:left;
-        width:400px;
-        height:240px;
+        width:47%;
         overflow:hidden;
-    }
-    .feature lh a {
-        font-weight:bold;
     }
     .feature li {
         font-size:small;
     }
-    .feature ul li:first-of-type {
-        padding-top:0.6em;
+    #content {
+        width:80%;
+        margin-left:auto;
+        margin-right:auto;
+	overflow:hidden;
+	margin-bottom:2em;
     }
-    .feature.tag_blob {
-        border-radius:12px;
-        overflow:auto;
-        font-size:14px;
-        padding:16px;
-        width:368px;
-        height:208px;
-    }
-
-/* ===================== ENTRY ============================== */
-
-    .entry {
-        margin-right:96px;
-        margin-bottom:64px;
-    }
-    .entry_head {
-        margin-bottom:1em;
-        overflow:auto;
-    }
-    .entry_head #title {
-        font-size:x-large;
-        font-weight:bold;
-    }
-    .entry_head #date {
-        float:right;
-        margin-left:1em;
-    }
-    .entry_body {
-        padding-top:0;
-        padding-bottom:0;
-    }
-    .entry_body p:first-child { 
-        margin-top:0;
-        padding-top:0;
-    }
-    .entry_body p:last-child {
-        margin-bottom:0;
-        padding-bottom:0;
-    }
-    .entry_foot {
-        margin:0;
-        padding:0.4em 0;
-    }
-    #entry_tags {
-        margin-top:1em;
-        clear:both;
-    }
-    #entry_tags i { 
-        font-style:normal; 
-    }
-   
-/* ===================== LIST =============================== */
-   
-    #entry_list {
-        margin-left:2em;
-    }
-    #entry_list ul {
-        list-style-type:none;
-    }
-    #entry_list lh div {
-        margin:0;
-        padding:0;
-        margin-top:1em;
-        margin-bottom:0.4em;
-        font-weight:bold;
-    }
-
-/* ===================== CONTROLS =========================== */
-
-    #controls {
-        /* border:1px solid red; */
-        padding:1em;
-        position:fixed;
-        top:32px;
-        right:32px;
-        width:24px;
-        border-radius:8px;
-    }
-    #controls img {
-        padding-top:8px;
-        width:24px;
-        height:24px;
-    }
-    #controls a:first-child img { /* special for tanuki icon */
-        /* border:1px solid green; */
-        margin:0;
-        padding:0;
-        margin-top:-8px;
-        margin-left:-8px;
-        width:40px;
-        height:40px;
-    }
-    #controls img {
+    #content.gallery img {
         float:left;
+        height:120px;
     }
-    
-    #next_prev {
-        margin:0;
-        padding:0;
-        position:fixed;
-        bottom:8px;
-        right:8px;
-        width:48px;
+    #content.list h3 {
+	text-align:center;
+	margin-top:0;
     }
-    #next_prev .btn {
-        float:left;
+    #content.list ol {
+        margin-left:5em;
     }
-    .btn {
-      margin:8px 0;
-      padding:0;
-      width:24px;
-      height:24px;
-    }
-    div.btn:hover {
-        cursor:pointer;
-    }
-
-/* ===================== FORMS ============================== */
-
-    form#edit {
-        margin-top:32px;
-        margin-left:32px;
-        margin-right:108px;
+    #content.form {
+	padding-top:16px;
     }
     form#edit table { 
         width:100%;
@@ -236,71 +68,26 @@
         width:100%;
         font-size:12pt;
     }
-    #error_msg { 
-        margin:2em; 
-        font-size:x-large; 
+    #content.confirm {
+      width:50%;
     }
-    
-    #confirm {
-        padding:64px;
+    #content.search {
+	text-align:center;
     }
-    #confirm table {
-        margin:0 auto;
+    #content.tags h3 {
+	text-align:center;
+	margin-top:0;
     }
-    #confirm input { 
-        font-size:larger; 
-    }
-    
-    #search img {
-        vertical-align:bottom;
-    }
-    #search input {
-        font-size:16pt;
-    }
-
-/* ===================== TAG_SET ============================ */
-
     #tag_set {
-        margin:2em;
-        margin-top:0;
-        line-height:3em;
+	text-align:center;
+	line-height:1.6em;
+	word-spacing:1em;
+	/* text-align:justify; */
     }
-    .index #tag_set {
-        margin:0;
-        font-size:smaller;
+    #tag_set .count {
+	font-size:smaller;
+	opacity:0.6;
     }
-    #tag_set span {
-      padding:4px;
-    }
-    #tag_set i { 
-        padding:4px;
-        font-style:normal;
-    }
-    #tag_set span a { 
-        padding:4px;
-        text-decoration:none; 
-    }
-    #tag_set span:hover {
-        border-radius:16px;
-    }
-    
-    .prettyprinted {
-        padding:1em;
-        border-radius:8px;
-    }
-    .prettyprinted:hover {
-        background:black;
-    }
-    
-    #playlist {
-        clear:both;
-    }
-    #viewtube {
-        float:right;
-        margin-left:1em;
-    }
-    
-    
     .help_eg {
         margin:1em;
         padding:1em;
@@ -315,29 +102,14 @@
         border-left:4px solid #d3d3d3;
         overflow:auto;
     }
-    
-    #tanuki {
-        position:fixed;
-        top:320px;
-        right:48px;
-        font-size:24px;
-        color:#d3d3d3;
-        display:none;        
-    }
-
 }
 
 @media print {
-
     body {
         font-size:10pt;
-    }
-    #tanuki, #controls {
-        display:none;
     }
     entry.text {
         margin:0;
         padding:0;
     }
-
 }

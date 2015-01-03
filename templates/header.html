@@ -1,0 +1,35 @@
+<div id="header" style="padding:16px;text-align:center;">
+<a href="/">タヌキ</a> |
+
+{% if not request.path.startswith('/help') %}
+
+{% if request.path == '/list' %}
+<b>list</b> ({{status.entries}}) |
+{% else %}
+<a href="/list">list</a> ({{status.entries}}) |
+{% endif %}
+
+
+{% if request.path == '/tags' %}
+<b>tags</b> ({{status.tags}}) |
+{% else %}
+<a href="/tags">tags</a> ({{status.tags}}) |
+{% endif %}
+
+{% if request.path == '/notag' %}
+<b>notag</b> ({{status.notag}}) |
+{% else %}
+<a href="/notag">notag</a> ({{status.notag}}) |
+{% endif %}
+
+{% endif %}
+
+<a href="/new">new</a> |
+<a href="/search">search</a> |
+
+{% if request.path.startswith('/help') %}
+<b>help</b>
+{% else %}
+<a href="/help">help</a>
+{% endif %}
+</div>

@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
-
-<div align="center" id="error_msg">{{ msg }}</div>
-
+<div id="content" class="error">
+<h1><img src="/static/tanuki.png">Uh-oh!</h1>
+<h3>{{msg}}</h3>
+</div>
 {% endblock %}

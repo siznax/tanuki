@@ -1,14 +1,17 @@
 {% extends "layout.html" %}
 {% block body %}
+{% include "header.html" %}
 
-{% if controls %}<div id="controls">{{ controls|safe }}</div>{% endif %}
+<div id="content" class="help">
 
-<h1>♨ tanuki Help</h1>
+<h1><img src="/static/tanuki.png">Help</h1>
 
 <ol>
 {% for entry in entries %}
 <li value={{entry.id}}><a href="/help/{{entry.id}}">{{entry.title}}</a></li>
 {% endfor %}
 </ol>
+
+</div>
 
 {% endblock %}
