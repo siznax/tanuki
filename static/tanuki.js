@@ -4,21 +4,6 @@ $( function() {
 
     var DEBUG = false;
 
-    // Leaflet JS maps -----------------------------------------
-
-    if ( $(".leafletjs").length ) {
-	var map  = $( "div.leafletjs" ).attr("id");
-	var lat  = $( "div.leafletjs" ).attr("lat");
-	var lon  = $( "div.leafletjs" ).attr("lon");
-	var zoom = $( "div.leafletjs" ).attr("zoom");
-	console.log("TANUKI found map: " + map + " [" + lat + "," + lon + "] " + zoom );
-	map = L.map( map ).setView( [lat,lon],zoom );
-	var API_KEY = $( "#leafletjs_api_key" ).attr("key");
-	L.tileLayer('http://{s}.tile.cloudmade.com/'+API_KEY+'/997/256/{z}/{x}/{y}.png', { attribution:'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>', maxZoom:18 }).addTo( map );
-    }
-
-    // Youtube playlist ----------------------------------------
-
     $("div.playlist").each( function() {
 	playlist = $(this).attr("id");
 	console.log( "TANUKI found playlist: " + playlist );
