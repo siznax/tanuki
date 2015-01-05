@@ -85,7 +85,8 @@ class Tanuki:
         entry = {'date': datetime.date.today().isoformat(),
                  'text': None,
                  'title': None,
-                 'tags': None}
+                 'tags': None,
+                 'public': 0}
         return render_template('edit.html',
                                entry=entry,
                                title='NEW',
@@ -170,10 +171,11 @@ class Tanuki:
         self.db_query('DELETE from entries WHERE id=?', [entry_id])
         self.con.commit()
 
-    def render_confirm_form(self, entry_id):
-        return render_template('confirm.html',
-                               entry=self.get_entry(entry_id),
-                               func='destroy')
+    def render_delete_form(self, entry_id):
+        entry = self.get_entry(entry_id)
+        if entry['public'] > 1:
+            return render_template('error.html', msg="Entry locked.")
+        return render_template('delete.html', entry=entry)
 
     def get_tags(self, eid):
         """return sorted list of tag names."""

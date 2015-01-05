@@ -23,7 +23,7 @@
 <td width="100%"><input type="text" name="tags" style="font-size:12pt"
  placeholder="tags"{% if entry.tags %} value="{{ entry.tags }}"{% endif %}>
 <td><input id="save_btn" type="submit" value="Save"
- onclick="return validate();">
+ onclick="return validate();"{% if entry.public>1 %} disabled {% endif %}>
 
 </table>
 {% if entry.id %}

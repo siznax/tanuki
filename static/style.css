@@ -45,7 +45,7 @@
         -webkit-box-sizing:border-box;
         -moz-box-sizing:border-box;
     }
-    #content.confirm {
+    #content.delete {
       width:50%;
     }
     #content.search {

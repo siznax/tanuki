@@ -61,13 +61,13 @@ def edit(_id):
     return tanuki.render_edit_form(_id)
 
 
-@app.route('/confirm/<int:_id>')
-def confirm(_id):
-    return tanuki.render_confirm_form(_id)
+@app.route('/delete/<int:_id>')
+def delete_form(_id):
+    return tanuki.render_delete_form(_id)
 
 
 @app.route('/delete', methods=['POST'])
-def delete():
+def delete_entry():
     tanuki.delete(request.form['entry_id'])
     return redirect(url_for('index'))
 
