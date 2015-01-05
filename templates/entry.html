@@ -4,25 +4,16 @@
 <div id="content" class="entry">
 
 {% if not request.path.startswith("/help") %}
-<div style="float:left">
-<span style="opacity:0.6">{{entry.date_str}}</span>
+<p id="entry_heading" style="opacity:0.75">{{entry.date_str}}
 {% for tag in entry.tags %}
 #<a href="/tagged/{{tag}}">{{tag}}</a>
 {% endfor %}
-</div>
-
-<div style="float:right">
-<a href="/edit/{{entry.id}}">edit</a> |
-<a href="/confirm/{{entry.id}}">delete</a>
-</div>
+</p>
 {% endif %}
-
-<div style="clear:both">
 
 <h2>{{ entry.title }}</h2>
 
 {{ entry.text|safe }}
 
 </div>
-
 {% endblock %}

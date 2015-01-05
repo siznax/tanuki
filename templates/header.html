@@ -1,23 +1,16 @@
 <div id="header" style="padding:16px;text-align:center">
 
-{% if request.path == '/' %}
-<img id="tanuki-home" src="/static/tanuki-home.png">
-{% else %}
-<a href="/"><img id="tanuki-home" src="/static/tanuki-home.png"></a>
-{% endif %}
-
-<span class="header_spacer"></span>
+<a href="/"><img id="tanuki-home" class="octicon" 
+ src="/static/tanuki-home.png"></a>
 
 {% if not request.path.startswith('/help') %}
 
 {{status.entries}}
 {% if request.path == '/list' %}
-<span class="octicon octicon-list-ordered"></span>
+<span class="octicon octicon-list-unordered"></span>
 {% else %}
-<a href="/list"><span class="octicon octicon-list-ordered"></span></a>
+<a href="/list"><span class="octicon octicon-list-unordered"></span></a>
 {% endif %}
-
-<span class="header_spacer"></span>
 
 {{status.tags}}
 {% if request.path == '/tags' %}
@@ -26,8 +19,6 @@
 <a href="/tags"><span class="octicon octicon-tag"></span></a>
 {% endif %}
 
-<span class="header_spacer"></span>
-
 {% if status.notag %}
 {{status.notag}}
 {% if request.path == '/notag' %}
@@ -35,10 +26,9 @@
 {% else %}
 <a href="/notag"><span class="octicon octicon-issue-opened"></span></a>
 {% endif %}
-<span class="header_spacer"></span>
 {% endif %}
 
-{% endif %}
+{% endif %}  <!-- not /help -->
 
 {% if request.path == '/new' %}
 <span class="octicon octicon-file-text"></span>
@@ -46,7 +36,12 @@
 <a href="/new"><span class="octicon octicon-file-text"></span></a>
 {% endif %}
 
-<span class="header_spacer"></span>
+{% if request.path.startswith('/entry') %}
+<a href="/edit/{{entry.id}}"><span 
+ class="octicon octicon-pencil"></span></a>
+<a href="/confirm/{{entry.id}}"><span 
+ class="octicon octicon-trashcan"></span></a>
+{% endif %}
 
 {% if request.path == '/search' %}
 <span class="octicon octicon-search"></span>
@@ -54,19 +49,15 @@
 <a href="/search"><span class="octicon octicon-search"></span></a>
 {% endif %}
 
-<span class="header_spacer"></span>
-
 {% if request.path == '/help' %}
 <span class="octicon octicon-question"></span>
 {% else %}
 <a href="/help"><span class="octicon octicon-question"></span></a>
 {% endif %}
 
-<span class="header_spacer"></span>
-
 <a target="_blank" href="https://github.com/siznax/tanuki/"><span 
  class="octicon octicon-mark-github"></span></a>
 
 </div>
 
-<style type="text/css">.header_spacer { margin-right:12px; }</style>
+<style type="text/css">.octicon { margin-right:12px; }</style>

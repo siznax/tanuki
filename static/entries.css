@@ -1,14 +1,24 @@
-.art {
-    overflow:auto;
+/* style your entries here */
+
+pre {
+    overflow-y:hidden;
 }
-.art img {
-    width:320px;
-    float:left;
-    margin-right:1em;
+
+#content.entry {
+    background:white;
+    padding:0 1em 1em 1em;
+    border:1px solid silver;
+    border-radius:4px;
 }
-.art.wide img {
-    width:640px;
+#playlist {
+    clear:both;
 }
+#viewtube {
+    float:right;
+    margin-left:1em;
+}
+
+
 .book {
     margin-left:1em;
     margin-bottom:1em;
@@ -19,24 +29,13 @@
     overflow:auto;
     margin-bottom:1em;
 }
-pre {
-    overflow-y:hidden;
-}
 .quote {
-    overflow:auto;
     padding:1em;
     font-family:Georgia;
     font-size:x-large;
     font-weight:100;
     background:#d3d3d3;
     border-radius:0.4em;
-}
-#playlist {
-    clear:both;
-}
-#viewtube {
-    float:right;
-    margin-left:1em;
 }
 .clipping {
     margin:0;
@@ -45,14 +44,14 @@ pre {
     text-align:justify;
     font-family:Georgia,Times,Serif;
 }
-.entry .clipping img {
+.clipping img {
     margin:0;
     float:right;
     margin-left:2em;
     margin-bottom:1em;
     max-width:240px;
 }
-.entry .inline_right {
+.inline_right {
     float:right;
     border:1px solid silver;
     border-radius:0.6em;
@@ -63,11 +62,14 @@ pre {
     width:240px;
     font-size:12px;
 }
-.entry .inline_left {
+.inline_left {
     float:left;
     margin-right:1em;
     margin-bottom:1em;
     width:180px;
     font-size:10px;
     text-align:center;
+}
+.inline_right img, .inline_left img {
+    max-width:240px;
 }
