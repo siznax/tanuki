@@ -28,14 +28,15 @@
 
 <span class="header_spacer"></span>
 
+{% if status.notag %}
 {{status.notag}}
 {% if request.path == '/notag' %}
 <span class="octicon octicon-issue-opened"></span>
 {% else %}
 <a href="/notag"><span class="octicon octicon-issue-opened"></span></a>
 {% endif %}
-
 <span class="header_spacer"></span>
+{% endif %}
 
 {% endif %}
 
