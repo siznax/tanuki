@@ -29,10 +29,9 @@
 	margin-bottom:2em;
     }
     #content.gallery img {
-        float:left;
         height:120px;
     }
-    #content.list h3 {
+    #content.list h3, #content.gallery h3 {
 	text-align:center;
 	margin-top:0;
     }

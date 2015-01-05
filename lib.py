@@ -296,15 +296,17 @@ class Tanuki:
             self.log.debug("%d %s" % (x['id'], x['img']))
         return entries
 
-    def render_tagged_gallery(self, title, msg, entries):
-        tagged = self.markdown_entries(entries)
+    def render_tagged_gallery(self, tag):
+        tagged = self.get_entries_tagged(tag)
+        tagged = self.markdown_entries(tagged)
         tagged = self.get_entries_img_src(tagged)
-        found = set(x['img'] for x in tagged if x['img'])
+        images = set(x['img'] for x in tagged if x['img'])
         return render_template('gallery.html',
-                               title=title,
-                               msg=msg,
+                               title="#%s gallery" % tag,
                                entries=tagged,
-                               found=found)
+                               tag=tag,
+                               images=images,
+                               status=self.status)
 
     def get_notag_entries(self):
         """return entries having no tags."""

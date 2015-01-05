@@ -73,18 +73,18 @@ def delete_entry():
 
 
 @app.route('/tags')
-def tags():
+def show_tags():
     return tanuki.render_tags()
 
 
 @app.route('/tagged/<tag>')
-def tagged(tag):
+def show_tagged(tag):
     return tanuki.render_tagged(tag, None)
 
 
-@app.route('/tagged/<tag>/v:<view>')
-def tagged_view(tag, view):
-    return tanuki.render_tagged(tag, view)
+@app.route('/gallery/<tag>')
+def show_tagged_gallery(tag):
+    return tanuki.render_tagged_gallery(tag)
 
 
 @app.route('/notag')

@@ -1,15 +1,19 @@
 {% extends "layout.html" %}
 {% block body %}
 {% include "header.html" %}
-
 <div id="content" class="gallery">
 
-<p>{% if not found %}
-No images found in ({{entries|length()}}) entries.
+<h3>
+{% if images %}
+#{{tag}} ({{entries|length()}}) w/images ({{images|length()}})
+<a href="/tagged/{{tag}}"><span class="octicon octicon-list-unordered"
+ style="margin-left:16px;"></a>
 {% else %}
-Found in ({{found|length()}}) images in ({{entries|length()}}) entries.
-{% endif %}</p>
+No images found in ({{entries|length()}}) entries.
+{% endif %}
+</h3>
 
+<div style="text-align:center">
 {% set count = 1 %}
 {% for entry in entries %}
   {% if entry.img %}
@@ -18,7 +22,7 @@ Found in ({{found|length()}}) images in ({{entries|length()}}) entries.
   {% endif %}
 {% set count = count + 1 %}
 {% endfor %}
-
 </div>
 
+</div>
 {% endblock %}
