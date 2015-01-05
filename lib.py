@@ -204,14 +204,6 @@ class Tanuki:
             x['text'] = markdown.markdown(x['text'])
         return entries
 
-    def pre_markdown(self, entries):
-        """pre-markdown needful operations."""
-        for x in entries:
-            self.log.debug("pre_markdown %d" % x['id'])
-            if re.match(r'^<video|<iframe|<object', x['text']):
-                x['mediatype'] = 'video'
-        return entries
-
     def get_latest_entries(self):
         """return last ten entries updated."""
         sql = 'select * from entries order by updated desc limit 10'
@@ -249,7 +241,6 @@ class Tanuki:
         entry = [entry2dict(row)]
         entry = self.apply_tags(entry, editing)
         if not editing:
-            entry = self.pre_markdown(entry)
             entry = self.markdown_entries(entry)
         return entry[0]
 
