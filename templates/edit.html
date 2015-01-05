@@ -1,41 +1,35 @@
 {% extends "layout.html" %}
 {% block body %}
+{% include "header.html" %}
 <div id="content" class="form">
-
 <form id="edit" action="/store" method="POST">
+<table id="edit" style="width:100%">
 
+<tr>
+<td colspan="4"><input type="text" id="title" name="title" size="32"
+ style="padding:8px;font-size:x-large;"
+{% if entry.title %} value="{{ entry.title }}"{% endif %}
+ placeholder="title" required>
+
+<tr>
+<td colspan="4"><textarea width="100%" name="entry" id="entry_text"
+ style="height:320px;font-family:Monaco;font-size:12px;"
+ placeholder="text" 
+ required>{% if entry.text %}{{entry.text}}{% endif %}</textarea>
+
+<tr>
+<td><input type="text" name="date" style="font-size:12pt;width:7em;"
+ value="{{entry.date}}">
+<td width="100%"><input type="text" name="tags" style="font-size:12pt"
+ placeholder="tags"{% if entry.tags %} value="{{ entry.tags }}"{% endif %}>
+<td><input id="save_btn" type="submit" value="Save"
+ onclick="return validate();">
+
+</table>
 {% if entry.id %}
 <input type="hidden" name="entry_id" value="{{ entry.id }}">
 <input type="hidden" name="referrer" value="{{ referrer }}">
 {% endif %}
-
-<table id="edit">
-
-<tr>
-<td colspan=4><input type=text id="title" name="title" type="text" size="32"{% 
-    if entry.title=='title' 
-%} onfocus="this.value==this.defaultValue?this.value='':null"{% 
-    endif 
-%} value="{{ entry.title }}" required>
-
-<tr>
-<td colspan=4><textarea name="entry" id="entry_text"{% 
-    if entry.text == 'text' 
-%} onfocus="this.value==this.defaultValue?this.value='':null"
-{% endif %} required>{{ entry.text|safe }}</textarea>
-
-<tr>
-<td><input id="date_box" type="text" name="date" value="{{ entry.date }}">
-<td width="100%"><input id="tags_box" type="text" name="tags"{%   
-    if entry.tags=='tags' 
-%} onfocus="this.value==this.defaultValue?this.value='':null"{% 
-    endif 
-%} value="{{ entry.tags }}">
-<td>
-<input id="save_btn" type="submit" value="Save" onclick="return validate();">
-
-</table>
 </form>
-
 </div>
 {% endblock %}

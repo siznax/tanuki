@@ -24,8 +24,17 @@
 
 {% endif %}
 
+{% if request.path == '/new' %}
+<b>new</b> |
+{% else %}
 <a href="/new">new</a> |
+{% endif %}
+
+{% if request.path == '/search' %}
+<b>search</b> |
+{% else %}
 <a href="/search">search</a> |
+{% endif %}
 
 {% if request.path.startswith('/help') %}
 <b>help</b>

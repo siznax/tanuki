@@ -83,13 +83,13 @@ class Tanuki:
 
     def render_new_form(self):
         entry = {'date': datetime.date.today().isoformat(),
-                 'text': 'text',
-                 'title': 'title',
-                 'tags': 'tags',
-                 'public': 0}
+                 'text': None,
+                 'title': None,
+                 'tags': None}
         return render_template('edit.html',
                                entry=entry,
-                               title='new entry')
+                               title='NEW',
+                               status=self.status)
 
     def render_edit_form(self, entry_id):
         entry = self.get_entry(entry_id, True)
@@ -111,11 +111,12 @@ class Tanuki:
         """store tags specified in edit form"""
         self.clear_tags(entry_id)
         for count, tag in enumerate(normalize_tags(tags)):
-            if (count + 1) > Tanuki.MAX_TAGS_PER_ENTRY:
-                return
-            sql = 'insert into tags values(?,?,?)'
-            date = datetime.date.today().isoformat()
-            self.db_query(sql, [entry_id, tag[:Tanuki.MAX_TAG_LEN], date])
+            if tag.strip():
+                if (count + 1) > Tanuki.MAX_TAGS_PER_ENTRY:
+                    return
+                sql = 'insert into tags values(?,?,?)'
+                date = datetime.date.today().isoformat()
+                self.db_query(sql, [entry_id, tag[:Tanuki.MAX_TAG_LEN], date])
 
     def upsert(self, req):
         self.environ = req.environ
