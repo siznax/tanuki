@@ -68,7 +68,7 @@ def delete_form(_id):
 
 @app.route('/delete', methods=['POST'])
 def delete_entry():
-    tanuki.delete(request.form['entry_id'])
+    tanuki.delete_entry(request.form['entry_id'])
     return redirect(url_for('index'))
 
 

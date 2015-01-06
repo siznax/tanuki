@@ -119,42 +119,50 @@ class Tanuki:
                 date = datetime.date.today().isoformat()
                 self.db_query(sql, [entry_id, tag[:Tanuki.MAX_TAG_LEN], date])
 
+    @staticmethod
+    def valid_edit_form(req):
+        """returns True if edit form validates."""
+        datetime.datetime.strptime(req.form['date'], '%Y-%m-%d')
+        if 'locked' in req.form:
+            raise ValueError
+        if str_is_int(req.form['title']):
+            raise ValueError
+        if str_is_int(req.form['entry']):
+            raise ValueError
+        if 'entry_id' in req.form.keys():
+            return True
+        return False
+
+    def update_entry(self, req):
+        """executes DB UPDATE, returns entry id."""
+        sql = ("update entries set title=?,text=?,date=?,"
+               "updated=?,public=? where id=?")
+        val = (req.form['title'][:Tanuki.MAX_TITLE_LEN],
+               req.form['entry'][:Tanuki.MAX_ENTRY_LEN],
+               req.form['date'], utcnow(), 0, req.form['entry_id'])
+        self.db_query(sql, val)
+        return req.form['entry_id']
+
+    def insert_entry(self, req):
+        """executes DB INSERT, returns entry id."""
+        sql = "insert into entries values(?,?,?,?,?,?)"
+        val = [None,
+               req.form['title'][:Tanuki.MAX_TITLE_LEN],
+               req.form['entry'][:Tanuki.MAX_ENTRY_LEN],
+               req.form['date'], utcnow(), 0]
+        cur = self.db_query(sql, val)
+        return cur.lastrowid
+
     def upsert(self, req):
+        """update existing or insert new entry in DB."""
         self.environ = req.environ
         try:
-            datetime.datetime.strptime(req.form['date'], '%Y-%m-%d')
-            if 'locked' in req.form:
-                raise ValueError
-            if str_is_int(req.form['title']):
-                raise ValueError
-            if str_is_int(req.form['entry']):
-                raise ValueError
-            if 'entry_id' in req.form.keys():
-                sql = 'update entries set '\
-                    'title=?,text=?,date=?,updated=?,public=? '\
-                    'where id=?'
-                val = (req.form['title'][:Tanuki.MAX_TITLE_LEN],
-                       req.form['entry'][:Tanuki.MAX_ENTRY_LEN],
-                       req.form['date'],
-                       utcnow(),
-                       0,
-                       req.form['entry_id'])
-                self.db_query(sql, val)
-                entry_id = req.form['entry_id']
+            if Tanuki.valid_edit_form(req):
+                entry_id = self.update_entry(req)
             else:
-                sql = 'insert into entries values(?,?,?,?,?,?)'
-                val = [None,
-                       req.form['title'][:Tanuki.MAX_TITLE_LEN],
-                       req.form['entry'][:Tanuki.MAX_ENTRY_LEN],
-                       req.form['date'],
-                       utcnow(),
-                       0]
-                cur = self.db_query(sql, val)
-                entry_id = cur.lastrowid
-
+                entry_id = self.insert_entry(req)
             self.store_tags(entry_id, req.form['tags'])
             self.con.commit()
-
             url = "%s/entry/%s" % (self.environ['HTTP_ORIGIN'], entry_id)
             ref = req.form['referrer'] if 'referrer' in req.form else url
             return redirect(ref)
@@ -165,7 +173,7 @@ class Tanuki:
             return render_template('error.html',
                                    msg="Title or text not unique, try again.")
 
-    def delete(self, entry_id):
+    def delete_entry(self, entry_id):
         """purge entry and associated tags."""
         self.clear_tags(entry_id)
         self.db_query('DELETE from entries WHERE id=?', [entry_id])
@@ -426,3 +434,5 @@ def str_is_int(_str):
 def utcnow():
     """return simpler ISO datetime (UTC) string."""
     return datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
