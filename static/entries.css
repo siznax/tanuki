@@ -4,6 +4,7 @@ pre {
     overflow-y:hidden;
 }
 
+
 #content.entry {
     background:white;
     padding:0 1em 1em 1em;
@@ -25,51 +26,24 @@ pre {
     float:right;
     width:240px;
 }
-.blockflow {
-    overflow:auto;
-    margin-bottom:1em;
-}
-.quote {
-    padding:1em;
-    font-family:Georgia;
-    font-size:x-large;
-    font-weight:100;
-    background:#d3d3d3;
-    border-radius:0.4em;
-}
-.clipping {
-    margin:0;
-    padding:0;
-    font-size:1.2em;
-    text-align:justify;
-    font-family:Georgia,Times,Serif;
-}
-.clipping img {
-    margin:0;
-    float:right;
-    margin-left:2em;
-    margin-bottom:1em;
+.inline_right img, .inline_left img {
     max-width:240px;
 }
 .inline_right {
     float:right;
     border:1px solid silver;
-    border-radius:0.6em;
+    border-radius:4px;
     background:white;
     padding:1em;
-    margin:1.4em;
-    margin-top:0.4em;
+    margin:8px;
+    margin-top:8px;
     width:240px;
     font-size:12px;
 }
 .inline_left {
     float:left;
-    margin-right:1em;
-    margin-bottom:1em;
-    width:180px;
-    font-size:10px;
-    text-align:center;
-}
-.inline_right img, .inline_left img {
-    max-width:240px;
+    margin-right:8px;
+    margin-bottom:8px;
+    width:240px;
+    font-size:12px;
 }
