@@ -5,11 +5,13 @@ could easily deploy it as a blog.
 * Demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
 * Help: [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 * Dependencies:
-[python](https://python.org),
 [flask](http://flask.pocoo.org/),
-[sqlite](http://www.sqlite.org/),
+[google-code-prettify](http://google-code-prettify.googlecode.com/),
+[lxml](http://lxml.de/),
 [markdown](http://daringfireball.net/projects/markdown/),
-[lxml](http://lxml.de/)
+[octicons](https://octicons.github.com/),
+[python](https://python.org),
+[sqlite](http://www.sqlite.org/)
 * Recommended:
 [virtualenvwrapper](http://virtualenvwrapper.readthedocs.org/), 
 [dropbox](https://www.dropbox.com/)
