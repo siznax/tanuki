@@ -16,7 +16,7 @@
 
 <div class="feature" style="float:right">
 <ul>
-<lh><b>README</b> (<a href="/tagged/readme">{{readme|length()}}</a>)</lh>
+<lh><b>#readme</b> (<a href="/tagged/readme">{{readme|length()}}</a>)</lh>
 {% if not readme %}<li>None</li>{% endif %}
 {% for entry in readme[:10] %}
 <li><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>
