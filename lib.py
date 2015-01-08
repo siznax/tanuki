@@ -5,7 +5,6 @@ import datetime
 import logging
 import markdown
 import os
-import re
 import sqlite3
 import string
 import sys
@@ -290,7 +289,7 @@ class Tanuki:
         num = len(tagged)
         title = "#%s (%d)" % (tag, num)
         if view == 'gallery':
-            return self.render_tagged_gallery(title, msg, tagged)
+            return self.render_tagged_gallery(title, tagged)
         return render_template('list.html',
                                title=title,
                                entries=tagged,
@@ -434,5 +433,3 @@ def str_is_int(_str):
 def utcnow():
     """return simpler ISO datetime (UTC) string."""
     return datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
