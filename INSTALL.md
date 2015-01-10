@@ -1,4 +1,4 @@
-Install tanuki!
+Install
 ================================================================
 
 Clone tanuki:
@@ -36,9 +36,9 @@ $ curl -o tanuki/static/jquery <jquery-latest-min.js>
 # google-code-prettify <https://code.google.com/p/google-code-prettify/>
 #    1. Download minified JS and CSS and extract into /tmp
 #    2. mv /tmp/google-code-prettify tanuki/static/prettify
-#       You want {{tanuki/static/prettify/*.*}}
+#       You want [tanuki/static/prettify/*.*]
 #    3. curl -o <sunburst-skin> tanuki/static/prettify
-#       You want {{tanuki/static/prettify/sunburst.css}}
+#       You want [tanuki/static/prettify/sunburst.css]
 ```
 
 
@@ -66,8 +66,9 @@ $ sqlite3 tanuki/tanuki.db < tanuki/schema.sql
 _Optionally, you can put your database in a "cloud" &#x2601; to share
 on all your computers, and to have a durable backup. Please keep in
 mind, there is nothing in tanuki protecting your database. You can
-point to it in your config file as {{DATABASE}}, or you can symlink
-{{tanuki/tanuki.db}} (the default dbfile) to your Dropbox version:_
+point to it in your config file as <tt>DATABASE</tt>, or you can
+symlink <tt>tanuki/tanuki.db</tt> (the default dbfile) to your Dropbox
+version:_ 
 
 ```shell
 $ mv tanuki/tanuki.db ~/Dropbox/tanuki.db    
