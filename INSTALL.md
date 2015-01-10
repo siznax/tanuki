@@ -38,7 +38,7 @@ $ curl -o tanuki/static/jquery <jquery-latest-min.js>
 #    2. mv /tmp/google-code-prettify tanuki/static/prettify
 #       You want {{tanuki/static/prettify/*.*}}
 #    3. curl -o <sunburst-skin> tanuki/static/prettify
-        You want {{tanuki/static/prettify/sunburst.css}}
+#       You want {{tanuki/static/prettify/sunburst.css}}
 ```
 
 
@@ -48,7 +48,8 @@ Create a config file (e.g. <tt>tanuki/config</tt>) and (at least) add:
 TITLE = "tanuki"
 ```
 
-Add <tt>TANUKI_CONFIG</tt> to your environment (e.g. bash):
+Add <tt>TANUKI_CONFIG</tt> to your environment (e.g. in bash, add
+something like this to your <tt>.bashrc</tt>):
 
 ```shell
 export TANUKI_CONFIG=tanuki/config
@@ -66,7 +67,7 @@ _Optionally, you can put your database in a "cloud" &#x2601; to share
 on all your computers, and to have a durable backup. Please keep in
 mind, there is nothing in tanuki protecting your database. You can
 point to it in your config file as {{DATABASE}}, or you can symlink
-{{tanuki/tanuki.db}} (the default dbfile) to your Dropbox version:
+{{tanuki/tanuki.db}} (the default dbfile) to your Dropbox version:_
 
 ```shell
 $ mv tanuki/tanuki.db ~/Dropbox/tanuki.db    
@@ -74,7 +75,7 @@ $ ln -s ~/Dropbox/tanuki.db tanuki/tanuki.db
 ```
 
 
-Create a flask app script outside of the tanuki module
+Create a startup script outside of the tanuki module
 (e.g. <tt>tanuki.py</tt>): 
 
 ```python
@@ -90,13 +91,9 @@ Start the tanuki app in the shell:
 
 ```shell
 $ workon tanuki
-(tanuki)$ python ~/sw/tanuki.py
+(tanuki)$ python tanuki.py
 ```
 
-Visit your tanuki in a web browser at: <http://localhost:5001>
+Visit your _tanuki_ in a web browser at: <http://localhost:5001>
 
-You can try the demo to see what it's like to take notes in
-[tanuki.siznax.net](http://tanuki.siznax.net/)
-
-If you want to run tanuki as a WSGI module on your web server, see the
-tips at [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
+Enjoy!
