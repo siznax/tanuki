@@ -3,6 +3,7 @@ __date__ = "Jan 2015"
 
 import datetime
 import logging
+import lxml.html
 import markdown
 import os
 import sqlite3
@@ -32,17 +33,22 @@ class Tanuki:
 
     def db_connect(self):
         """connect to default DB."""
-        if request.path.startswith('/help'):
-            dbfile = os.path.join(os.path.dirname(__file__),
-                                  Tanuki.DEFAULT_HELP_DB)
+        if self.config.get('DATABASE'):
+            if not os.path.exists(self.config['DATABASE']):
+                raise ValueError("DATABASE not found: "
+                                 + self.config.get('DATABASE'))
+            dbfile = self.config.get('DATABASE')
         else:
             dbfile = os.path.join(os.path.dirname(__file__),
                                   Tanuki.DEFAULT_DB)
-        self.dbfile = dbfile
+        if request.path.startswith('/help'):
+            dbfile = os.path.join(os.path.dirname(__file__),
+                                  Tanuki.DEFAULT_HELP_DB)
         self.log.info("Connecting %s" % (dbfile))
         self.con = sqlite3.connect(dbfile)
         self.con.execute('pragma foreign_keys = on')  # !important
         self.db = self.con.cursor()
+        self.dbfile = dbfile
 
     def db_disconnect(self):
         """teardown DB."""
@@ -397,7 +403,6 @@ def entry2dict(row):
 
 def img_src(html):
     """return (first) <img> src attribute from HTML."""
-    import lxml.html
     doc = lxml.html.document_fromstring(html)
     for src in doc.xpath("//img/@src"):
         return src
