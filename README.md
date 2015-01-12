@@ -9,8 +9,9 @@ anyone can try taking some notes in the
 
 I have over a thousand entries in my _tanuki_ and use it everyday. I
 hope others find it useful too. Anyone is welcome to contribute. I'd 
-be happy to answer any questions about it. See <tt>INSTALL.md</tt> to
-get started. 
+be happy to answer any questions about it. See
+<tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt>
+to get started. 
 
 * Demo &mdash; [tanuki.siznax.net](http://tanuki.siznax.net/)
 * Help &mdash; [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
