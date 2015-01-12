@@ -8,7 +8,7 @@ anyone can try taking some notes in the
 [demo](http://tanuki.siznax.net/). 
 
 I have over a thousand entries in my _tanuki_ and use it everyday. I
-hope others find this useful. Anyone is welcome to contribute. I'd 
+hope others find it useful too. Anyone is welcome to contribute. I'd 
 be happy to answer any questions about it. See <tt>INSTALL.md</tt> to
 get started. 
 
