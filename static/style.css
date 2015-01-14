@@ -12,11 +12,9 @@
         text-decoration:underline;
     }
     .feature {
-        border-radius:8px;
         margin:8px;
-        float:left;
-        width:47%;
-        overflow:hidden;
+	padding:8px;
+        border-radius:8px;
     }
     .feature li {
         font-size:small;
@@ -26,7 +24,7 @@
         margin-left:auto;
         margin-right:auto;
 	overflow:hidden;
-	margin-bottom:2em;
+	margin-bottom:32px;
     }
     #content.gallery img {
         height:120px;

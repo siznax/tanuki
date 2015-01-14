@@ -4,7 +4,9 @@
 
 <div id="content" class="index">
 
-<div class="feature" style="float:left">
+  <div style="width:50%;float:left;">
+  
+<div class="feature">
 <ul>
 <lh><b>latest ({{latest|length()}}) updates</b></lh>
 {% if not latest %}<li>None</li>{% endif %}
@@ -14,7 +16,9 @@
 </ul>
 </div>
 
-<div class="feature" style="float:right">
+  </div><div style="width:50%;float:right;">
+
+<div class="feature">
 <ul>
 <lh><b>#readme</b> (<a href="/tagged/readme">{{readme|length()}}</a>)</lh>
 {% if not readme %}<li>None</li>{% endif %}
@@ -24,15 +28,18 @@
 </ul>
 </div>
 
+  </div>
+
 <div style="clear:both"></div>
 
 {% include "tag_set.html" %}
 
+<div align="center" style="margin-top:32px;">
+<a target="_blank" href="https://github.com/siznax/tanuki/"><span
+ title="Fork me on GitHub"
+ class="octicon octicon-mark-github"></span></a>
 </div>
 
-<div align="center">
-<a target="_blank" href="https://github.com/siznax/tanuki/"><span 
- class="octicon octicon-mark-github"></span></a>
 </div>
 
 {% endblock %}
