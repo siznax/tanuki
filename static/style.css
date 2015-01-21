@@ -13,7 +13,7 @@
     }
     .feature {
         margin:8px;
-	padding:8px;
+        padding:8px;
         border-radius:8px;
     }
     .feature li {
@@ -80,11 +80,14 @@
 }
 
 @media print {
-    body {
-        font-size:10pt;
+    div#header, div#entry_heading {
+	display:none;
     }
-    entry.text {
+    div#content.entry {
+	border:0;
         margin:0;
         padding:0;
+        font-size:10pt;
+	font-family:serif;
     }
 }
