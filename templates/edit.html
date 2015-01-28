@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
 {% include "header.html" %}
-<div id="content" class="form">
+<div id="content" class="edit">
 <form id="edit" action="/store" method="POST">
-<table id="edit" style="width:100%">
+<table id="edit" style="width:100%;">
 
 <tr>
 <td colspan="4"><input type="text" id="title" name="title" size="32"
@@ -13,7 +13,7 @@
 
 <tr>
 <td colspan="4"><textarea width="100%" name="entry" id="entry_text"
- style="height:320px;font-family:Monaco;font-size:12px;"
+ style="height:400px;resize:none;font-family:Monaco;font-size:12px;"
  placeholder="text" 
  required>{% if entry.text %}{{entry.text}}{% endif %}</textarea>
 
