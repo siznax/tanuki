@@ -27,7 +27,7 @@ pre {
     opacity:0.6;
     text-align:center;
 }
-#entry_heading a, a:visited {
+#entry_heading a, #entry_heading a:visited {
     color:black;
 }
 
