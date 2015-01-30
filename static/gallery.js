@@ -208,8 +208,8 @@ $( function() {
 	}
 	if ( href ) {
 	    $("#caption").append(
-		"<a target=\"_blank\" href=\"" 
-		    + href + "\"><img src=/static/leave.png></a>"
+		"<div class=\"exit\"><a target=\"_blank\" href=\""
+		    + href + "\">&#x27b2;</a></div>"
 	    );
 	} else {
 	    $("#caption img").remove();

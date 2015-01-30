@@ -32,8 +32,12 @@
     color:white;
     text-align:center;
 }
-#caption img {
+#caption .exit {
     float:right;
+    font-size:24px;
     margin-left:1em;
-    height:24px;
+}
+#caption .exit a {
+    color:white;
+    text-decoration:none;
 }
