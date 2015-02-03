@@ -20,20 +20,26 @@ Install web dependencies (Bower TBD):
 
     tanuki/static/
       |
+      '-> galleryjs/
       '-> jquery.js
       '-> octicons/
       '-> prettify/
-      '-> prettify/sunburst.css
 
 ```shell
-$ curl -o tanuki/static/jquery <jquery-latest-min.js>
+# galleryjs/ <https://github.com/siznax/galleryjs>
+#    1. git clone git@github.com:siznax/galleryjs.git tanuki/static
+#       You want {{tanuki/static/galleryjs/gallery.{css,js}}}
 
-# octicons <https://octicons.github.com>
+# jquery.js
+#    1. $ curl -o tanuki/static/jquery <jquery-latest-min.js>
+#       You want {{tanuki/static/jquery.js}}
+
+# octicons/ <https://octicons.github.com>
 #    1. Download octicons
 #    2. mv octicons tanuki/static/
 #       You want {{tanuki/static/octicons/*.*}}
 
-# google-code-prettify <https://code.google.com/p/google-code-prettify/>
+# prettify/ <https://code.google.com/p/google-code-prettify/>
 #    1. Download minified JS and CSS and extract into /tmp
 #    2. mv /tmp/google-code-prettify tanuki/static/prettify
 #       You want [tanuki/static/prettify/*.*]
