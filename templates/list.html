@@ -4,14 +4,15 @@
 
 <div id="content" class="list">
 
-{% if tag %}
-<h3>#{{tag}} ({{entries|length()}}) 
+<div align="center">
+{% if tag %}#{{tag}} ({{entries|length()}}) 
 <a href="/gallery/{{tag}}"><span 
  class="octicon octicon-file-media"
- style="margin-left:16px;"></span></a></h3>
-{% elif notag %}<h3>({{entries|length()}}) not tagged</h3>
-{% else %}<h3>({{entries|length()}}) entries</h3>
+ style="margin-left:16px;"></span></a>
+{% elif notag %}({{entries|length()}}) not tagged
+{% else %}({{entries|length()}}) entries
 {% endif %}
+</div>
 
 <ol>
 {% for entry in entries %}

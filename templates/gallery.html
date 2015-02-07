@@ -3,7 +3,7 @@
 {% include "header.html" %}
 <div id="content" class="gallery">
 
-<h3>
+<div align="center" style="margin-bottom:1em;">
 {% if images %}
 #{{tag}} ({{entries|length()}}) w/images ({{images|length()}})
 <a href="/tagged/{{tag}}"><span class="octicon octicon-list-unordered"
@@ -11,7 +11,7 @@
 {% else %}
 No images found in ({{entries|length()}}) entries.
 {% endif %}
-</h3>
+</div>
 
 <div style="text-align:center">
 {% set count = 1 %}
