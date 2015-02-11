@@ -8,7 +8,7 @@ $ git clone https://github.com/siznax/tanuki.git
 ```
 
 
-Install Python dependencies ([`requirements.txt`](https://github.com/siznax/tanuki/blob/master/requirements.txt)):
+Install Python dependencies (see [`requirements.txt`](https://github.com/siznax/tanuki/blob/master/requirements.txt)):
 
 ```shell
 $ mkvirtualenv tanuki tanuki/env
@@ -19,8 +19,8 @@ $ mkvirtualenv tanuki tanuki/env
 Install [bower](http://bower.io/) (JS/CSS) dependencies (see [`bower.json`](https://github.com/siznax/tanuki/blob/master/requirements.txt)):
 
 ```shell
-npm install bower
-bower install
+(tanuki)$ npm install bower
+(tanuki)$ bower install
 ```
 
 
