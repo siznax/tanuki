@@ -5,13 +5,14 @@ __date__ = "Jan 2015"
 # app = Flask(__name__)
 
 from flask import request, redirect, url_for
+from flask.ext.bower import Bower
 from lib import Tanuki
 from tanuki import app
 
-
 app.config.from_envvar('TANUKI_CONFIG', silent=False)
-tanuki = Tanuki(app.config)
+Bower(app)
 
+tanuki = Tanuki(app.config)
 
 @app.before_request
 def before_request():

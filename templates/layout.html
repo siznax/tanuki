@@ -4,16 +4,19 @@
 <title>タヌキ {{ title }}</title>
 <link rel="stylesheet" type="text/css" href="/static/style.css" />
 <link rel="stylesheet" type="text/css" href="/static/color.css" />
-<link rel="stylesheet" type="text/css" href="/static/octicons/octicons.css">
-<script src="/static/jquery.js"></script>
+<link rel="stylesheet" type="text/css"
+ href="{{bower_url_for('octicons', 'octicons/octicons.css')}}">
+<script src="{{bower_url_for('jquery', 'dist/jquery.min.js')}}"></script>
 
 {% if entry %}
 <link rel="stylesheet" type="text/css" href="/static/entries.css" />
-<link rel="stylesheet" type="text/css" href="/static/galleryjs/gallery.css" />
-<link rel="stylesheet" type="text/css" href="/static/prettify/sunburst.css" />
+<link rel="stylesheet" type="text/css"
+ href="{{bower_url_for('gallery-js', 'gallery.css')}}" />
+<script src="{{bower_url_for('gallery-js', 'gallery.js')}}"></script>
+<link rel="stylesheet" type="text/css"
+ href="{{bower_url_for('google-code-prettify', 'styles/sunburst.css')}}" />
+<script src="{{bower_url_for('google-code-prettify', 'src/prettify.js')}}"></script>
 <script src="/static/tanuki.js"></script>
-<script src="/static/galleryjs/gallery.js"></script>
-<script src="/static/prettify/prettify.js"></script>
 {% endif %}
 
 </head>
