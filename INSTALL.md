@@ -8,7 +8,7 @@ $ git clone https://github.com/siznax/tanuki.git
 ```
 
 
-Install python dependencies:
+Install Python dependencies ([`requirements.txt`](https://github.com/siznax/tanuki/blob/master/requirements.txt)):
 
 ```shell
 $ mkvirtualenv tanuki tanuki/env
@@ -16,35 +16,11 @@ $ mkvirtualenv tanuki tanuki/env
 ```
 
 
-Install web dependencies (Bower TBD):
-
-    tanuki/static/
-      |
-      '-> galleryjs/
-      '-> jquery.js
-      '-> octicons/
-      '-> prettify/
+Install [bower](http://bower.io/) (JS/CSS) dependencies (see [`bower.json`](https://github.com/siznax/tanuki/blob/master/requirements.txt)):
 
 ```shell
-# galleryjs/ <https://github.com/siznax/galleryjs>
-#    1. git clone git@github.com:siznax/galleryjs.git tanuki/static
-#       You want {{tanuki/static/galleryjs/gallery.{css,js}}}
-
-# jquery.js
-#    1. $ curl -o tanuki/static/jquery <jquery-latest-min.js>
-#       You want {{tanuki/static/jquery.js}}
-
-# octicons/ <https://octicons.github.com>
-#    1. Download octicons
-#    2. mv octicons tanuki/static/
-#       You want {{tanuki/static/octicons/*.*}}
-
-# prettify/ <https://code.google.com/p/google-code-prettify/>
-#    1. Download minified JS and CSS and extract into /tmp
-#    2. mv /tmp/google-code-prettify tanuki/static/prettify
-#       You want [tanuki/static/prettify/*.*]
-#    3. curl -o <sunburst-skin> tanuki/static/prettify
-#       You want [tanuki/static/prettify/sunburst.css]
+npm install bower
+bower install
 ```
 
 
