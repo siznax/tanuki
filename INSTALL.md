@@ -45,7 +45,7 @@ $ sqlite3 tanuki/tanuki.db < tanuki/schema.sql
 ```
 
 
-_Optionally, you can put your database in a "cloud" &#x2601; to share
+_Optionally, you can put your database in the "cloud" &#x2601; to share
 on all your computers, and to have a durable backup. Please keep in
 mind, there is nothing in tanuki protecting your database. You can
 point to it in your config file as <tt>DATABASE</tt>, or you can
@@ -53,8 +53,8 @@ symlink <tt>tanuki/tanuki.db</tt> (the default dbfile) to your Dropbox
 version:_ 
 
 ```shell
-$ mv tanuki/tanuki.db ~/Dropbox/tanuki.db    
-$ ln -s ~/Dropbox/tanuki.db tanuki/tanuki.db
+# TANUKI_CONFIG:
+DATABASE = "/Users/foobar/Dropbox/tanuki.db"
 ```
 
 
