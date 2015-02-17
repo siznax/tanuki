@@ -16,7 +16,7 @@ $ mkvirtualenv tanuki tanuki/env
 ```
 
 
-Install [bower](http://bower.io/) (JS/CSS) dependencies (see [`bower.json`](https://github.com/siznax/tanuki/blob/master/requirements.txt)):
+Install [bower](http://bower.io/) (JS/CSS) dependencies (see [`bower.json`](https://github.com/siznax/tanuki/blob/master/bower.json)):
 
 ```shell
 (tanuki)$ npm install bower
