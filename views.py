@@ -47,6 +47,19 @@ def new():
     return tanuki.render_new_form()
 
 
+@app.route('/capture')
+def capture():
+    return tanuki.render_capture_form()
+
+
+@app.route('/edit_capture', methods=['POST'])
+def edit_capture():
+    return tanuki.render_edit_capture_form(
+        request.form['endpoint'],
+        request.form['stype'],
+        request.form['selector'])
+
+
 @app.route('/store', methods=['POST'])
 def store():
     return tanuki.upsert(request)

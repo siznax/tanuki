@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+{% include "header.html" %}
+<div id="content" class="capture">
+  <h3>Capture Web Page Fragment
+  (frag2text</a>)</h3> 
+<p><a href="https://github.com/siznax/frag2text"
+      target="_blank"><i>For example</i></a>:
+  http://en.wikipedia.org/wiki/Amanita <tt>CSS</tt> .infobox</p> 
+  <div id="capture_form">
+    <form id="edit" action="/edit_capture" method="POST">
+      <input id="endpoint" type="text" name="endpoint"
+             placeholder="URL" required style="width:50%"/>
+      <select name="stype">
+        <option value="css">CSS</option>
+        <option value="xpath">XPath</option>
+      </select>
+      <input id="selector" type="text" name="selector"
+      placeholder="selector" required style="width:25%" />
+      <input id="save_btn" type="submit" value="Capture">
+    </form>
+  </div>
+</div>
+</form>
+{% endblock %}

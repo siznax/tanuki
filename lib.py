@@ -1,6 +1,3 @@
-__author__ = "siznax"
-__date__ = "Jan 2015"
-
 import datetime
 import logging
 import lxml.html
@@ -11,6 +8,10 @@ import string
 import sys
 
 from flask import render_template, request, redirect, abort
+from frag2text import frag2text
+
+__author__ = "siznax"
+__date__ = "Jan 2015"
 
 
 class Tanuki:
@@ -35,8 +36,8 @@ class Tanuki:
         """connect to default DB."""
         if self.config.get('DATABASE'):
             if not os.path.exists(self.config['DATABASE']):
-                raise ValueError("DATABASE not found: "
-                                 + self.config.get('DATABASE'))
+                raise ValueError("DATABASE not found: " +
+                                 self.config.get('DATABASE'))
             dbfile = self.config.get('DATABASE')
         else:
             dbfile = os.path.join(os.path.dirname(__file__),
@@ -97,6 +98,10 @@ class Tanuki:
                                title='NEW',
                                status=self.status)
 
+    def render_capture_form(self):
+        return render_template('capture.html',
+                               status=self.status)
+
     def render_edit_form(self, entry_id):
         entry = self.get_entry(entry_id, True)
         referrer = request.referrer
@@ -107,6 +112,24 @@ class Tanuki:
                                entry=entry,
                                referrer=referrer,
                                title=title,
+                               status=self.status)
+
+    def render_edit_capture_form(self, endpoint, stype, selector):
+        text = ("<!-- frag2text\n" +
+                "endpoint: %s\nstype: %s\nselector: %s\n"
+                % (endpoint, stype, selector) +
+                "-->\n\n")
+        try:
+            text += frag2text(endpoint, stype, selector).decode('utf8')
+        except Exception as err:
+            text += "Caught exception: %s" % err
+        entry = {'date': datetime.date.today().isoformat(),
+                 'text': text,
+                 'title': None,
+                 'tags': None,
+                 'public': 0}
+        return render_template('edit.html',
+                               entry=entry,
                                status=self.status)
 
     def clear_tags(self, entry_id):
