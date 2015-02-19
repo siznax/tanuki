@@ -36,6 +36,14 @@
 <a href="/new"><span class="octicon octicon-file-text"></span></a>
 {% endif %}
 
+{% if request.path == '/capture' %}
+<span class="octicon octicon-squirrel"></span>
+{% else %}
+<a href="/capture" title="NEW! Capture a web page."><span
+ style="color:blue;background:yellow;padding:2px;border-radius:6px"
+ class="octicon octicon-squirrel"></span></a> 
+{% endif %}
+
 {% if request.path.startswith('/entry') %}
 <a href="/edit/{{entry.id}}"><span 
  class="octicon octicon-pencil"></span></a>
