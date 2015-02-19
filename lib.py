@@ -1,4 +1,5 @@
 import datetime
+import frag2text
 import logging
 import lxml.html
 import markdown
@@ -8,10 +9,9 @@ import string
 import sys
 
 from flask import render_template, request, redirect, abort
-from frag2text import frag2text
 
 __author__ = "siznax"
-__date__ = "Jan 2015"
+__date__ = "Feb 2015"
 
 
 class Tanuki:
@@ -115,12 +115,13 @@ class Tanuki:
                                status=self.status)
 
     def render_edit_capture_form(self, endpoint, stype, selector):
-        text = ("<!-- frag2text\n" +
+        text = ("<!-- frag2text %s\n" % frag2text.__version__ +
                 "endpoint: %s\nstype: %s\nselector: %s\n"
                 % (endpoint, stype, selector) +
                 "-->\n\n")
         try:
-            text += frag2text(endpoint, stype, selector).decode('utf8')
+            text += frag2text.frag2text(
+                endpoint, stype, selector).decode('utf8')
         except Exception as err:
             text += "Caught exception: %s" % err
         entry = {'date': datetime.date.today().isoformat(),
