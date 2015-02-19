@@ -2,15 +2,11 @@
 {% block body %}
 {% include "header.html" %}
 <div id="content" class="capture">
-  <h3>Capture Web Page Fragment
-  (frag2text</a>)</h3> 
-<p><a href="https://github.com/siznax/frag2text"
-      target="_blank"><i>For example</i></a>:
-  http://en.wikipedia.org/wiki/Amanita <tt>CSS</tt> .infobox</p> 
+  <p>Capture any web page, or just part of it:</p>
   <div id="capture_form">
-    <form id="edit" action="/edit_capture" method="POST">
+    <form action="/edit_capture" method="POST">
       <input id="endpoint" type="text" name="endpoint"
-             placeholder="URL" required style="width:50%"/>
+       placeholder="URL" required style="width:50%"/>
       <select name="stype">
         <option value="css">CSS</option>
         <option value="xpath">XPath</option>
@@ -20,6 +16,39 @@
       <input id="save_btn" type="submit" value="Capture">
     </form>
   </div>
-</div>
+
+  <div style="margin-top:2em;">
+    <a href="https://github.com/siznax/frag2text"
+       target="_blank"><i>frag2text</i></a> examples:
+
+    <p>
+    <table cellpadding=8 style="font-size:12px;border:1px solid silver">
+      <tr>
+        <th>
+        <th>URL
+        <th>stype
+        <th>selector
+      <tr>
+        <td><b>A NYT Article</b>:
+        <td>http://nyti.ms/17qJGw4
+        <td>CSS
+        <td>#article
+      <tr>
+        <td><b>A Wikipedia Infobox</b>:
+        <td>http://en.wikipedia.org/wiki/Amanita
+        <td>CSS
+        <td>.infobox
+      <tr>
+        <td><b>A specific paragraph</b>:
+        <td>http://en.wikipedia.org/wiki/Amanita
+        <td>XPath
+        <td>//p[13]
+    </table>
+</ul>
+
+  </div>
+
 </form>
+</div>
+
 {% endblock %}
