@@ -1,14 +1,18 @@
+import os
+
 from flask import request, redirect, url_for
 from flask.ext.bower import Bower
 from lib import Tanuki
-from tanuki import app
+from tanuki import app, settings
 
 __author__ = "siznax"
 __date__ = "Jan 2015"
 
-app.config.from_envvar('TANUKI_CONFIG', silent=False)
-Bower(app)
+app.config.from_object(settings.DefaultConfig)
+if '/var/www/' in os.getcwd():
+    app.config.from_object(settings.ProductionConfig)
 
+Bower(app)
 applib = Tanuki(app.config)
 
 
