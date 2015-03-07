@@ -1,6 +1,8 @@
 DEPLOY
 ======
 
+Provision a VM.
+
 ```root
 # lsb_release -a
 No LSB modules are available.
@@ -11,13 +13,15 @@ Codename:	trusty
 ```
 
 
-Apache2 on Ubuntu
------------------
+Install packages
+----------------
+
+Let's use apache, for example.
 
 ```root
 $ su -
 # apt-get install apache2 libapache2-mod-wsgi
-# apt-get install python-dev python-lxml
+# apt-get install python-dev python-lxml sqlite3
 # apt-get install libxml2-dev libxslt-dev libncurses5-dev zlib1g-dev
 # apt-get install nodejs nodejs-dev npm
 # apt-get install python-virtualenv virtualenvwrapper
@@ -31,6 +35,7 @@ $ su -
 (env)# pip install -r tanuki/requirements.txt
 (env)# cd tanuki
 (env)# bower install
+(env)# sqlite3 tanuki.db < schema.sql
 
 # chgrp -R www-data /var/www/tanuki
 # chown -R www-data /var/www/tanuki
