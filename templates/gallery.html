@@ -3,13 +3,13 @@
 {% include "header.html" %}
 <div id="content" class="gallery">
 
-<div align="center" style="margin-bottom:1em;">
+<div id="content_heading">
 {% if images %}
-#{{tag}} ({{entries|length()}}) w/images ({{images|length()}})
-<a href="/tagged/{{tag}}"><span class="octicon octicon-list-unordered"
- style="margin-left:16px;"></a>
+({{entries|length()}}) #<a href="/tagged/{{tag}}">{{tag}}</a>
+({{images|length()}}) w/images
 {% else %}
-No images found in ({{entries|length()}}) entries.
+No images found in ({{entries|length()}})
+#<a href="/tagged/{{tag}}">{{tag}}</a> entries.
 {% endif %}
 </div>
 

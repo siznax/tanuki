@@ -2,13 +2,13 @@
 {% block body %}
 {% include "header.html" %}
 {% if not request.path.startswith("/help") %}
-<p id="entry_heading">
+<div id="content_heading">
   {{entry.date_str}}
   {% if entry.tags %}
   { {% for tag in entry.tags %}
   #<a href="/tagged/{{tag}}">{{tag}}</a>
   {% endfor %} }
-  {% endif %}</p>
+  {% endif %}</div>
 {% endif %}
 <div id="content" class="entry">
 
