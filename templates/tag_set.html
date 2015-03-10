@@ -1,7 +1,5 @@
 <div id="tag_set">
 {% for tag in tag_set %}
-<span>
-<a href="/tagged/{{tag['name']}}">{{tag['name']}}</a><span class="count">({{tag['count']}})</span>
-</span>
+<span style="font-size:{{tag['em']}}em"><a href="/tagged/{{tag['name']}}">{{tag['name']}}</a><span class="count">({{tag['count']}})</span></span>
 {% endfor %}
 </div>

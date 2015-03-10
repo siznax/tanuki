@@ -1,3 +1,5 @@
+from __future__ import division
+
 import datetime
 import frag2text
 import logging
@@ -294,7 +296,7 @@ class Tanuki:
         return [{'count': r[0], 'name': r[1]} for r in self.db_query(sql)]
 
     def render_tags(self):
-        tag_set = self.get_tag_set()
+        tag_set = binned_tags(self.get_tag_set())
         return render_template('tags.html',
                                title="tags (%d)" % len(tag_set),
                                tag_set=tag_set,
@@ -387,6 +389,19 @@ class Tanuki:
                                entries=self.get_help_entries(),
                                title="help",
                                status=self.status)
+
+
+def binned_tags(tag_set):
+    max_count = max([x['count'] for x in tag_set])
+    t_min = 0
+    f_max = 3
+    for tag in tag_set:
+        if tag['count'] > t_min:
+            em = (f_max * (tag['count'] - t_min)) / (max_count - t_min)
+            tag['em'] = round(em + 1, 2)
+        else:
+            tag['em'] = 1
+    return tag_set
 
 
 def console_logger(user_agent, level=logging.DEBUG):
