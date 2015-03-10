@@ -1,6 +1,6 @@
 <div id="header" style="padding:16px;text-align:center">
 
-<a href="/"><img id="tanuki-home" class="octicon" 
+<a href="/" title="Tanuki home"><img id="tanuki-home" class="octicon" 
  src="/static/tanuki-home.png"></a>
 
 {% if not request.path.startswith('/help') %}
@@ -9,14 +9,16 @@
 {% if request.path == '/list' %}
 <span class="octicon octicon-list-unordered"></span>
 {% else %}
-<a href="/list"><span class="octicon octicon-list-unordered"></span></a>
+<a href="/list" title="List entries"><span
+ class="octicon octicon-list-unordered"></span></a>
 {% endif %}
 
 {{status.tags}}
 {% if request.path == '/tags' %}
 <span class="octicon octicon-tag"></span>
 {% else %}
-<a href="/tags"><span class="octicon octicon-tag"></span></a>
+<a href="/tags" title="Show tags"><span
+ class="octicon octicon-tag"></span></a>
 {% endif %}
 
 {% if status.notag %}
@@ -24,7 +26,8 @@
 {% if request.path == '/notag' %}
 <span class="octicon octicon-issue-opened"></span>
 {% else %}
-<a href="/notag"><span class="octicon octicon-issue-opened"></span></a>
+<a href="/notag" title="Show un-tagged"><span
+ class="octicon octicon-issue-opened"></span></a>
 {% endif %}
 {% endif %}
 
@@ -33,7 +36,8 @@
 {% if request.path == '/new' %}
 <span class="octicon octicon-file-text"></span>
 {% else %}
-<a href="/new"><span class="octicon octicon-file-text"></span></a>
+<a href="/new" title="Create new entry"><span
+ class="octicon octicon-file-text"></span></a>
 {% endif %}
 
 {% if request.path == '/capture' %}
@@ -54,13 +58,15 @@
 {% if request.path == '/search' %}
 <span class="octicon octicon-search"></span>
 {% else %}
-<a href="/search"><span class="octicon octicon-search"></span></a>
+<a href="/search" title="Search"><span
+ class="octicon octicon-search"></span></a>
 {% endif %}
 
 {% if request.path == '/help' %}
 <span class="octicon octicon-question"></span>
 {% else %}
-<a href="/help"><span class="octicon octicon-question"></span></a>
+<a href="/help" title="Don't panic!"><span
+ class="octicon octicon-question"></span></a>
 {% endif %}
 
 </div>
