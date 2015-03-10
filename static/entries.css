@@ -18,18 +18,6 @@ pre {
     float:right;
     margin-left:1em;
 }
-#entry_heading {
-    width:80%;
-    margin-top:0;
-    margin-left:auto;
-    margin-right:auto;
-    overflow:hidden;
-    opacity:0.6;
-    text-align:center;
-}
-#entry_heading a, #entry_heading a:visited {
-    color:black;
-}
 
 
 .book {
