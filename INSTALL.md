@@ -28,14 +28,14 @@ Install [bower](http://bower.io/) (JS/CSS) dependencies (see [`bower.json`](http
 Create a database from the schema provided:
 
 ```shell
-(tanuki)$ sqlite3 tanuki/tanuki.db < tanuki/schema.sql
+(tanuki)$ sqlite3 tanuki.db < schema.sql
 ```
 
 
 _Optionally, you can put your database in the "cloud" &#x2601; to share
 on all your computers, and to have a durable backup. Please keep in
 mind, there is nothing in tanuki protecting your database. You can
-point to it in `settings.py` as `DATABASE`:
+point to it in `settings.py` as `DATABASE`:_
 
 ```python
 class DefaultConfig:
@@ -46,16 +46,17 @@ class DefaultConfig:
 _or you can symlink `tanuki/tanuki.db` (the default dbfile) to your Dropbox version:_
 
 ```shell
-$ ln -s /Users/<your-username>/Dropbox/tanuki.db .
+(tanuki)$ ln -s /Users/<your-username>/Dropbox/tanuki.db .
 ```
 
 
-Create a startup script outside of the tanuki module (e.g. `tanuki.py`): 
+Create a startup script outside of the tanuki module (e.g. `~/Code/tanuki.py`): 
 
 ```python
 from tanuki import app
-app.config.from_envvar('TANUKI_CONFIG', silent=False)
-app.run(debug=True, port=5005)
+from tanuki import settings
+app.config.from_object(settings.DefaultConfig)
+app.run(port=5001)
 ```
 
 
