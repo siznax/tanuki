@@ -11,8 +11,8 @@ $ git clone https://github.com/siznax/tanuki.git
 Install Python dependencies (see [`requirements.txt`](https://github.com/siznax/tanuki/blob/master/requirements.txt)):
 
 ```shell
-$ mkvirtualenv tanuki tanuki/env
-(tanuki)$ pip install -r requirements.txt
+$ mkvirtualenv tanuki
+(tanuki)$ pip install -r tanuki/requirements.txt
 ```
 
 
@@ -20,46 +20,37 @@ Install [bower](http://bower.io/) (JS/CSS) dependencies (see [`bower.json`](http
 
 ```shell
 (tanuki)$ npm install bower
+(tanuki)$ cd tanuki
 (tanuki)$ bower install
-```
-
-
-Create a config file (e.g. <tt>tanuki/config</tt>) and (at least) add:
-
-```shell
-TITLE = "tanuki"
-```
-
-Add <tt>TANUKI_CONFIG</tt> to your environment (e.g. in bash, add
-something like this to your <tt>.bashrc</tt>):
-
-```shell
-export TANUKI_CONFIG=tanuki/config
 ```
 
 
 Create a database from the schema provided:
 
 ```shell
-$ sqlite3 tanuki/tanuki.db < tanuki/schema.sql
+(tanuki)$ sqlite3 tanuki/tanuki.db < tanuki/schema.sql
 ```
 
 
 _Optionally, you can put your database in the "cloud" &#x2601; to share
 on all your computers, and to have a durable backup. Please keep in
 mind, there is nothing in tanuki protecting your database. You can
-point to it in your config file as <tt>DATABASE</tt>, or you can
-symlink <tt>tanuki/tanuki.db</tt> (the default dbfile) to your Dropbox
-version:_ 
+point to it in `settings.py` as `DATABASE`:
+
+```python
+class DefaultConfig:
+    DEBUG = True
+    DATABASE = "/Users/<your-username>/Dropbox/tanuki.db"
+```
+
+_or you can symlink `tanuki/tanuki.db` (the default dbfile) to your Dropbox version:_
 
 ```shell
-# TANUKI_CONFIG:
-DATABASE = "/Users/foobar/Dropbox/tanuki.db"
+$ ln -s /Users/<your-username>/Dropbox/tanuki.db .
 ```
 
 
-Create a startup script outside of the tanuki module
-(e.g. <tt>tanuki.py</tt>): 
+Create a startup script outside of the tanuki module (e.g. `tanuki.py`): 
 
 ```python
 from tanuki import app
@@ -68,7 +59,8 @@ app.run(debug=True, port=5005)
 ```
 
 
-## Startup
+Startup
+-------
 
 Start the tanuki app in the shell:
 
