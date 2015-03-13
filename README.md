@@ -23,5 +23,7 @@ to get started.
 
 * Demo &mdash; [tanuki.siznax.net](http://tanuki.siznax.net/)
 * Help &mdash; [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
-* Tanuki icon courtesy of
-[cavepainter](http://web.archive.org/web/*/http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/). 
+
+
+Tanuki icon courtesy of
+[cavepainter](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/). 
