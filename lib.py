@@ -186,7 +186,6 @@ class Tanuki:
 
     def upsert(self, req):
         """update existing or insert new entry in DB."""
-        self.environ = req.environ
         try:
             if Tanuki.valid_edit_form(req):
                 entry_id = self.update_entry(req)
@@ -194,9 +193,7 @@ class Tanuki:
                 entry_id = self.insert_entry(req)
             self.store_tags(entry_id, req.form['tags'])
             self.con.commit()
-            url = "%s/entry/%s" % (self.environ['HTTP_ORIGIN'], entry_id)
-            ref = req.form['referrer'] if 'referrer' in req.form else url
-            return redirect(ref)
+            return redirect("/entry/%s" % (entry_id))
         except ValueError:
             return render_template('error.html',
                                    msg="ValueError raised, try again.")
