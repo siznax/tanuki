@@ -7,6 +7,16 @@ Clone tanuki:
 $ git clone https://github.com/siznax/tanuki.git
 ```
 
+You may need to install some of the following packages:
+
+```root
+$ su -
+# apt-get install python-virtualenv virtualenvwrapper
+# apt-get install python-dev python-lxml sqlite3
+# apt-get install libxml2-dev libxslt-dev libncurses5-dev zlib1g-dev
+# apt-get install nodejs nodejs-dev npm
+```
+
 
 Install Python dependencies (see [`requirements.txt`](https://github.com/siznax/tanuki/blob/master/requirements.txt)):
 
