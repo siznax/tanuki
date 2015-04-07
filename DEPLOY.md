@@ -29,7 +29,7 @@ $ su -
 
 # mkdir /var/www/tanuki
 # cd /var/www/tanuki
-# git clone tanuki
+# git clone https://github.com/siznax/tanuki.git
 # mkvirtualenv /var/www/tanuki/tanuki/env
 # source tanuki/env/bin/activate
 (env)# pip install -r tanuki/requirements.txt
