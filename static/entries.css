@@ -3,7 +3,11 @@
 pre {
     overflow-y:hidden;
 }
-
+pre xmp {
+    padding:1em;
+    background:#222;
+    color:lightblue;
+}
 
 #content.entry {
     background:white;
