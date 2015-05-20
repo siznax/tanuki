@@ -20,20 +20,20 @@
   margin:1em;
 }
 #content.list table th {
-  padding:0.4em;
+  text-align:left;
+  padding-top:1em;
 }
 #content.list table td {
   padding:0.4em;
 }
 </style>
 
+<table>
 {% for entry in entries %}
 {% if not entry.month == last_month %}
-{% if last_month %}</table>{% endif %}
-<table>
   <tr>
     <th>{{entry.month}} {{entry.year}}
-    <th>
+    <th>&nbsp;
 {% endif %}
 <tr>
   <td style="font-size:smaller;text-align:right;opacity:0.5">{{entry.date_str}}
