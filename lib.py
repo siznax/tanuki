@@ -370,9 +370,8 @@ class Tanuki:
 
     def render_search_results(self, terms):
         found = self.get_entries_matching(terms)
-        msg = 'found (%d) matching "%s"' % (len(found), terms)
         return render_template('list.html',
-                               msg=msg,
+                               terms=terms,
                                entries=found,
                                status=self.status)
 

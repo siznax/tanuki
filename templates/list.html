@@ -10,6 +10,7 @@
  class="octicon octicon-file-media"
  style="margin-left:16px;"></span></a>
 {% elif notag %}({{entries|length()}}) not tagged
+{% elif terms %}found ({{entries|length()}}) matching "{{terms}}"
 {% else %}({{entries|length()}}) entries by date created
 {% endif %}
 </div>
