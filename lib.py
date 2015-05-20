@@ -254,18 +254,38 @@ class Tanuki:
                                tag_set=self.get_tag_set(),
                                status=self.status)
 
+    # TODO: remove text from entries object
     def get_entries(self):
-        """return fully hydrated entries ordered by date."""
+        """return fully hydrated entries ordered by date created."""
         sql = 'select * from entries order by date desc,id desc'
         entries = [entry2dict(x) for x in self.db_query(sql)]
         self.log.debug("entries %d bytes" % (sys.getsizeof(entries)))
         return entries
 
     def render_list(self):
-        entries = self.get_entries()  # consider removing text
+        """show entries by date created."""
+        entries = self.get_entries()
         return render_template('list.html',
-                               title="list (%d)" % len(entries),
+                               title="(%d) by created" % len(entries),
                                entries=entries,
+                               sortby='created',
+                               status=self.status)
+
+    # TODO: remove text from entries object
+    def get_entries_by_updated(self):
+        """return fully hydrated entries ordered by date updated."""
+        sql = 'select * from entries order by updated desc, date desc'
+        entries = [entry2dict(x, 'updated') for x in self.db_query(sql)]
+        self.log.debug("entries %d bytes" % (sys.getsizeof(entries)))
+        return entries
+
+    def render_list_by_updated(self):
+        """show entries by date updated."""
+        entries = self.get_entries_by_updated()
+        return render_template('list.html',
+                               title="(%d) by updated" % len(entries),
+                               entries=entries,
+                               sortby='updated',
                                status=self.status)
 
     def get_entry(self, entry_id, editing=False):
@@ -419,22 +439,25 @@ def date_str(date):
         date = datetime.datetime.strptime(date, '%Y-%m-%d')
         return date.strftime('%a %d %b %Y')
     except:
-        return 'MALFORMED'
+        return date
 
-
-def entry2dict(row):
+def entry2dict(row, sort='date'):
     """map entries DB row to dict."""
-    return {'id': row[0],
-            'title': row[1],
-            'text': row[2],
-            'date': row[3],
-            'updated': row[4],
-            'public': row[5],
-            'year': parse_ymd(row[3])[0],
-            'month': parse_ymd(row[3])[1],
-            'day': parse_ymd(row[3])[2],
-            'date_str': date_str(row[3]),
-            'mediatype': 'text'}
+    _dict = {'id':        row[0],
+             'title':     row[1],
+             'text':      row[2],
+             'date':      row[3],
+             'date_str':  date_str(row[3]),
+             'updated':   row[4],
+             'public':    row[5],
+             'mediatype': 'text'}
+    date = row[3]
+    if sort == 'updated':
+        date = row[4]
+    _dict['year']        = parse_ymd(date)[0]
+    _dict['month']       = parse_ymd(date)[1]
+    _dict['day']         = parse_ymd(date)[2]
+    return _dict
 
 
 def img_src(html):
@@ -456,10 +479,13 @@ def normalize_tags(blob):
 
 def parse_ymd(date):
     """return [y, m, d] from 'YYYY-mm-dd'"""
-    parsed = datetime.datetime.strptime(date, '%Y-%m-%d')
-    return [parsed.strftime('%Y'),
-            parsed.strftime('%b'),
-            parsed.strftime('%d')]
+    try:
+        parsed = datetime.datetime.strptime(date[:10], '%Y-%m-%d')
+        return [parsed.strftime('%Y'),
+                parsed.strftime('%b'),
+                parsed.strftime('%d')]
+    except:
+        return [None, None, None]
 
 
 def str_is_int(_str):

@@ -8,7 +8,7 @@
   
 <div class="feature">
 <ul>
-<lh><b><a href="/list">latest</a> ({{latest|length()}}) updates</b></lh>
+<lh><b>latest ({{latest|length()}}) <a href="/updated">updated</a></b></lh>
 {% if not latest %}<li>None</li>{% endif %}
 {% for entry in latest %}
 <li><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>

@@ -44,6 +44,11 @@ def list():
     return applib.render_list()
 
 
+@app.route('/updated')
+def updated():
+    return applib.render_list_by_updated()
+
+
 @app.route('/new')
 def new():
     return applib.render_new_form()

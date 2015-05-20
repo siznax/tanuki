@@ -6,39 +6,70 @@
 
 <div id="content_heading">
 {% if tag %}#{{tag}} ({{entries|length()}}) 
-<a href="/gallery/{{tag}}"><span 
- class="octicon octicon-file-media"
- style="margin-left:16px;"></span></a>
-{% elif notag %}({{entries|length()}}) not tagged
-{% elif terms %}found ({{entries|length()}}) matching "{{terms}}"
-{% else %}({{entries|length()}}) entries by date created
+<a href="/gallery/{{tag}}"><span class="octicon octicon-file-media"
+ style="margin-left:16px;"></span></a>{% endif %}
+{% if notag %}({{entries|length()}}) not tagged{% endif %}
+{% if terms %}found ({{entries|length()}}) matching "{{terms}}"{% endif %}
+{% if request.path=='/list' %}
+  ({{entries|length()}}) entries by date <i>created</i>
+{% endif %}
+{% if request.path=='/updated' %}
+  ({{entries|length()}}) entries by date <i>updated</i>
 {% endif %}
 </div>
 
-<style type="text/css" media="screen">
+<style type="text/css">
 #content.list table {
-  border-collapse:collapse;
   margin:1em;
-}
-#content.list table th {
-  text-align:left;
-  padding-top:1em;
+  border-collapse:collapse;
 }
 #content.list table td {
-  padding:0.4em;
+  white-space:nowrap;
+  padding:0.2em;
+  padding-right:2em;
+}
+#content.list table tr.heading:not(:first-child) td {
+  padding-top:2em;
+}
+#content.list table tr.entry:hover {
+  background:white;
+}
+#content.list table td.date {
+  vertical-align:bottom;
+  font-size:smaller;
+  opacity:0.5;
+}
+#content.list table tr.heading td.heading {
+  font-size:large;
+  font-weight:bold;
+  padding-top:1em;
 }
 </style>
 
 <table>
-{% for entry in entries %}
-{% if not entry.month == last_month %}
-  <tr>
-    <th>{{entry.month}} {{entry.year}}
-    <th>&nbsp;
-{% endif %}
+{% if not sortby %}
 <tr>
-  <td style="font-size:smaller;text-align:right;opacity:0.5">{{entry.date_str}}
+  <td>Title
+  <td>Created
+  <td>Updated
+{% endif %}
+{% for entry in entries %}
+{% if sortby and not entry.month == last_month %}
+<tr class=heading>
+  {% if entry.month and entry.year %}
+  <td><b>{{entry.month}} {{entry.year}}</b>
+  {% else %}
+  <td>
+  {% endif %}
+  <td>{% if not sortby or sortby=='created' %}<i>Created</i>
+      {% else %}<a href="/list">Created</a>{% endif %}
+  <td>{% if sortby=='updated' %}<i>Updated</i>
+      {% else %}<a href="/updated">Updated</a>{% endif %}
+{% endif %}
+<tr class=entry>
   <td><a href="/entry/{{entry.id}}">{{entry.title}}</a>
+  <td class=date>{{entry.date_str}}
+  <td class=date>{{entry.updated}}
 {% set last_month = entry.month %}
 {% endfor %}
 </table>
