@@ -433,6 +433,7 @@ def entry2dict(row):
             'public': row[5],
             'year': parse_ymd(row[3])[0],
             'month': parse_ymd(row[3])[1],
+            'day': parse_ymd(row[3])[2],
             'date_str': date_str(row[3]),
             'mediatype': 'text'}
 

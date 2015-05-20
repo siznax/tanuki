@@ -10,21 +10,37 @@
  class="octicon octicon-file-media"
  style="margin-left:16px;"></span></a>
 {% elif notag %}({{entries|length()}}) not tagged
-{% else %}({{entries|length()}}) entries
+{% else %}({{entries|length()}}) entries by date created
 {% endif %}
 </div>
 
-<ol>
+<style type="text/css" media="screen">
+#content.list table {
+  border-collapse:collapse;
+  margin:1em;
+}
+#content.list table th {
+  padding:0.4em;
+}
+#content.list table td {
+  padding:0.4em;
+}
+</style>
+
 {% for entry in entries %}
 {% if not entry.month == last_month %}
-</section><section>
-<p style="margin:1em 0 0 0"><b>{{entry.month}} {{entry.year}}</b></p>
+{% if last_month %}</table>{% endif %}
+<table>
+  <tr>
+    <th>{{entry.month}} {{entry.year}}
+    <th>
 {% endif %}
-<li value="{{entry.id}}"><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>
+<tr>
+  <td style="font-size:smaller;text-align:right;opacity:0.5">{{entry.date_str}}
+  <td><a href="/entry/{{entry.id}}">{{entry.title}}</a>
 {% set last_month = entry.month %}
 {% endfor %}
-</section>
-</ol>
+</table>
 
 </div>
 
