@@ -1,4 +1,5 @@
-![icon](https://raw.githubusercontent.com/siznax/tanuki/master/static/tanuki.png)
+<img alt=icon align=left hspace=16
+ src="https://raw.githubusercontent.com/siznax/tanuki/master/static/tanuki.png">
 
 _Tanuki_ is a web app that allows you to take media rich notes (HTML,
 audio, video, etc.) in your browser. I made it for taking personal
@@ -24,6 +25,7 @@ to get started.
 * Demo &mdash; [tanuki.siznax.net](http://tanuki.siznax.net/)
 * Help &mdash; [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 
-
 Tanuki icon courtesy of
-[cavepainter](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/). 
+[cavepainter](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
+
+<a href="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"><img alt=screenshot width=640 src="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"></a>
