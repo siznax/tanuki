@@ -247,10 +247,14 @@ class Tanuki:
 
     def render_index(self, page=0):
         readme = self.get_entries_tagged("readme")
+        todo = self.get_entries_tagged("todo")
+        pinned = self.get_entries_tagged("pinned")
         return render_template('index.html',
                                title=self.status['entries'],
                                latest=self.get_latest_entries(),
                                readme=readme,
+                               todo=todo,
+                               pinned=pinned,
                                tag_set=self.get_tag_set(),
                                status=self.status)
 
@@ -312,6 +316,7 @@ class Tanuki:
         sql = 'select count(*),name from tags group by name order by name'
         return [{'count': r[0], 'name': r[1]} for r in self.db_query(sql)]
 
+
     def render_tags(self):
         tag_set = binned_tags(self.get_tag_set())
         return render_template('tags.html',
@@ -330,7 +335,7 @@ class Tanuki:
     def get_entries_tagged(self, tag):
         """return entries matching tag name ordered by date."""
         sql = ("select * from entries,tags where tags.name=? and "
-               "tags.id=entries.id order by date desc")
+               "tags.id=entries.id order by updated desc")
         return [entry2dict(x) for x in self.db_query(sql, [tag])]
 
     def render_tagged(self, tag, view=None):
@@ -408,6 +413,8 @@ class Tanuki:
 
 
 def binned_tags(tag_set):
+    if not tag_set:
+        return []
     max_count = max([x['count'] for x in tag_set])
     t_min = 0
     f_max = 3

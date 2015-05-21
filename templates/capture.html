@@ -1,31 +1,40 @@
 {% extends "layout.html" %}
 {% block body %}
 {% include "header.html" %}
-<div id="content" class="capture">
-  <p>Capture any web page, or just part of it:</p>
+<div align=center id="content" class="capture">
+
+  <p>Capture any web page, or just part of it. (<i>Note: this is experimental</i>)</p>
   <div id="capture_form">
     <form action="/edit_capture" method="POST">
       <input id="endpoint" type="text" name="endpoint"
-       placeholder="URL" required style="width:50%"/>
+       placeholder="URL" required style="width:33%"/>
       <select name="stype">
         <option value="css">CSS</option>
         <option value="xpath">XPath</option>
       </select>
       <input id="selector" type="text" name="selector"
-      placeholder="selector" required style="width:25%" />
+      placeholder="selector" required style="width:15%" />
       <input id="save_btn" type="submit" value="Capture">
     </form>
   </div>
 
-  <div style="margin-top:2em;background:white;padding:1em;border:1px
-      solid silver;">
-    <a href="https://github.com/siznax/frag2text"
-       target="_blank"><i>frag2text</i></a> examples:
+<style type="text/css">
+  table {
+    border-collapse:collapse;
+  }
+  th, td {
+    border:1px solid silver;
+  }
+</style>
+  
+  <div style="margin-top:2em;">
+  
 
     <p>
     <table cellpadding=8 style="font-size:12px;border:1px solid silver">
       <tr>
-        <th>
+        <th><a href="https://github.com/siznax/frag2text"
+       target="_blank"><i>frag2text</i></a> examples
         <th>URL
         <th>stype
         <th>selector

@@ -44,8 +44,8 @@ def list():
     return applib.render_list()
 
 
-@app.route('/updated')
-def updated():
+@app.route('/updates')
+def updates():
     return applib.render_list_by_updated()
 
 

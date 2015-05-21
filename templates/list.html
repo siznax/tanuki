@@ -4,6 +4,8 @@
 
 <div id="content" class="list">
 
+{% if entries %}
+
 <div id="content_heading">
 {% if tag %}#{{tag}} ({{entries|length()}}) 
 <a href="/gallery/{{tag}}"><span class="octicon octicon-file-media"
@@ -13,18 +15,17 @@
 {% if request.path=='/list' %}
   ({{entries|length()}}) entries by date <i>created</i>
 {% endif %}
-{% if request.path=='/updated' %}
+{% if request.path=='/updates' %}
   ({{entries|length()}}) entries by date <i>updated</i>
 {% endif %}
 </div>
 
 <style type="text/css">
 #content.list table {
-  margin:1em;
   border-collapse:collapse;
+  padding:1em;
 }
 #content.list table td {
-  white-space:nowrap;
   padding:0.2em;
   padding-right:2em;
 }
@@ -32,26 +33,34 @@
   padding-top:2em;
 }
 #content.list table tr.entry:hover {
-  background:white;
+  text-decoration:underline;
 }
 #content.list table td.date {
-  vertical-align:bottom;
+  white-space:nowrap;
+  vertical-align:center;
   font-size:smaller;
   opacity:0.5;
 }
-#content.list table tr.heading td.heading {
-  font-size:large;
-  font-weight:bold;
-  padding-top:1em;
+#content.list table th {
+  font-weight:normal;
+  opacity:0.5;
+  text-align:left;
+}
+#content.list div.listing {
+  padding:2em;
+  background:white;
+  border:1px solid silver;
+  border-radius:4px;
 }
 </style>
 
+<div align=center class="listing">
 <table>
 {% if not sortby %}
 <tr>
-  <td>Title
-  <td>Created
-  <td>Updated
+  <th>Title
+  <th>Created
+  <th>Updated
 {% endif %}
 {% for entry in entries %}
 {% if sortby and not entry.month == last_month %}
@@ -64,7 +73,7 @@
   <td>{% if not sortby or sortby=='created' %}<i>Created</i>
       {% else %}<a href="/list">Created</a>{% endif %}
   <td>{% if sortby=='updated' %}<i>Updated</i>
-      {% else %}<a href="/updated">Updated</a>{% endif %}
+      {% else %}<a href="/updates">Updated</a>{% endif %}
 {% endif %}
 <tr class=entry>
   <td><a href="/entry/{{entry.id}}">{{entry.title}}</a>
@@ -73,6 +82,11 @@
 {% set last_month = entry.month %}
 {% endfor %}
 </table>
+</div>
+
+{% else %}
+<div align=center>No entries yet!</div>
+{% endif %}
 
 </div>
 

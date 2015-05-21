@@ -4,37 +4,75 @@
 
 <div id="content" class="index">
 
-  <div style="width:50%;float:left;">
-  
-<div class="feature">
-<ul>
-<lh><b>latest ({{latest|length()}}) <a href="/updated">updated</a></b></lh>
-{% if not latest %}<li>None</li>{% endif %}
-{% for entry in latest %}
-<li><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>
-{% endfor %}
-</ul>
-</div>
-
-  </div><div style="width:50%;float:right;">
-
-<div class="feature">
-<ul>
-<lh><b>#readme</b> (<a href="/tagged/readme">{{readme|length()}}</a>)</lh>
-{% if not readme %}<li>None</li>{% endif %}
-{% for entry in readme[:10] %}
-<li><a href="/entry/{{entry.id}}">{{entry.title}}</a></li>
-{% endfor %}
-</ul>
-</div>
-
+<div class=feature_cell_left>
+  <div id="latest" class=feature>
+    <ul>
+      <lh>&#x26c5; <b>latest ({{latest|length()}}) <a href="/updates">updates</a></b>
+        {% if latest %}
+        {% for entry in latest %}
+        <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
+        {% endfor %}
+        {% else %}
+        <li>Latest entries will be listed here.
+        {% endif %}
+    </ul>
   </div>
+</div>
+
+<div class=feature_cell_right>
+  <div id="todo" class=feature>
+    <ul>
+      <lh>&#x2615; <b>TODO</b> (<a href="/tagged/todo">{{todo|length()}}</a>)
+        {% if todo %}
+        {% for entry in todo[:10] %}
+        <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
+        {% endfor %}
+        {% else %}
+        <li>Entries tagged "todo" will be listed here.
+        {% endif %}
+    </ul>
+  </div>
+</div>
 
 <div style="clear:both"></div>
 
+<div class=feature_cell_left>
+  <div id="readme" class=feature>
+    <ul>
+      <lh>&#x1f4d6; <b>readme</b> (<a href="/tagged/readme">{{readme|length()}}</a>)
+        {% if readme %}
+        {% for entry in readme[:10] %}
+        <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
+        {% endfor %}
+        {% else %}
+        <li>Entries tagged "readme" will be listed here.
+        {% endif %}
+    </ul>
+  </div>
+</div>
+
+<div class=feature_cell_right>
+  <div id="pinned" class=feature>
+    <ul>
+      <lh>&#x1f4cc; <b>pinned</b> (<a href="/tagged/pinned">{{pinned|length()}}</a>)
+        {% if pinned %}
+        {% for entry in pinned[:10] %}
+        <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
+        {% endfor %}
+        {% else %}
+        <li>Entries tagged "pinned" will be listed here.
+        {% endif %}
+    </ul>
+  </div>
+</div>
+
+{% if tag_set %}<div style="clear:both;padding:0.4em;"></div>{% endif %}
+
 {% include "tag_set.html" %}
 
-<div align="center" style="margin-top:32px;">
+<div style="clear:both;padding:1em;"></div>
+
+<div align=center>
 <a target="_blank" href="https://github.com/siznax/tanuki/"><span
  title="Fork me on GitHub"
  class="octicon octicon-mark-github"></span></a>

@@ -3,7 +3,11 @@
 {% include "header.html" %}
 <div id="content" class="tags">
 
+{% if tag_set %}
 {% include "tag_set.html" %}
+{% else %}
+<div align=center>No tags yet!</div>
+{% endif %}
 
 </div>
 {% endblock %}

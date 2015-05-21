@@ -16,19 +16,30 @@
         padding:8px;
         border-radius:8px;
     }
+    .feature_cell_left {
+        float:left;
+        width:50%;
+    }
+    .feature_cell_right {
+        float:right;
+        width:50%;
+    }
     .feature li {
         font-size:smaller;
     }
-    #tanuki-home {
-    }
-    #header, .octicon {
+    .feature#pinned {
+        background:lightyellow;
+        border-top:1px solid white;
+        border-right:1px solid yellow;
+        border-bottom:1px solid yellow;
+        border-left:1px solid white;
     }
     #content {
-        width:80%;
-        margin-left:auto;
-        margin-right:auto;
+        margin:auto;
 	overflow:hidden;
-	margin-bottom:32px;
+        width:80%;
+        margin-top:1em;
+	margin-bottom:2em;
     }
     #content_heading {
         margin-bottom:1em;
@@ -58,7 +69,6 @@
 	text-align:center;
     }
     #tag_set {
-	margin-top:1em;
 	text-align:center;
 	line-height:1.6em;
 	word-spacing:1em;

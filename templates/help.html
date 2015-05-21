@@ -1,17 +1,13 @@
 {% extends "layout.html" %}
 {% block body %}
 {% include "header.html" %}
-
 <div id="content" class="help">
-
-<h1><img src="/static/tanuki.png">Help</h1>
-
-<ol>
-{% for entry in entries %}
-<li value={{entry.id}}><a href="/help/{{entry.id}}">{{entry.title}}</a></li>
-{% endfor %}
-</ol>
-
+  <h1><img src="/static/tanuki.png">Help</h1>
+  <ol>
+    {% for entry in entries %}
+    <li value={{entry.id}}><a href="/help/{{entry.id}}">{{entry.title}}</a>
+      {% endfor %}
+  </ol>
 </div>
 
 {% endblock %}
