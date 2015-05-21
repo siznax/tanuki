@@ -5,8 +5,7 @@ create table entries (
        text string unique not null,
        date text not null,
        updated text,
-       public int not null,
-       folder text
+       public int not null
 );
 drop table if exists tags;
 create table tags (
