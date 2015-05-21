@@ -1,4 +1,4 @@
-<img alt=icon style="float:right;margin:16px;"
+<img alt=icon align=right vspace=16 hspace=16
  src="https://raw.githubusercontent.com/siznax/tanuki/master/static/tanuki.png">
 
 _Tanuki_ is a web app that allows you to take media rich notes (HTML,
