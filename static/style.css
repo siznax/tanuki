@@ -67,7 +67,8 @@
 	text-align:center;
     }
     #content.tags #tag_set {
-	line-height:2em;
+	line-height:3em;
+        font-size:12px;
     }
     #header {
         margin-top:8px;
