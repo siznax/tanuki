@@ -1,9 +1,9 @@
 <div id="header">
 
 {% if request.path == '/' %} 
-<img id="tanuki-home" src="/static/home.gif">
+<span class="mega-octicon octicon-home"></span>
 {% else %}
-<a href="/" title="Tanuki home"><img id="tanuki-home" src="/static/home.gif"></a>
+<a href="/" title="Tanuki home"><span class="mega-octicon octicon-home"></span></a>
 {% endif %}
 
 {% if not request.path.startswith('/help') %}
