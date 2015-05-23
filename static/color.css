@@ -27,7 +27,14 @@ tt {
 #header {
     text-shadow:0px 1px 0px snow;
 }
-
+table#frag2text {
+  font-size:12px;
+  border:1px solid silver;
+  border-collapse:collapse;
+}
+table#frag2text th, table#frag2text td {
+  border:1px solid silver;
+}
 
 .feature {
     border:1px solid #ccc;

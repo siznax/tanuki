@@ -1,73 +1,74 @@
-<div id="header" style="padding:16px;text-align:center">
+<div id="header">
 
-<a href="/" title="Tanuki home"><img id="tanuki-home" class="octicon" 
- src="/static/tanuki-home.png"></a>
+{% if request.path == '/' %} 
+<img id="tanuki-home" src="/static/home.gif">
+{% else %}
+<a href="/" title="Tanuki home"><img id="tanuki-home" src="/static/home.gif"></a>
+{% endif %}
 
 {% if not request.path.startswith('/help') %}
 
 {{status.entries}}
 {% if request.path == '/list' %}
-<span class="octicon octicon-list-unordered"></span>
+<span class="mega-octicon octicon-list-unordered"></span>
 {% else %}
 <a href="/list" title="List entries"><span
- class="octicon octicon-list-unordered"></span></a>
+ class="mega-octicon octicon-list-unordered"></span></a>
 {% endif %}
 
 {{status.tags}}
 {% if request.path == '/tags' %}
-<span class="octicon octicon-tag"></span>
+<span class="mega-octicon octicon-tag"></span>
 {% else %}
 <a href="/tags" title="Show tags"><span
- class="octicon octicon-tag"></span></a>
+ class="mega-octicon octicon-tag"></span></a>
 {% endif %}
 
 {% if status.notag %}
 {{status.notag}}
 {% if request.path == '/notag' %}
-<span class="octicon octicon-issue-opened"></span>
+<span class="mega-octicon octicon-issue-opened"></span>
 {% else %}
 <a href="/notag" title="Show un-tagged"><span
- class="octicon octicon-issue-opened"></span></a>
+ class="mega-octicon octicon-issue-opened"></span></a>
 {% endif %}
 {% endif %}
 
 {% endif %}  <!-- not /help -->
 
 {% if request.path == '/new' %}
-<span class="octicon octicon-file-text"></span>
+<span class="mega-octicon octicon-file-text"></span>
 {% else %}
 <a href="/new" title="Create new entry"><span
- class="octicon octicon-file-text"></span></a>
+ class="mega-octicon octicon-file-text"></span></a>
 {% endif %}
 
 {% if request.path == '/capture' %}
-<span class="octicon octicon-squirrel"></span>
+<span class="mega-octicon octicon-squirrel"></span>
 {% else %}
 <a href="/capture" title="NEW! Capture a web page."><span
- class="octicon octicon-squirrel"></span></a> 
+ class="mega-octicon octicon-squirrel"></span></a> 
 {% endif %}
 
 {% if request.path.startswith('/entry') %}
 <a href="/edit/{{entry.id}}"><span 
- class="octicon octicon-pencil"></span></a>
+ class="mega-octicon octicon-pencil"></span></a>
 <a href="/delete/{{entry.id}}"><span 
- class="octicon octicon-trashcan"></span></a>
+ class="mega-octicon octicon-trashcan"></span></a>
 {% endif %}
 
 {% if request.path == '/search' %}
-<span class="octicon octicon-search"></span>
+<span class="mega-octicon octicon-search"></span>
 {% else %}
 <a href="/search" title="Search"><span
- class="octicon octicon-search"></span></a>
+ class="mega-octicon octicon-search"></span></a>
 {% endif %}
 
 {% if request.path == '/help' %}
-<span class="octicon octicon-question"></span>
+<span class="mega-octicon octicon-question"></span>
 {% else %}
 <a href="/help" title="Don't panic!"><span
- class="octicon octicon-question"></span></a>
+ class="mega-octicon octicon-question"></span></a>
 {% endif %}
 
 </div>
-
-<style type="text/css">.octicon { margin-right:12px; }</style>

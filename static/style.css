@@ -11,6 +11,107 @@
     a:hover {
         text-decoration:underline;
     }
+
+
+    #content {
+        margin:auto;
+	overflow:hidden;
+        width:80%;
+        margin-top:1em;
+	margin-bottom:2em;
+    }
+    #content.delete {
+      width:50%;
+    }
+    #content.gallery img {
+        height:120px;
+    }
+    #content_heading {
+        margin-bottom:1em;
+        text-align:center;
+    }
+    #content.gallery h3, #content.list h3 {
+	text-align:center;
+	margin-top:0;
+    }
+    #content.list table {
+      border-collapse:collapse;
+      padding:1em;
+    }
+    #content.list table td {
+      padding:0.2em;
+      padding-right:2em;
+    }
+    #content.list table tr.heading:not(:first-child) td {
+      padding-top:2em;
+    }
+    #content.list table tr.entry:hover {
+      text-decoration:underline;
+    }
+    #content.list table td.date {
+      white-space:nowrap;
+      vertical-align:center;
+      font-size:smaller;
+      opacity:0.5;
+    }
+    #content.list table th {
+      font-weight:normal;
+      opacity:0.5;
+      text-align:left;
+    }
+    #content.list div.listing {
+      padding:2em;
+      background:white;
+      border:1px solid silver;
+      border-radius:4px;
+    }
+    #content.search {
+	text-align:center;
+    }
+    #content.tags #tag_set {
+	line-height:2em;
+    }
+    #header {
+        margin-top:8px;
+        margin-bottom:8px;
+        padding:8px;
+        font-size:24px;
+        text-align:center;
+    }
+    #header img {
+        margin-right:16px;
+        height:24px;
+        margin-top:2px;
+    }
+    #tag_set {
+	text-align:center;
+	line-height:1.6em;
+	word-spacing:1em;
+    }
+    #tag_set .count {
+        padding-left:0.2em;
+	font-size:smaller;
+	opacity:0.6;
+    }
+    form#edit input[type=text], form#edit textarea {
+        width:100%;
+        resize:none;
+        box-sizing:border-box;
+        -webkit-box-sizing:border-box;
+        -moz-box-sizing:border-box;
+        border:1px solid silver;
+    }
+    form#edit input#date {
+        text-align:center;
+    }
+    table#edit td {
+        border:none;
+    }
+    table#edit td#submit {
+        text-align:center;
+        vertical-align:middle;
+    }
+
     .feature {
         margin:8px;
         padding:8px;
@@ -27,53 +128,6 @@
     .feature li {
         font-size:smaller;
     }
-    #content {
-        margin:auto;
-	overflow:hidden;
-        width:80%;
-        margin-top:1em;
-	margin-bottom:2em;
-    }
-    #content_heading {
-        margin-bottom:1em;
-        text-align:center;
-    }
-    #content.gallery img {
-        height:120px;
-    }
-    #content.list h3, #content.gallery h3 {
-	text-align:center;
-	margin-top:0;
-    }
-    #content.list ol {
-        margin-left:5em;
-    }
-    form#edit input[type=text], form#edit textarea {
-        width:100%;
-        resize:none;
-        box-sizing:border-box;
-        -webkit-box-sizing:border-box;
-        -moz-box-sizing:border-box;
-    }
-    #content.delete {
-      width:50%;
-    }
-    #content.search {
-	text-align:center;
-    }
-    #tag_set {
-	text-align:center;
-	line-height:1.6em;
-	word-spacing:1em;
-    }
-    #tag_set .count {
-        padding-left:0.2em;
-	font-size:smaller;
-	opacity:0.6;
-    }
-    #content.tags #tag_set {
-	line-height:2em;
-    }
     .help_eg {
         margin:1em;
         padding:1em;
@@ -84,6 +138,11 @@
         padding-left:1em;
         clear:both;
         overflow:auto;
+    }
+    .mega-octicon {
+        font-size:24px;
+        margin-right:24px;
+        text-align:center;
     }
 }
 
