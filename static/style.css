@@ -27,13 +27,6 @@
     .feature li {
         font-size:smaller;
     }
-    .feature#pinned {
-        background:lightyellow;
-        border-top:1px solid white;
-        border-right:1px solid yellow;
-        border-bottom:1px solid yellow;
-        border-left:1px solid white;
-    }
     #content {
         margin:auto;
 	overflow:hidden;
@@ -84,15 +77,12 @@
     .help_eg {
         margin:1em;
         padding:1em;
-        background:white;
-        border:1px solid silver;
         white-space:pre;
     }
     .help_display {
         margin-bottom:4em;
         padding-left:1em;
         clear:both;
-        border-left:4px solid #d3d3d3;
         overflow:auto;
     }
 }
