@@ -61,8 +61,6 @@
     }
     #content.list div.listing {
       padding:2em;
-      background:white;
-      border:1px solid silver;
       border-radius:4px;
     }
     #content.search {
