@@ -227,7 +227,7 @@ class Tanuki:
         for x in entries:
             tags = self.get_tags(x['id'])
             if editing:
-                x['tags'] = ', '.join(str(x) for x in tags)
+                x['tags'] = ', '.join(filter(bool, (ascii(x) for x in tags)))
             else:
                 x['tags'] = tags
         return entries
@@ -474,13 +474,19 @@ def img_src(html):
         return src
 
 
+def ascii(s):
+    """return just the ascii portion of a string"""
+    return ''.join([c for c in s if ord(c) < 128])
+
+
 def normalize_tags(blob):
     norm = []
     # lower, strip, split, unique
     for tag in set(''.join(blob.lower().split()).split(',')):
         # remove punctuation
         exclude = set(string.punctuation)
-        norm.append(''.join(ch for ch in tag if ch not in exclude))
+        nopunc = ''.join(ch for ch in tag if ch not in exclude)
+        norm.append(ascii(nopunc))
     return norm
 
 
