@@ -1,15 +1,18 @@
 {% extends "layout.html" %}
 {% block body %}
 {% include "header.html" %}
+
 {% if not request.path.startswith("/help") %}
-<div id="content_heading">
-  {{entry.date_str}}
-  {% if entry.tags %}
-  { {% for tag in entry.tags %}
+<div id="entry_heading">
+<span style="margin-right:1em;">{{entry.date_str}}</span>
+{% if entry.tags %}<i style="float:right;">
+{% for tag in entry.tags %}
   #<a href="/tagged/{{tag}}">{{tag}}</a>
-  {% endfor %} }
-  {% endif %}</div>
+{% endfor %}</i>
 {% endif %}
+</div>
+{% endif %}
+
 <div id="content" class="entry">
 
 <h2>{{ entry.title }}</h2>
@@ -17,4 +20,12 @@
 {{ entry.text|safe }}
 
 </div>
+
+<div align=center style="
+font-size:xx-large;
+font-weight:bold;
+margin-bottom:2em;
+color:#ccc;
+">&#x2766;</div>
+
 {% endblock %}

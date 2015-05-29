@@ -5,7 +5,7 @@
         padding:0;
         overlflow:none;
     }
-    a { 
+    a {
         text-decoration:none;
     }
     a:hover {
@@ -17,7 +17,6 @@
         margin:auto;
 	overflow:hidden;
         width:80%;
-        margin-top:1em;
 	margin-bottom:2em;
     }
     #content.delete {
@@ -27,6 +26,7 @@
         height:120px;
     }
     #content_heading {
+        margin-top:1em;
         margin-bottom:1em;
         text-align:center;
     }
@@ -68,7 +68,7 @@
     }
     #content.tags #tag_set {
 	line-height:3em;
-        font-size:12px;
+        font-size:12pt;
     }
     #header {
         margin-top:8px;

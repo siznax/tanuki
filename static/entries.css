@@ -1,5 +1,9 @@
 /* style your entries here */
 
+a {
+    text-dectoration:underline;
+}
+
 pre {
     overflow-y:hidden;
 }
@@ -9,8 +13,20 @@ pre xmp {
 
 
 #content.entry {
-    padding:0 1em 1em 1em;
-    border-radius:4px;
+    padding:1em;
+    padding-top:0;
+    border-bottom-right-radius:8px;
+    border-bottom-left-radius:8px;
+}
+#entry_heading {
+    background:#e5e5e5;
+    color:#666;
+    width:80%;
+    margin:auto;
+    margin-top:1em;
+    padding:1em;
+    border-top-left-radius:8px;
+    border-top-right-radius:8px;
 }
 #playlist {
     clear:both;
