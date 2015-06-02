@@ -51,7 +51,12 @@
 </div>
 
 {% else %}
-<div align=center>No entries yet!</div>
+
+<div align=center style="margin:2em;font-size:larger;">
+{% if terms %}No entries found matching "{{terms}}".{% endif %}
+{% if tag %}No entries tagged "{{tag}}".{% endif %}
+</div>
+
 {% endif %}
 
 </div>
