@@ -426,19 +426,14 @@ class Tanuki:
 
 
 def link_media(media):
-    links = []
-    for m in media:
-        links.append('<a href="/media/%s">%s</a>' % (m, m))
-    return links
+    return ['<a href="/media/%s">%s</a>' % (m, m) for m in media]
 
 
 def mark_media(entries):
     for x in entries:
-        media = []
-        for m in ['<audio', '<iframe', '<img', '<video',
-                  '.flv', '.mov', '.mp3', '.mp4', '.ogg']:
-            if m in x['text']:
-                media.append(rmpunc(m))
+        mediatypes = ['<audio', '<iframe', '<img', '<video',
+                      '.flv', '.mov', '.mp3', '.mp4', '.ogg']
+        media = [rmpunc(m) for m in mediatypes if m in x['text']]
         x['media'] = ', '.join(link_media(media))
     return entries
 
