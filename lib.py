@@ -232,6 +232,34 @@ class Tanuki:
                 x['tags'] = tags
         return entries
 
+    def mediatype(self, entry_text, default=None):
+        media = []
+        if '.flv' in entry_text:
+            media.append('flv')
+        elif '.mov' in entry_text:
+            media.append('mov')
+        elif '.mp3' in entry_text:
+            media.append('mp3')
+        elif '.mp4' in entry_text:
+            media.append('mp4')
+        else:
+            media.append(default)
+        return ', '.join(media)
+
+    def mark_media(self, entries):
+        for x in entries:
+            media = []
+            if '<audio' in x['text']:
+                media.append(self.mediatype(x['text'], 'audio'))
+            if '<iframe' in x['text']:
+                media.append(self.mediatype(x['text'], 'iframe'))
+            if '<img' in x['text']:
+                media.append('img')
+            if '<video' in x['text']:
+                media.append(self.mediatype(x['text'], 'video'))
+            x['media'] = ', '.join(media)
+        return entries
+
     def markdown_entries(self, entries):
         """return Markdown text from HTML entries"""
         for x in entries:
@@ -258,7 +286,6 @@ class Tanuki:
                                tag_set=self.get_tag_set(),
                                status=self.status)
 
-    # TODO: remove text from entries object
     def get_entries(self):
         """return fully hydrated entries ordered by date created."""
         sql = 'select * from entries order by date desc,id desc'
@@ -269,13 +296,13 @@ class Tanuki:
     def render_list(self):
         """show entries by date created."""
         entries = self.get_entries()
+        entries = self.mark_media(entries)
         return render_template('list.html',
                                title="(%d) by created" % len(entries),
                                entries=entries,
                                sortby='created',
                                status=self.status)
 
-    # TODO: remove text from entries object
     def get_entries_by_updated(self):
         """return fully hydrated entries ordered by date updated."""
         sql = 'select * from entries order by updated desc, date desc'
@@ -286,6 +313,7 @@ class Tanuki:
     def render_list_by_updated(self):
         """show entries by date updated."""
         entries = self.get_entries_by_updated()
+        entries = self.mark_media(entries)
         return render_template('list.html',
                                title="(%d) by updated" % len(entries),
                                entries=entries,
@@ -340,6 +368,7 @@ class Tanuki:
 
     def render_tagged(self, tag, view=None):
         tagged = self.get_entries_tagged(tag)
+        tagged = self.mark_media(tagged)
         num = len(tagged)
         title = "#%s (%d)" % (tag, num)
         if view == 'gallery':
@@ -395,6 +424,7 @@ class Tanuki:
 
     def render_search_results(self, terms):
         found = self.get_entries_matching(terms)
+        found = self.mark_media(found)
         return render_template('list.html',
                                terms=terms,
                                entries=found,

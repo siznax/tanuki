@@ -27,9 +27,10 @@
   <th>Title
   <th>Created
   <th>Updated
+  <th>Media
 {% endif %}
 {% for entry in entries %}
-{% if sortby and not entry.month == last_month %}
+    {% if sortby and not entry.month == last_month %}
 <tr class=heading>
   {% if entry.month and entry.year %}
   <td><b>{{entry.month}} {{entry.year}}</b>
@@ -40,11 +41,13 @@
       {% else %}<a href="/list">Created</a>{% endif %}
   <td>{% if sortby=='updated' %}<i>Updated</i>
       {% else %}<a href="/updates">Updated</a>{% endif %}
+  <td>Media
 {% endif %}
 <tr class=entry>
   <td><a href="/entry/{{entry.id}}">{{entry.title}}</a>
   <td class=date>{{entry.date_str}}
   <td class=date>{{entry.updated}}
+  <td class=media>{{entry.media}}
 {% set last_month = entry.month %}
 {% endfor %}
 </table>

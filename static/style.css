@@ -39,18 +39,26 @@
       padding:1em;
     }
     #content.list table td {
-      padding:0.2em;
+      padding:0.4em;
       padding-right:2em;
     }
+    #content.list table td:last-child {
+        padding-right:0.4em;
+    }
     #content.list table tr.heading:not(:first-child) td {
-      padding-top:2em;
+      padding-top:4em;
+    }
+    #content.list table tr.heading {
+        background:none;
+    }
+    #content.list table tr.entry {
     }
     #content.list table tr.entry:hover {
-      text-decoration:underline;
+        background:rgba(250,250,250,1);
     }
-    #content.list table td.date {
+    #content.list table td.date, #content.list table td.media {
       white-space:nowrap;
-      vertical-align:center;
+      vertical-align:top;
       font-size:smaller;
       opacity:0.5;
     }
