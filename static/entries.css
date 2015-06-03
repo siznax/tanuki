@@ -14,19 +14,10 @@ pre xmp {
 
 #content.entry {
     padding:1em;
-    padding-top:0;
-    border-bottom-right-radius:8px;
-    border-bottom-left-radius:8px;
-}
-#entry_heading {
-    background:#e5e5e5;
-    color:#666;
-    width:80%;
-    margin:auto;
-    margin-top:1em;
-    padding:1em;
-    border-top-left-radius:8px;
-    border-top-right-radius:8px;
+    padding-top:0em;
+    background:white;
+    overflow:auto;
+    border-radius:4px;
 }
 #playlist {
     clear:both;
@@ -44,21 +35,20 @@ pre xmp {
     width:240px;
 }
 .inline_right img, .inline_left img {
-    max-width:240px;
+    width:240px;
 }
 .inline_right {
-    float:right;
     border-radius:4px;
+    float:right;
+    font-size:10pt;
+    margin:0 2em 2em 2em;
     padding:1em;
-    margin:8px;
-    margin-top:8px;
     width:240px;
-    font-size:12px;
 }
 .inline_left {
     float:left;
-    margin-right:8px;
-    margin-bottom:8px;
+    font-size:10pt;
+    margin:1em;
+    padding:1em;
     width:240px;
-    font-size:12px;
 }
