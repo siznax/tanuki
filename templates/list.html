@@ -12,6 +12,7 @@
  style="margin-left:16px;"></span></a>{% endif %}
 {% if notag %}({{entries|length()}}) not tagged{% endif %}
 {% if terms %}found ({{entries|length()}}) matching "{{terms}}"{% endif %}
+{% if mediatype %}found ({{entries|length()}}) with <i>{{mediatype}}</i> media{% endif %}
 {% if request.path=='/list' %}
   ({{entries|length()}}) entries by date <i>created</i>
 {% endif %}
@@ -47,7 +48,7 @@
   <td><a href="/entry/{{entry.id}}">{{entry.title}}</a>
   <td class=date>{{entry.date_str}}
   <td class=date>{{entry.updated}}
-  <td class=media>{{entry.media}}
+  <td class=media>{{entry.media|safe}}
 {% set last_month = entry.month %}
 {% endfor %}
 </table>

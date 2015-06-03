@@ -232,34 +232,6 @@ class Tanuki:
                 x['tags'] = tags
         return entries
 
-    def mediatype(self, entry_text, default=None):
-        media = []
-        if '.flv' in entry_text:
-            media.append('flv')
-        elif '.mov' in entry_text:
-            media.append('mov')
-        elif '.mp3' in entry_text:
-            media.append('mp3')
-        elif '.mp4' in entry_text:
-            media.append('mp4')
-        else:
-            media.append(default)
-        return ', '.join(media)
-
-    def mark_media(self, entries):
-        for x in entries:
-            media = []
-            if '<audio' in x['text']:
-                media.append(self.mediatype(x['text'], 'audio'))
-            if '<iframe' in x['text']:
-                media.append(self.mediatype(x['text'], 'iframe'))
-            if '<img' in x['text']:
-                media.append('img')
-            if '<video' in x['text']:
-                media.append(self.mediatype(x['text'], 'video'))
-            x['media'] = ', '.join(media)
-        return entries
-
     def markdown_entries(self, entries):
         """return Markdown text from HTML entries"""
         for x in entries:
@@ -296,7 +268,7 @@ class Tanuki:
     def render_list(self):
         """show entries by date created."""
         entries = self.get_entries()
-        entries = self.mark_media(entries)
+        entries = mark_media(entries)
         return render_template('list.html',
                                title="(%d) by created" % len(entries),
                                entries=entries,
@@ -313,11 +285,23 @@ class Tanuki:
     def render_list_by_updated(self):
         """show entries by date updated."""
         entries = self.get_entries_by_updated()
-        entries = self.mark_media(entries)
+        entries = mark_media(entries)
         return render_template('list.html',
                                title="(%d) by updated" % len(entries),
                                entries=entries,
                                sortby='updated',
+                               status=self.status)
+
+    def render_list_media(self, mediatype):
+        """show entries selected by mediatype"""
+        entries = self.get_entries()
+        entries = [x for x in mark_media(entries) if mediatype in x['media']]
+        if not entries:
+            abort(404)
+        return render_template('list.html',
+                               title="(%d) %s" % (len(entries), mediatype),
+                               entries=entries,
+                               mediatype=mediatype,
                                status=self.status)
 
     def get_entry(self, entry_id, editing=False):
@@ -344,7 +328,6 @@ class Tanuki:
         sql = 'select count(*),name from tags group by name order by name'
         return [{'count': r[0], 'name': r[1]} for r in self.db_query(sql)]
 
-
     def render_tags(self):
         tag_set = binned_tags(self.get_tag_set())
         return render_template('tags.html',
@@ -368,7 +351,7 @@ class Tanuki:
 
     def render_tagged(self, tag, view=None):
         tagged = self.get_entries_tagged(tag)
-        tagged = self.mark_media(tagged)
+        tagged = mark_media(tagged)
         num = len(tagged)
         title = "#%s (%d)" % (tag, num)
         if view == 'gallery':
@@ -424,7 +407,7 @@ class Tanuki:
 
     def render_search_results(self, terms):
         found = self.get_entries_matching(terms)
-        found = self.mark_media(found)
+        found = mark_media(found)
         return render_template('list.html',
                                terms=terms,
                                entries=found,
@@ -440,6 +423,24 @@ class Tanuki:
                                entries=self.get_help_entries(),
                                title="help",
                                status=self.status)
+
+
+def link_media(media):
+    links = []
+    for m in media:
+        links.append('<a href="/media/%s">%s</a>' % (m, m))
+    return links
+
+
+def mark_media(entries):
+    for x in entries:
+        media = []
+        for m in ['<audio', '<iframe', '<img', '<video',
+                  '.flv', '.mov', '.mp3', '.mp4', '.ogg']:
+            if m in x['text']:
+                media.append(rmpunc(m))
+        x['media'] = ', '.join(link_media(media))
+    return entries
 
 
 def binned_tags(tag_set):
@@ -478,6 +479,7 @@ def date_str(date):
     except:
         return date
 
+
 def entry2dict(row, sort='date'):
     """map entries DB row to dict."""
     _dict = {'id':        row[0],
@@ -491,9 +493,9 @@ def entry2dict(row, sort='date'):
     date = row[3]
     if sort == 'updated':
         date = row[4]
-    _dict['year']        = parse_ymd(date)[0]
-    _dict['month']       = parse_ymd(date)[1]
-    _dict['day']         = parse_ymd(date)[2]
+    _dict['year'] = parse_ymd(date)[0]
+    _dict['month'] = parse_ymd(date)[1]
+    _dict['day'] = parse_ymd(date)[2]
     return _dict
 
 
@@ -509,14 +511,15 @@ def ascii(s):
     return ''.join([c for c in s if ord(c) < 128])
 
 
+def rmpunc(_str):
+    return ''.join(c for c in _str if c not in set(string.punctuation))
+
+
 def normalize_tags(blob):
     norm = []
     # lower, strip, split, unique
     for tag in set(''.join(blob.lower().split()).split(',')):
-        # remove punctuation
-        exclude = set(string.punctuation)
-        nopunc = ''.join(ch for ch in tag if ch not in exclude)
-        norm.append(ascii(nopunc))
+        norm.append(ascii(rmpunc(tag)))
     return norm
 
 

@@ -39,6 +39,7 @@
       padding:1em;
     }
     #content.list table td {
+      vertical-align:top;
       padding:0.4em;
       padding-right:2em;
     }
@@ -53,14 +54,17 @@
     }
     #content.list table tr.entry {
     }
-    #content.list table tr.entry:hover {
+    #content.list table tr.entry:hover, td.media:hover {
         background:rgba(250,250,250,1);
     }
-    #content.list table td.date, #content.list table td.media {
+    #content.list table td.date {
       white-space:nowrap;
-      vertical-align:top;
+    }
+    #content.list table td.date, #content.list table td.media {
       font-size:smaller;
-      opacity:0.5;
+    }
+   #content.list table td.date, #content.list table td.media a {
+      color:#666;
     }
     #content.list table th {
       font-weight:normal;

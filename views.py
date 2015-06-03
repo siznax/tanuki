@@ -49,6 +49,11 @@ def updates():
     return applib.render_list_by_updated()
 
 
+@app.route('/media/<mediatype>')
+def media(mediatype):
+    return applib.render_list_media(mediatype)
+
+
 @app.route('/new')
 def new():
     return applib.render_new_form()
