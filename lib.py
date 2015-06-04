@@ -304,6 +304,16 @@ class Tanuki:
                                mediatype=mediatype,
                                status=self.status)
 
+    def render_media_count(self):
+        """show media counts"""
+        entries = self.get_entries()
+        entries = mark_media(entries, links=False)
+        return render_template('media.html',
+                               title="(%d) media entries" % len(entries),
+                               entries=entries,
+                               media=media_count(entries),
+                               status=self.status)
+
     def get_entry(self, entry_id, editing=False):
         """returns single entry as HTML or markdown text."""
         sql = 'select * from entries where id=?'
@@ -425,16 +435,29 @@ class Tanuki:
                                status=self.status)
 
 
+def media_count(entries):
+    """expects entries with simple (not linked) media values"""
+    from collections import Counter, OrderedDict
+    media = []
+    for item in entries:
+        media.extend(item['media'].split(', '))
+    return OrderedDict(sorted(Counter(media).items(),
+                              key=lambda t: t[1],
+                              reverse=True))
+
+
 def link_media(media):
     return ['<a href="/media/%s">%s</a>' % (m, m) for m in media]
 
 
-def mark_media(entries):
+def mark_media(entries, links=True):
     for x in entries:
         mediatypes = ['<audio', '<iframe', '<img', '<video',
                       '.flv', '.mov', '.mp3', '.mp4', '.ogg']
         media = [rmpunc(m) for m in mediatypes if m in x['text']]
-        x['media'] = ', '.join(link_media(media))
+        if links:
+            media = link_media(media)
+        x['media'] = ', '.join(media)
     return entries
 
 
@@ -483,8 +506,7 @@ def entry2dict(row, sort='date'):
              'date':      row[3],
              'date_str':  date_str(row[3]),
              'updated':   row[4],
-             'public':    row[5],
-             'mediatype': 'text'}
+             'public':    row[5]}
     date = row[3]
     if sort == 'updated':
         date = row[4]

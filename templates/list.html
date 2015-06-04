@@ -28,7 +28,7 @@
   <th>Title
   <th>Created
   <th>Updated
-  <th>Media
+  <th><a href="/media">Media</a>
 {% endif %}
 {% for entry in entries %}
     {% if sortby and not entry.month == last_month %}
@@ -42,7 +42,7 @@
       {% else %}<a href="/list">Created</a>{% endif %}
   <td>{% if sortby=='updated' %}<i>Updated</i>
       {% else %}<a href="/updates">Updated</a>{% endif %}
-  <td>Media
+  <td><a href="/media">Media</a>
 {% endif %}
 <tr class=entry>
   <td><a href="/entry/{{entry.id}}">{{entry.title}}</a>

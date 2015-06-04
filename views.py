@@ -49,8 +49,13 @@ def updates():
     return applib.render_list_by_updated()
 
 
+@app.route('/media')
+def media_count():
+    return applib.render_media_count()
+
+
 @app.route('/media/<mediatype>')
-def media(mediatype):
+def mediatype(mediatype):
     return applib.render_list_media(mediatype)
 
 

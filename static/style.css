@@ -42,6 +42,7 @@
       vertical-align:top;
       padding:0.4em;
       padding-right:2em;
+      padding-left:0em;
     }
     #content.list table td:last-child {
         padding-right:0.4em;
@@ -68,8 +69,8 @@
     }
     #content.list table th {
       font-weight:normal;
-      opacity:0.5;
       text-align:left;
+      color:#666;
     }
     #content.list div.listing {
       padding:2em;
