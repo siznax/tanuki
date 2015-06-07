@@ -20,7 +20,17 @@
 	margin-bottom:2em;
     }
     #content.delete {
-      width:50%;
+        text-align:center;
+    }
+    #delete {
+        text-align:left;
+        margin:2em;
+        padding:2em;
+        overflow:none;
+        background:white;
+        border:1px solid silver;
+        border-radius:8px;
+        display:inline-block;
     }
     #content.gallery img {
         height:120px;
