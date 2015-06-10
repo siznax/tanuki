@@ -48,11 +48,13 @@
       border-collapse:collapse;
       padding:1em;
     }
+    #content.list th {
+      padding:0.4em;
+    }
     #content.list table td {
       vertical-align:top;
       padding:0.4em;
       padding-right:2em;
-      padding-left:0em;
     }
     #content.list table td:last-child {
         padding-right:0.4em;
@@ -63,9 +65,7 @@
     #content.list table tr.heading {
         background:none;
     }
-    #content.list table tr.entry {
-    }
-    #content.list table tr.entry:hover, td.media:hover {
+    #content.list table tr.entry:hover {
         background:rgba(250,250,250,1);
     }
     #content.list table td.date {
