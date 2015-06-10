@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+{% include "header.html" %}
+
+<div id="content" class="">
+  <div align=center style="margin-top:2em;">
+  <table border=1 cellpadding=4>
+    <tr>
+      <th>mediatype
+      <th>count
+  {% for key,val in media.iteritems() %}
+      <tr>
+        <td>{% if key %}<a href="/media/{{key}}">{{key}}</a>
+          {% else %}None{% endif %}
+        <td>{{val}}
+  {% endfor %}
+  </table>
+  </div>
+</div>
+
+{% endblock %}
