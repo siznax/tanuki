@@ -20,7 +20,7 @@ be happy to answer any questions about it.
 
 See
 <tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt>
-to get started, or the demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
+to get started, or try the demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
 
 ### Screenshots
 
