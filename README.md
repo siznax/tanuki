@@ -25,7 +25,9 @@ to get started.
 * Demo &mdash; [tanuki.siznax.net](http://tanuki.siznax.net/)
 * Help &mdash; [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
 
+<a href="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"><img alt=screenshot width=640 src="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"></a>
+
+<a href="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen2.png"><img alt=screenshot width=640 src="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen2.png"></a>
+
 Tanuki icon courtesy of
 [cavepainter](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
-
-<a href="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"><img alt=screenshot width=640 src="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"></a>
