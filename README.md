@@ -9,20 +9,18 @@ be a small bit of code that's easy to maintain. So, at this point
 _tanuki_ is really only suitable for programmers (or curious folks) to
 run on their local machines, but anyone can try taking some notes in
 the demo at [tanuki.siznax.net](http://tanuki.siznax.net/). What's it
-made of?  
-[Python](https://python.org),
-[Flask](http://flask.pocoo.org/),
-[SQLite](http://www.sqlite.org/),
-and [Bower](http://bower.io/) components like
-[Octicons](https://octicons.github.com/).
+made of? [Python](https://python.org),
+[Flask](http://flask.pocoo.org/), [SQLite](http://www.sqlite.org/),
+and some [Bower](http://bower.io/) components like
+[Octicons](https://octicons.github.com/). 
 
 I have well over a thousand entries in my (local) _tanuki_ and use it 
 everyday. Everyone is welcome to collaborate on tanuki development. I'd
-be happy to answer any questions about it. See 
-<tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt>
-to get started. 
+be happy to answer any questions about it.
 
-Try the demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
+See
+<tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt>
+to get started, or the demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
 
 ### Screenshots
 
