@@ -8,9 +8,8 @@ book](https://en.wikipedia.org/wiki/Commonplace_book). It's meant to
 be a small bit of code that's easy to maintain. So, at this point
 _tanuki_ is really only suitable for programmers (or curious folks) to
 run on their local machines, but anyone can try taking some notes in
-the demo at [tanuki.siznax.net](http://tanuki.siznax.net/).
-
-What's it made of? 
+the demo at [tanuki.siznax.net](http://tanuki.siznax.net/). What's it
+made of?  
 [Python](https://python.org),
 [Flask](http://flask.pocoo.org/),
 [SQLite](http://www.sqlite.org/),
@@ -23,8 +22,7 @@ be happy to answer any questions about it. See
 <tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt>
 to get started. 
 
-* Demo &mdash; [tanuki.siznax.net](http://tanuki.siznax.net/)
-* Help &mdash; [tanuki.siznax.net/help](http://tanuki.siznax.net/help)
+Try the demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
 
 ### Screenshots
 
