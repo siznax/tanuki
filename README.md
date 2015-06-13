@@ -2,7 +2,7 @@
  src="https://raw.githubusercontent.com/siznax/tanuki/master/static/tanuki.png">
 
 _Tanuki_ is a web app that allows you to take media rich notes (HTML,
-audio, video, etc.) in your browser. I made it for taking personal  
+audio, video, etc.) in your browser. I made it for taking personal
 notes to be kept offline&mdash;a modern [commonplace
 book](https://en.wikipedia.org/wiki/Commonplace_book). It's meant to
 be a small bit of code that's easy to maintain. So, at this point
