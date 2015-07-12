@@ -16,17 +16,17 @@ It's made of [Python](https://python.org),
 [Flask](http://flask.pocoo.org/), [SQLite](http://www.sqlite.org/), 
 some [Bower](http://bower.io/) components like
 [Octicons](https://octicons.github.com/). I've also integrated a
-couple of enhancement packages I made
-like [galleryjs](https://github.com/siznax/galleryjs) and
+couple of enhancements like
+[galleryjs](https://github.com/siznax/galleryjs) and 
 [frag2text](https://github.com/siznax/frag2text/). 
 
-I have well over a thousand entries in my (local) _tanuki_ and use it 
-everyday. Everyone is welcome to collaborate on tanuki development and
-I'm happy to answer any questions about it.
+I have well over a thousand entries in my offline _tanuki_ and use it 
+constantly. Anyone can contribute to tanuki development and I'm happy
+to answer any questions about it and hear feedback.
 
 See
 <tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt>
-to get started, or try the demo: [tanuki.siznax.net](http://tanuki.siznax.net/)
+to get started or try the demo at [tanuki.siznax.net](http://tanuki.siznax.net/)
 
 ### Screenshots
 
