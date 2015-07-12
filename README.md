@@ -9,7 +9,7 @@ book](https://en.wikipedia.org/wiki/Commonplace_book).
 It's meant to be a small bit of code that's easy to understand and
 maintain. So, at this point it's best for programmers (or curious
 folks) to run on their local machines. It doesn't require a network
-connection or try to put any of your notes online, but there's nothing
+connection or try to your data online, but there's nothing
 preventing you from doing that sort of stuff either.
 
 It's made of [Python](https://python.org),
