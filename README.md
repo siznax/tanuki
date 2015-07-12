@@ -1,22 +1,28 @@
 <img alt=icon align=right vspace=16 hspace=16
  src="https://raw.githubusercontent.com/siznax/tanuki/master/static/tanuki.png">
 
-_Tanuki_ is a web app that allows you to take media rich notes (HTML,
-audio, video, etc.) in your browser. I made it for taking personal
-notes to be kept offline&mdash;a modern [commonplace
-book](https://en.wikipedia.org/wiki/Commonplace_book). It's meant to
-be a small bit of code that's easy to maintain. So, at this point
-_tanuki_ is really only suitable for programmers (or curious folks) to
-run on their local machines, but anyone can try taking some notes in
-the demo at [tanuki.siznax.net](http://tanuki.siznax.net/). What's it
-made of? [Python](https://python.org),
-[Flask](http://flask.pocoo.org/), [SQLite](http://www.sqlite.org/),
-and some [Bower](http://bower.io/) components like
-[Octicons](https://octicons.github.com/). 
+_Tanuki_ is a tiny web app that allows you to take media rich notes
+(text, HTML, audio, video, etc.) in your browser. I made it for taking
+personal notes to be kept offline&mdash;a modern [commonplace
+book](https://en.wikipedia.org/wiki/Commonplace_book).
+
+It's meant to be a small bit of code that's easy to understand and
+maintain. So, at this point it's best for programmers (or curious
+folks) to run on their local machines. It doesn't require a network
+connection or try to put any of your notes online, but there's nothing
+preventing you from doing that sort of stuff either.
+
+It's made of [Python](https://python.org),
+[Flask](http://flask.pocoo.org/), [SQLite](http://www.sqlite.org/), 
+some [Bower](http://bower.io/) components like
+[Octicons](https://octicons.github.com/). I've also integrated a
+couple of enhancement packages I made
+like [galleryjs](https://github.com/siznax/galleryjs) and
+[frag2text](https://github.com/siznax/frag2text/). 
 
 I have well over a thousand entries in my (local) _tanuki_ and use it 
-everyday. Everyone is welcome to collaborate on tanuki development. I'd
-be happy to answer any questions about it.
+everyday. Everyone is welcome to collaborate on tanuki development and
+I'm happy to answer any questions about it.
 
 See
 <tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt>
