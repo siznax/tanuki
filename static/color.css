@@ -1,12 +1,10 @@
 body {
-    font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;
-    background:whitesmoke;
-    /* font-family:Baskerville; */
-    /* font-size:14pt; */
+    background:beige;
+    font-family:Baskerville;
+    font-size:14pt;
 }
 h1,h2,h3,h4,h5,h6 {
-    text-shadow:0px 1px 0px white;
-    /* font-family:Georgia; */
+    font-family:Georgia;
 }
 hl {
     background-color:khaki;
@@ -21,7 +19,6 @@ tt {
     border:1px solid silver;
     border-radius:4px;
 }
-
 
 #header {
     text-shadow:0px 1px 0px snow;
@@ -40,13 +37,6 @@ table#frag2text th, table#frag2text td {
 
 .feature {
     background:white;
-}
-.feature#pinned {
-    background:lightyellow;
-    border-top:1px solid white;
-    border-right:1px solid yellow;
-    border-bottom:1px solid yellow;
-    border-left:1px solid white;
 }
 .help_eg {
     background:white;
