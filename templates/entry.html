@@ -4,11 +4,11 @@
 
 {% if not request.path.startswith("/help") %}
   <div style="margin:1em;" align=center>
-    {{entry.date_str}}
-    {% if entry.tags %}&mdash;<i>
+    <i>{{entry.date_str}}</i>
+    {% if entry.tags %}&mdash;
       {% for tag in entry.tags %}
     #<a href="/tagged/{{tag}}">{{tag}}</a>
-      {% endfor %}</i>
+      {% endfor %}
     {% endif %}
   </div>
 {% endif %}

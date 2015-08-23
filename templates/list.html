@@ -8,9 +8,8 @@
 
 <div id="content_heading">
 {% if tag %}#{{tag}} ({{entries|length()}}) 
-<a href="/gallery/{{tag}}"><span class="octicon octicon-file-media"
- style="margin-left:16px;"></span></a>{% endif %}
-{% if notag %}({{entries|length()}}) not tagged{% endif %}
+&mdash; <a href="/gallery/{{tag}}">Gallery</a>{% endif %}
+{% if notag %}({{entries|length()}}) entries not tagged{% endif %}
 {% if terms %}found ({{entries|length()}}) matching "{{terms}}"{% endif %}
 {% if mediatype %}found ({{entries|length()}}) with <i>{{mediatype}}</i> media{% endif %}
 {% if request.path=='/list' %}
