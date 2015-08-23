@@ -1,5 +1,6 @@
 body {
-    background:beige;
+    background-color:beige;
+    background-color:rgba(249, 238, 233, 1);  /* IOT beige-ish */
     font-family:Baskerville;
     font-size:14pt;
 }
@@ -15,11 +16,13 @@ pre xmp {
 }
 tt {
     padding:0.1em 0.2em;
-    background:white;
+    background:whitesmoke;
     border:1px solid silver;
     border-radius:4px;
 }
-
+pre, tt {
+    font-size:10pt;
+}
 #header {
     text-shadow:0px 1px 0px snow;
 }
