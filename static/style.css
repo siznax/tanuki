@@ -14,9 +14,8 @@
 
 
     #content {
-        margin:auto;
+        margin:auto 2em;
 	overflow:hidden;
-        width:80%;
 	margin-bottom:2em;
     }
     #content.delete {
@@ -44,6 +43,8 @@
 	text-align:center;
 	margin-top:0;
     }
+    #content.index {
+    }
     #content.list table {
       border-collapse:collapse;
       padding:1em;
@@ -68,7 +69,10 @@
     #content.list table td.date {
       white-space:nowrap;
     }
-    #content.list table td.date, #content.list table td.media {
+    #content.list table td.date {
+        font-size:x-small;
+    }
+    #content.list table td.media {
       font-size:smaller;
     }
    #content.list table td.date, #content.list table td.media a {
@@ -134,19 +138,20 @@
     .feature {
         margin:8px;
         padding:8px;
+        padding-right:16px;
         border-radius:8px;
     }
-    .feature_cell_left {
-        float:left;
-        width:50%;
-    }
-    .feature_cell_right {
-        float:right;
-        width:50%;
-    }
-    .feature li {
-        font-size:smaller;
-    }
+    /* .feature_cell_left { */
+    /*     float:left; */
+    /*     width:50%; */
+    /* } */
+    /* .feature_cell_right { */
+    /*     float:right; */
+    /*     width:50%; */
+    /* } */
+    /* .feature li { */
+    /*     font-size:smaller; */
+    /* } */
     .help_eg {
         margin:1em;
         padding:1em;
