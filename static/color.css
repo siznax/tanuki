@@ -1,11 +1,12 @@
 body {
     background-color:beige;
+    background-color:rgba(250, 251, 246, 1);  /* Moleskine beige-ish */
     background-color:rgba(249, 238, 233, 1);  /* IOT beige-ish */
-    font-family:Baskerville;
     font-size:14pt;
+    font-family:"Optima", Verdana, Tahoma, Arial, sans-serif;
 }
 h1,h2,h3,h4,h5,h6 {
-    font-family:Georgia;
+    font-family:"Lucida Grande", Helvetica, sans-serif;
 }
 hl {
     background-color:khaki;
@@ -16,9 +17,9 @@ pre xmp {
 }
 tt {
     padding:0.1em 0.2em;
+    border-radius:4px;
     background:whitesmoke;
     border:1px solid silver;
-    border-radius:4px;
 }
 pre, tt {
     font-size:10pt;
@@ -28,6 +29,9 @@ pre, tt {
 }
 #content.list div.listing {
   background:white;
+}
+#content.list table tr.entry:hover {
+    background:rgba(250,250,250,1);
 }
 table#frag2text {
   font-size:12px;
@@ -51,4 +55,7 @@ table#frag2text th, table#frag2text td {
 .inline_right {
     background:white;
     border:1px solid silver;
+}
+table#media {
+    background:white;
 }
