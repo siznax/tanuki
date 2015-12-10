@@ -2,6 +2,7 @@ body {
     background-color:beige;
     background-color:rgba(250, 251, 246, 1);  /* Moleskine beige-ish */
     background-color:rgba(249, 238, 233, 1);  /* IOT beige-ish */
+    background:whitesmoke;
     font-size:14pt;
     font-family:"Optima", Verdana, Tahoma, Arial, sans-serif;
 }
