@@ -14,9 +14,10 @@
 
 
     #content {
-        margin:auto 2em;
-	overflow:hidden;
-	margin-bottom:2em;
+        margin:auto;
+        margin-bottom:3em;
+        overflow:hidden;
+        max-width:720px;
     }
     #content.delete {
         text-align:center;
@@ -75,7 +76,7 @@
     #content.list table td.media {
       font-size:smaller;
     }
-   #content.list table td.date, #content.list table td.media a {
+    #content.list table td.date, #content.list table td.media a {
       color:#666;
     }
     #content.list table th {
