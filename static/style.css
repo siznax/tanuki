@@ -142,17 +142,17 @@
         padding-right:16px;
         border-radius:8px;
     }
-    /* .feature_cell_left { */
-    /*     float:left; */
-    /*     width:50%; */
-    /* } */
-    /* .feature_cell_right { */
-    /*     float:right; */
-    /*     width:50%; */
-    /* } */
-    /* .feature li { */
-    /*     font-size:smaller; */
-    /* } */
+    .feature_cell_left {
+        float:left;
+        width:50%;
+    }
+    .feature_cell_right {
+        float:right;
+        width:50%;
+    }
+    .feature li {
+        font-size:75%;
+    }
     .help_eg {
         margin:1em;
         padding:1em;
