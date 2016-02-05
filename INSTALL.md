@@ -78,6 +78,7 @@ Start the tanuki app in the shell:
 ```shell
 $ workon tanuki
 (tanuki)$ python tanuki.py
+ * Running on http://127.0.0.1:5001/
 ```
 
 Visit your _tanuki_ in a web browser at: <http://localhost:5001>
