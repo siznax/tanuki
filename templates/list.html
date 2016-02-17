@@ -12,45 +12,31 @@
 {% if notag %}({{entries|length()}}) entries not tagged{% endif %}
 {% if terms %}found ({{entries|length()}}) matching "{{terms}}"{% endif %}
 {% if mediatype %}found ({{entries|length()}}) with <i>{{mediatype}}</i> media{% endif %}
+{% if request.path=='/list' or request.path=='/updates'%}
+({{entries|length()}}) entries by date
+{% endif %}
 {% if request.path=='/list' %}
-  ({{entries|length()}}) entries by date <i>created</i>
+created | <a href="/updates">updated</a>
 {% endif %}
 {% if request.path=='/updates' %}
-  ({{entries|length()}}) entries by date <i>updated</i>
+updated | <a href="/list">created</a>
 {% endif %}
 </div>
 
-<div align=center class="listing">
-<table>
-{% if not sortby %}
-<tr>
-  <th>Title
-  <th>Created
-  <th>Updated
-  <th><a href="/media">Media</a>
-{% endif %}
+<div class="listing">
 {% for entry in entries %}
-    {% if sortby and not entry.month == last_month %}
-<tr class=heading>
-  {% if entry.month and entry.year %}
-  <td><b>{{entry.month}} {{entry.year}}</b>
-  {% else %}
-  <td>
+  {% if not entry.month == last_month %}
+    {% if last_month %}</ol>{% endif %}
+<ol>
+<lh>{{entry.month}} {{entry.year}}</lh>
   {% endif %}
-  <td>{% if not sortby or sortby=='created' %}<i>Created</i>
-      {% else %}<a href="/list">Created</a>{% endif %}
-  <td>{% if sortby=='updated' %}<i>Updated</i>
-      {% else %}<a href="/updates">Updated</a>{% endif %}
-  <td><a href="/media">Media</a>
-{% endif %}
-<tr class=entry>
-  <td><a href="/entry/{{entry.id}}">{{entry.title}}</a>
-  <td class=date>{{entry.date_str}}
-  <td class=date>{{entry.updated}}
-  <td class=media>{{entry.media|safe}}
+<li value="{{entry.id}}"><a href="/entry/{{entry.id}}"
+ title="{{entry.date_str}}">{{entry.title}}</a>{%
+  if entry.media
+%} - <span class=media>{{entry.media|safe}}</span>{% endif %}</li>
 {% set last_month = entry.month %}
 {% endfor %}
-</table>
+</ol>
 </div>
 
 {% else %}

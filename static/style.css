@@ -88,6 +88,12 @@
       padding:2em;
       border-radius:4px;
     }
+    #content.list div.listing lh {
+        font-weight:bold;
+    }
+    #content.list div.listing span.media a {
+        opacity:0.5;
+    }
     #content.search {
 	text-align:center;
     }
