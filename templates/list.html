@@ -7,7 +7,7 @@
 {% if entries %}
 
 <div id="content_heading">
-{% if tag %}#{{tag}} ({{entries|length()}}) 
+{% if tag %}({{entries|length()}}) tagged #{{tag}}
 &mdash; <a href="/gallery/{{tag}}">Gallery</a>{% endif %}
 {% if notag %}({{entries|length()}}) entries not tagged{% endif %}
 {% if terms %}found ({{entries|length()}}) matching "{{terms}}"{% endif %}
