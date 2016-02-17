@@ -357,7 +357,7 @@ class Tanuki:
         """return entries matching tag name ordered by date."""
         sql = ("select * from entries,tags where tags.name=? and "
                "tags.id=entries.id order by updated desc")
-        return [entry2dict(x) for x in self.db_query(sql, [tag])]
+        return [entry2dict(x, 'updated') for x in self.db_query(sql, [tag])]
 
     def render_tagged(self, tag, view=None):
         tagged = self.get_entries_tagged(tag)
