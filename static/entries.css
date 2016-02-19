@@ -18,11 +18,8 @@ pre xmp {
 
 
 #content.entry {
-    padding:1em;
-    padding-top:0em;
-    background:white;
-    overflow:auto;
-    border-radius:4px;
+    padding-top:0px;
+    background-color:white;
 }
 #playlist {
     clear:both;

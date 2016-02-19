@@ -32,6 +32,10 @@
         border-radius:8px;
         display:inline-block;
     }
+    #content.entry {
+        padding:16px;
+        overflow:auto;
+    }
     #content.gallery img {
         height:120px;
     }

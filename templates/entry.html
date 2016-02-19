@@ -3,7 +3,7 @@
 {% include "header.html" %}
 
 {% if not request.path.startswith("/help") %}
-  <div style="margin:1em;" align=center>
+  <div id="content_heading">
     <i>{{entry.date_str}}</i>
     {% if entry.tags %}&mdash;
       {% for tag in entry.tags %}
@@ -14,8 +14,8 @@
 {% endif %}
 
 <div id="content" class="entry">
-  <h2>{{ entry.title }}</h2>
-  {{ entry.text|safe }}
+<h2>{{ entry.title }}</h2>
+{{ entry.text|safe }}
 </div>
 
 {% endblock %}
