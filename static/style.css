@@ -2,7 +2,7 @@
 @media screen {
     body { 
         margin:0;
-        padding:0;
+        padding-bottom:128px;
         overlflow:none;
     }
     a {
@@ -15,9 +15,9 @@
 
     #content {
         margin:auto;
-        margin-bottom:3em;
         overflow:hidden;
         max-width:720px;
+        border-radius:4px;
     }
     #content.delete {
         text-align:center;
@@ -36,8 +36,8 @@
         height:120px;
     }
     #content_heading {
-        margin-top:1em;
-        margin-bottom:1em;
+        margin-top:0;
+        margin-bottom:16px;
         text-align:center;
     }
     #content.gallery h3, #content.list h3 {
@@ -85,8 +85,7 @@
       color:#666;
     }
     #content.list div.listing {
-      padding:2em;
-      border-radius:4px;
+        padding:1em 2em 2em 3em;
     }
     #content.list div.listing lh {
         font-weight:bold;
@@ -102,9 +101,7 @@
         font-size:12pt;
     }
     #header {
-        margin-top:8px;
-        margin-bottom:8px;
-        padding:8px;
+        padding:16px;
         font-size:24px;
         text-align:center;
     }

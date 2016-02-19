@@ -4,6 +4,11 @@ a {
     text-dectoration:underline;
 }
 
+iframe {
+    width:720px;
+    height:480px;
+}
+
 pre {
     overflow-y:hidden;
 }
