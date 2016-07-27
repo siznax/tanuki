@@ -5,7 +5,7 @@
 {% if not request.path.startswith("/help") %}
   <div id="content_heading">
     <i>{{entry.date_str}}</i>
-    {% if entry.tags %}&mdash;
+    {% if entry.tags %}
       {% for tag in entry.tags %}
     #<a href="/tagged/{{tag}}">{{tag}}</a>
       {% endfor %}

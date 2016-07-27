@@ -9,7 +9,7 @@
 <div class=feature_cell_left>
   <div id="latest" class=feature>
     <ul>
-      <lh>&#x1f31e; <b>latest ({{latest|length()}})</b> <a href="/updates"><b>updates</b></a>
+      <lh>&#x1f31e; &nbsp;<a href="/updates"><b>latest</b></a>
         {% if latest %}
         {% for entry in latest %}
         <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
@@ -24,7 +24,7 @@
 <div class=feature_cell_right>
   <div id="todo" class=feature>
     <ul>
-      <lh>&#x2615; <a href="/tagged/todo"><b>TODO</b></a> ({{todo|length()}})
+      <lh>&#x2615; &nbsp;<a href="/tagged/todo"><b>TODO</b></a> ({{todo|length()}})
         {% if todo %}
         {% for entry in todo[:10] %}
         <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
@@ -41,7 +41,7 @@
 <div class=feature_cell_left>
   <div id="readme" class=feature>
     <ul>
-      <lh>&#x1f4d6; <a href="/tagged/readme"><b>readme</b></a> ({{readme|length()}})
+      <lh>&#x1f4d6; &nbsp;<a href="/tagged/readme"><b>readme</b></a> ({{readme|length()}})
         {% if readme %}
         {% for entry in readme[:10] %}
         <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
@@ -56,7 +56,7 @@
 <div class=feature_cell_right>
   <div id="pinned" class=feature>
     <ul>
-      <lh>&#x1f4cc; <a href="/tagged/pinned"><b>pinned</b></a> ({{pinned|length()}})
+      <lh>&#x1f4cc; &nbsp;<a href="/tagged/pinned"><b>pinned</b></a> ({{pinned|length()}})
         {% if pinned %}
         {% for entry in pinned[:10] %}
         <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
