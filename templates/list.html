@@ -7,13 +7,13 @@
 {% if entries %}
 
 <div id="content_heading">
-{% if tag %}({{entries|length()}}) tagged #{{tag}}
-&mdash; <a href="/gallery/{{tag}}">Gallery</a>{% endif %}
+{% if tag %}{{entries|length()}} #{{tag}}
+| <a href="/gallery/{{tag}}">gallery</a>{% endif %}
 {% if notag %}({{entries|length()}}) entries not tagged{% endif %}
 {% if terms %}found ({{entries|length()}}) matching "{{terms}}"{% endif %}
-{% if mediatype %}found ({{entries|length()}}) with <i>{{mediatype}}</i> media{% endif %}
+{% if mediatype %}{{entries|length()}} <i>{{mediatype}}</i> <a href="/media">media</a>{% endif %}
 {% if request.path=='/list' or request.path=='/updates'%}
-({{entries|length()}}) entries by date
+{{entries|length()}} entries by date
 {% endif %}
 {% if request.path=='/list' %}
 created | <a href="/updates">updated</a>
