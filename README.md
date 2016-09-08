@@ -25,11 +25,7 @@ I have well over a thousand entries in my offline _tanuki_ and use it
 constantly. Anyone can contribute to tanuki development and I'm happy
 to answer any questions about it or hear feedback.
 
-See
-<tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt>
-to get started or try the demo at [tanuki.siznax.net](http://tanuki.siznax.net/)
-
-### Screenshots
+See <tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt> to get started.
 
 <a href="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"><img alt=screenshot width=640 src="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"></a>
 
