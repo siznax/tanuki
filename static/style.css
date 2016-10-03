@@ -36,6 +36,9 @@
         padding:16px;
         overflow:auto;
     }
+    #content img{
+        max-width:100%;
+    }
     #content.gallery img {
         height:120px;
     }
