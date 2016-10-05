@@ -405,7 +405,9 @@ class Tanuki:
                                status=self.status)
 
     def render_search_form(self):
-        return render_template('search.html', status=self.status)
+        return render_template('search.html',
+                               status=self.status,
+                               tag_set=binned_tags(self.get_tag_set()))
 
     def get_entries_matching(self, terms):
         """return entries matching terms in title or text."""
