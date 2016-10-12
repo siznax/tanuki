@@ -8,6 +8,9 @@
 
 {% if not request.path.startswith('/help') %}
 
+<a href="/tagged/pinned"><span class="mega-octicon octicon-pin"></span></a>
+<a href="/tagged/readme"><span class="mega-octicon octicon-book"></span></a>
+
 {{status.entries}}
 {% if request.path == '/list' %}
 <span class="mega-octicon octicon-list-unordered"></span>
