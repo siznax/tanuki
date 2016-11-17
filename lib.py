@@ -413,7 +413,7 @@ class Tanuki:
         """return entries matching terms in title or text."""
         terms = '%' + terms.encode('ascii', 'ignore') + '%'
         sql = ("select * from entries where title like ? or text like ? "
-               "order by id desc")
+               "order by updated desc")
         val = [terms, terms]
         return [entry2dict(x) for x in self.db_query(sql, val)]
 
