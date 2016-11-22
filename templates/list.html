@@ -24,16 +24,27 @@ updated | <a href="/list">created</a>
 </div>
 
 <div class="listing">
+
+{% if not '/list' in request.path %}<ol>{% endif %}
+
 {% for entry in entries %}
-  {% if not entry.month == last_month %}
-    {% if last_month %}</ol>{% endif %}
-<ol>
-<lh>{{entry.month}} {{entry.year}}</lh>
-  {% endif %}
-<li value="{{entry.id}}"><a href="/entry/{{entry.id}}"
- title="{{entry.date_str}}">{{entry.title}}</a>{%
-  if entry.media
-%} - <span class=media>{{entry.media|safe}}</span>{% endif %}</li>
+
+{% if '/list' in request.path %}
+{% if not entry.month == last_month %}
+{% if last_month %}</ol>{% endif %}
+<ol><lh>{{entry.month}} {{entry.year}}</lh>
+{% endif %}
+{% endif %}
+
+{% if request.path.startswith('/list') %}
+<li value="{{entry.id}}">
+{% else %}
+<li>
+{% endif %}
+<a href="/entry/{{entry.id}}" title="{{entry.date_str}}">{{entry.title}}</a>
+{% if entry.media %}- <span class=media>{{entry.media|safe}}</span>{% endif %}
+</li>
+
 {% set last_month = entry.month %}
 {% endfor %}
 </ol>
