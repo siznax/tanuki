@@ -1,15 +1,11 @@
 html, body {
     background-color:beige;
-    background-color:rgba(250, 251, 246, 1);  /* Moleskine beige-ish */
-    background-color:rgba(249, 238, 233, 1);  /* IOT beige-ish */
-    background:whitesmoke;
-}
-body {
-    font-family:"Optima", Verdana, Tahoma, Arial, sans-serif;
-    font-family: Verdana, Tahoma, Arial, sans-serif;
+    font-family:Times;
+    font-size:1.1em;
 }
 h1,h2,h3,h4,h5,h6 {
     font-family:"Lucida Grande", Helvetica, sans-serif;
+    font-family:Baskerville, Georgia;
 }
 hl {
     background-color:khaki;
