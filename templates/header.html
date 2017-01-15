@@ -3,13 +3,15 @@
 {% if request.path == '/' %} 
 <span class="mega-octicon octicon-home"></span>
 {% else %}
-<a href="/" title="Tanuki home"><span class="mega-octicon octicon-home"></span></a>
+<a href="/" title="Home"><span class="mega-octicon octicon-home"></span></a>
 {% endif %}
 
 {% if not request.path.startswith('/help') %}
 
-<a href="/tagged/pinned"><span class="mega-octicon octicon-pin"></span></a>
-<a href="/tagged/readme"><span class="mega-octicon octicon-book"></span></a>
+<a href="/tagged/pinned" title="Pinned entries">
+  <span class="mega-octicon octicon-pin"></span></a>
+<a href="/tagged/readme" title="README entries">
+  <span class="mega-octicon octicon-book"></span></a>
 
 {{status.entries}}
 {% if request.path == '/list' %}
