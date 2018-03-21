@@ -19,6 +19,9 @@
         max-width:720px;
         border-radius:4px;
     }
+    #content.capture {
+        margin-top:1em;
+    }
     #content.delete {
         text-align:center;
     }
