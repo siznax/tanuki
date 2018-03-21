@@ -22,8 +22,8 @@ class Tanuki:
     DEFAULT_HELP_DB = "help.db"
     MAX_ENTRY_LEN = 131072
     MAX_TAGS_PER_ENTRY = 5
-    MAX_TAG_LEN = 32
-    MAX_TITLE_LEN = 80
+    MAX_TAG_LEN = 128
+    MAX_TITLE_LEN = 1024
 
     def __init__(self, config):
         """initialize tanuki instance."""
