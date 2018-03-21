@@ -54,3 +54,9 @@ pre xmp {
     padding:1em;
     width:240px;
 }
+
+img.people {
+    width: 240px;
+    float: right;
+    margin: 0 1em 1em 1em;
+}
