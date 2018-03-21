@@ -103,8 +103,11 @@
     #content.search {
 	text-align:center;
     }
+    #content.tags, #content.gallery {
+        max-width:70%;
+    }
     #content.tags #tag_set {
-	line-height:3em;
+	line-height:2em;
         font-size:12pt;
     }
     #header {

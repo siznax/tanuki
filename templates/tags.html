@@ -1,7 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
 {% include "header.html" %}
+
 <div id="content" class="tags">
+
+<div id="content_heading">{{tag_set|length()}} tags</div>
 
 {% if tag_set %}
 {% include "tag_set.html" %}
@@ -10,4 +13,5 @@
 {% endif %}
 
 </div>
+
 {% endblock %}
