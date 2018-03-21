@@ -5,7 +5,7 @@
 
 <div id="content_heading">
 {% if images %}
-{{entries|length()}} #<a href="/tagged/{{tag}}">{{tag}}</a>
+{{entries|length()}} <a href="/tagged/{{tag}}">#{{tag}}</a>
 | gallery ({{images|length()}})
 {% else %}
 No images found in ({{entries|length()}})
