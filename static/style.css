@@ -1,6 +1,6 @@
 /* div { border:1px solid magenta; } */
 @media screen {
-    body { 
+    body {
         margin:0;
         padding-bottom:128px;
         overlflow:none;
@@ -168,17 +168,6 @@
     }
     .feature li {
         font-size:75%;
-    }
-    .help_eg {
-        margin:1em;
-        padding:1em;
-        white-space:pre;
-    }
-    .help_display {
-        margin-bottom:4em;
-        padding-left:1em;
-        clear:both;
-        overflow:auto;
     }
     .mega-octicon {
         font-size:24px;
