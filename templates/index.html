@@ -9,7 +9,7 @@
 <div class=feature_cell_left>
   <div id="latest" class=feature>
     <ul>
-      <lh>&#x1f31e; &nbsp;<a href="/updates"><b>latest</b></a>
+      <lh><a href="/updates"><b>latest</b></a>
         {% if latest %}
         {% for entry in latest %}
         <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
@@ -22,15 +22,15 @@
 </div>
 
 <div class=feature_cell_right>
-  <div id="todo" class=feature>
+  <div id="pinned" class=feature>
     <ul>
-      <lh>&#x2615; &nbsp;<a href="/tagged/todo"><b>TODO</b></a> ({{todo|length()}})
-        {% if todo %}
-        {% for entry in todo[:10] %}
+      <lh><a href="/tagged/pinned"><b>pinned</b></a> ({{pinned|length()}})
+        {% if pinned %}
+        {% for entry in pinned[:10] %}
         <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
         {% endfor %}
         {% else %}
-        <li>Entries tagged "todo" will be listed here.
+        <li>Entries tagged "pinned" will be listed here.
         {% endif %}
     </ul>
   </div>
@@ -41,7 +41,7 @@
 <div class=feature_cell_left>
   <div id="readme" class=feature>
     <ul>
-      <lh>&#x1f4d6; &nbsp;<a href="/tagged/readme"><b>readme</b></a> ({{readme|length()}})
+      <lh><a href="/tagged/readme"><b>readme</b></a> ({{readme|length()}})
         {% if readme %}
         {% for entry in readme[:10] %}
         <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
@@ -54,15 +54,15 @@
 </div>
 
 <div class=feature_cell_right>
-  <div id="pinned" class=feature>
+  <div id="todo" class=feature>
     <ul>
-      <lh>&#x1f4cc; &nbsp;<a href="/tagged/pinned"><b>pinned</b></a> ({{pinned|length()}})
-        {% if pinned %}
-        {% for entry in pinned[:10] %}
+      <lh><a href="/tagged/todo"><b>todo</b></a> ({{todo|length()}})
+        {% if todo %}
+        {% for entry in todo[:10] %}
         <li><a href="/entry/{{entry.id}}">{{entry.title}}</a>
         {% endfor %}
         {% else %}
-        <li>Entries tagged "pinned" will be listed here.
+        <li>Entries tagged "todo" will be listed here.
         {% endif %}
     </ul>
   </div>
