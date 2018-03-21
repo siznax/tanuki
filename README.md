@@ -21,7 +21,7 @@ couple of enhancements like
 [galleryjs](https://github.com/siznax/galleryjs) and 
 [frag2text](https://github.com/siznax/frag2text/). 
 
-I have well thousands of entries in my offline _tanuki_ and use it 
+I have thousands of entries in my offline _tanuki_ and use it 
 constantly. Anyone can contribute to tanuki development and I'm happy
 to answer any questions about it or hear feedback.
 
