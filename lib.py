@@ -213,6 +213,7 @@ class Tanuki:
 
     def render_capture_form(self):
         return render_template('capture.html',
+                               title='capture',
                                status=self.status)
 
     def render_delete_form(self, entry_id):
@@ -270,7 +271,7 @@ class Tanuki:
         todo = self.get_entries_tagged("todo")
         pinned = self.get_entries_tagged("pinned")
         return render_template('index.html',
-                               title=self.status['entries'],
+                               title="home (%d)" % self.status['entries'],
                                latest=self.get_latest_entries(),
                                readme=readme,
                                todo=todo,
@@ -283,7 +284,7 @@ class Tanuki:
         entries = self.get_entries()
         entries = mark_media(entries)
         return render_template('list.html',
-                               title="(%d) by created" % len(entries),
+                               title="list (%d) by created" % len(entries),
                                entries=entries,
                                sortby='created',
                                status=self.status)
@@ -328,7 +329,7 @@ class Tanuki:
                  'public': 0}
         return render_template('edit.html',
                                entry=entry,
-                               title='NEW',
+                               title='new',
                                status=self.status)
 
     def render_notags(self):
@@ -373,6 +374,7 @@ class Tanuki:
 
     def render_search_form(self):
         return render_template('search.html',
+                               title='search',
                                status=self.status,
                                tag_set=self.get_tag_set())
 
