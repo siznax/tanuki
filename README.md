@@ -15,9 +15,11 @@ It's made of [Python](https://python.org),
 [Flask](http://flask.pocoo.org/), [SQLite](http://www.sqlite.org/),
 and some [Bower](http://bower.io/) components like
 [Octicons](https://octicons.github.com/). I've also integrated
-[galleryjs](https://github.com/siznax/galleryjs) and
-[frag2text](https://github.com/siznax/frag2text/). I have thousands of
-entries in my offline _tanuki_ and use it constantly.
+[galleryjs](https://github.com/siznax/galleryjs),
+[frag2text](https://github.com/siznax/frag2text/),
+[code-prettify](https://github.com/google/code-prettify), and of
+course you can _embed_ anything you like from the web. I have
+thousands of entries in my offline _tanuki_ and use it constantly.
 
 Anyone can contribute to tanuki development and I'm happy to answer
 any questions about it or hear feedback.
