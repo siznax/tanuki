@@ -1,30 +1,33 @@
-<img alt=icon align=right vspace=8 hspace=8
- src="https://raw.githubusercontent.com/siznax/tanuki/master/static/tanuki.png">
+![tanuki icon](https://raw.githubusercontent.com/siznax/tanuki/master/static/tanuki.png)
 
 _Tanuki_ is a tiny web app that allows you to take media rich notes
 (text, images, HTML, audio, video, embeds, etc.) and keep them
 organized in your browser. I made it for taking personal notes to be
 kept offline&mdash;a modern [commonplace
 book](https://en.wikipedia.org/wiki/Commonplace_book).  It's meant to
-be a small bit of code that's easy to understand and maintain. So, at
-this point it's best for programmers (or curious folks) to run on
-their local machines. It doesn't require a network connection or try
-to put your data online, but there's nothing preventing you from doing
-that sort of stuff either.  It's made of [Python](https://python.org),
+be a small bit of code that's easy to understand and maintain.  So, at
+this point it's probably best for programmers (or curious folks) to
+run on their local machines. It doesn't require a network connection
+or try to put your data online, but there's nothing preventing you
+from doing that sort of stuff either.
+
+It's made of [Python](https://python.org),
 [Flask](http://flask.pocoo.org/), [SQLite](http://www.sqlite.org/),
 and some [Bower](http://bower.io/) components like
-[Octicons](https://octicons.github.com/). I've also integrated a
-couple of enhancements like
+[Octicons](https://octicons.github.com/). I've also integrated
 [galleryjs](https://github.com/siznax/galleryjs) and
-[frag2text](https://github.com/siznax/frag2text/).  I have thousands
-of entries in my offline _tanuki_ and use it constantly. Anyone can
-contribute to tanuki development and I'm happy to answer any questions
-about it or hear feedback.
+[frag2text](https://github.com/siznax/frag2text/). I have thousands of
+entries in my offline _tanuki_ and use it constantly.
 
-Tanuki icon courtesy of
-[cavepainter](http://artrelatedblog.wordpress.com/2012/08/06/new-pixel-art-avatar/).
+Anyone can contribute to tanuki development and I'm happy to answer
+any questions about it or hear feedback.
 
-See <tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt> to get started.
+See
+<tt>[INSTALL.md](https://github.com/siznax/tanuki/blob/master/INSTALL.md)</tt>
+to get started.
+
+_Tanuki_ icon courtesy of
+[Josh](http://artrelatedblog.wordpress.com/).
 
 <a href="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"><img alt=screenshot width=640 src="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"></a>
 
