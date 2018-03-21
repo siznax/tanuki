@@ -1,45 +1,19 @@
-/*
+/* CUSTOM STYLE */
 
-html, body {
-    background-color:black;
-    background:url('/static/custom.jpg');
-    color:lightgray;
+html, body { }
+body {
 }
-h1, h2, h3, h4, h5, h6, #content.list lh, table#media th {
-    color:white;
-}
-#header {
-    text-shadow:none;
-}
-a {
-    color:lime;
-}
-b, strong {
-    color:yellow;
-}
-i, em {
-    color:hotpink;
-}
-div.feature, #content.list div.listing, #content.entry, #delete, table#media {
-    background:rgba(0,0,0,0.6);
-}
-#header a {
-    color:deepskyblue;
-}
-div#tag_set a {
-    color:hotpink;
-}
-div#tag_set span {
-    color:lightgray;
-}
-tt {
-    color:white;
-    background:black;
-    border:1px solid silver;
-}
-input, textarea {
-    background:black;
-    color:white;
-}
+h1, h2, h3, h4, h5, h6 {  }
+a {  }
+tt {  }
+input, textarea {  }
+table#media { }
 
-*/
+div.feature {  }
+div.feature a {  }
+
+#content.entry, #content.list div.listing {  }
+#content.entry a            { }
+#content.list div.listing a { }
+#delete {  }
+#header { }
