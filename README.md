@@ -31,6 +31,11 @@ to get started.
 _Tanuki_ icon courtesy of
 [Josh](http://artrelatedblog.wordpress.com/).
 
-<a href="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"><img alt=screenshot width=640 src="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen.png"></a>
+<img alt=screen1 src="https://raw.githubusercontent.com/siznax/screenshots/master/tanuki-screen1.png">
+<img alt=screen2 src="https://raw.githubusercontent.com/siznax/screenshots/master/tanuki-screen2.png">
+<img alt=screen3 src="https://raw.githubusercontent.com/siznax/screenshots/master/tanuki-screen3.png">
+<img alt=screen4 src="https://raw.githubusercontent.com/siznax/screenshots/master/tanuki-screen4.png">
+<img alt=screen5 src="https://raw.githubusercontent.com/siznax/screenshots/master/tanuki-screen5.png">
+<img alt=screen6 src="https://raw.githubusercontent.com/siznax/screenshots/master/tanuki-screen6.png">
+<img alt=screen7 src="https://raw.githubusercontent.com/siznax/screenshots/master/tanuki-screen7.png">
 
-<a href="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen2.png"><img alt=screenshot width=640 src="https://raw.githubusercontent.com/siznax/tanuki/master/static/screen2.png"></a>
