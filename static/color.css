@@ -25,7 +25,8 @@ pre, tt {
 }
 
 code {
-    padding:0.2em;
+    font-size: smaller;
+    padding:2px;
     border:1px solid silver;
     background:whitesmoke;
     border-radius:4px;
