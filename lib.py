@@ -227,7 +227,7 @@ class Tanuki:
         referrer = request.referrer
         if not referrer:
             referrer = "/entry/%s" % entry_id
-        title = "edit %s: %s" % (entry_id, entry['title'])
+        title = "edit: %s" % (entry['title'])
         return render_template('edit.html',
                                entry=entry,
                                referrer=referrer,
