@@ -250,6 +250,7 @@ class Tanuki:
                  'tags': None,
                  'public': 0}
         return render_template('edit.html',
+                               title='capture %s' % endpoint,
                                entry=entry,
                                status=self.status)
 
@@ -294,7 +295,7 @@ class Tanuki:
         entries = self.get_entries_by_updated()
         entries = mark_media(entries)
         return render_template('list.html',
-                               title="(%d) by updated" % len(entries),
+                               title="list (%d) by updated" % len(entries),
                                entries=entries,
                                sortby='updated',
                                status=self.status)
@@ -306,7 +307,7 @@ class Tanuki:
         if not entries:
             abort(404)
         return render_template('list.html',
-                               title="(%d) %s" % (len(entries), mediatype),
+                               title="list (%d) %s" % (len(entries), mediatype),
                                entries=entries,
                                mediatype=mediatype,
                                status=self.status)
@@ -382,6 +383,7 @@ class Tanuki:
         found = self.get_entries_matching(terms)
         found = mark_media(found)
         return render_template('list.html',
+                               title="%s (%d)" % (terms, len(found)),
                                terms=terms,
                                entries=found,
                                status=self.status)
