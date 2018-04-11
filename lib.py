@@ -272,7 +272,7 @@ class Tanuki:
         todo = self.get_entries_tagged("todo")
         pinned = self.get_entries_tagged("pinned")
         return render_template('index.html',
-                               title="home (%d)" % self.status['entries'],
+                               title="%d" % self.status['entries'],
                                latest=self.get_latest_entries(),
                                readme=readme,
                                todo=todo,
